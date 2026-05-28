@@ -1,0 +1,26 @@
+{
+  "mcpServers": {
+    "airtable": {
+      "command": "npx",
+      "args": ["-y", "@airtable/mcp-server"],
+      "env": {
+        "AIRTABLE_API_KEY": "${AIRTABLE_API_KEY}"
+      }
+    },
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/"
+    },
+    "vercel": {
+      "type": "http",
+      "url": "https://mcp.vercel.com"
+    },
+    "posthog": {
+      "type": "http",
+      "url": "https://mcp.posthog.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ${POSTHOG_PERSONAL_API_KEY}"
+      }
+    }
+  }
+}
