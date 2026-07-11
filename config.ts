@@ -61,8 +61,8 @@ const config = {
     description:
       "Choisis le créneau qui te convient. On fait le point ensemble, sans engagement.",
     // Ton identifiant Cal.com : cal.com/<username>/<eventSlug>
-    calUsername: "", // ex: "pierre-evrard"
-    calEventSlug: "", // ex: "appel-decouverte"
+    calUsername: "delphine-taskzen",
+    calEventSlug: "appel-decouverte",
   },
 
   // ── Étape 4 : Merci ────────────────────────────────────
