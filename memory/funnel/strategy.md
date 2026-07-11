@@ -4,15 +4,15 @@
 
 ## Promesse du tunnel
 
-[À CONFIGURER] — Quel résultat la landing promet-elle en échange de l'email ?
+Découvre la Méthode IA pour récupérer 10h par semaine sans embaucher (vidéo courte, 5 min).
 
 ## Type de ressource
 
-[À CONFIGURER] — vsl / vidéo / pdf / quiz
+Vidéo courte (5 min)
 
 ## Angle / accroche principale
 
-[À CONFIGURER] — L'idée centrale qui rend la ressource désirable.
+Le coach sportif indépendant perd 9 à 11h/semaine en messages répétitifs (tarifs, dispos) auxquels il répond à toute heure. La vidéo montre le mécanisme concret pour automatiser ce support sans perdre le ton personnel, et chiffre le coût réel de ce temps perdu (10h/semaine = 2000€/mois non facturés).
 
 ## Chemin de conversion
 
@@ -23,4 +23,4 @@
 
 ## Mécanisme de désir vers l'appel
 
-[À CONFIGURER] — Pourquoi le prospect voudrait réserver un appel après la ressource ?
+La vidéo donne le principe général et le calcul type (10h/semaine = 2000€/mois). L'appel diagnostic personnalise ce chiffrage sur les messages réels du coach — savoir "combien de temps MOI je peux récupérer" est ce qui crée l'envie de réserver.
