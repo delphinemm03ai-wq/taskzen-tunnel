@@ -11,9 +11,9 @@
 
 const config = {
   business: {
-    name: "Atelier Démo",
-    tagline: "Le tunnel de vente que tu personnalises en quelques minutes avec Claude Code.",
-    domain: "exemple.com",
+    name: "Taskzen",
+    tagline: "Récupère 10 heures par semaine sans embaucher personne.",
+    domain: "taskzen.fr",
   },
 
   brand: {
@@ -26,40 +26,41 @@ const config = {
 
   // ── Étape 1 : Landing / opt-in ─────────────────────────
   landing: {
-    eyebrow: "Ressource gratuite",
-    headline: "Reçois le guide qui change la donne",
+    eyebrow: "Ressource gratuite — 5 minutes",
+    headline: "Récupère 10 heures par semaine sans embaucher personne",
     subhead:
-      "Laisse ton email et accède immédiatement à la ressource. Concret, actionnable, sans blabla.",
+      "La vidéo de 5 minutes qui montre comment les coachs sportifs indépendants automatisent leurs réponses WhatsApp, email et SMS — sans paraître robotique, sans rien installer eux-mêmes.",
     bullets: [
-      "Une méthode claire, étape par étape",
-      "Des exemples réels que tu peux copier",
-      "10 minutes pour passer à l'action",
+      "Le mécanisme exact pour répondre automatiquement dans TON ton, pas celui d'un robot",
+      "Le calcul de ce que ton temps de support te coûte vraiment (le chiffre pique)",
+      "Comment qualifier tes prospects et caler les RDV sans lever le petit doigt",
     ],
-    cta: "Recevoir la ressource",
+    cta: "Recevoir la vidéo gratuite",
     formLabel: "Ton meilleur email",
-    socialProof: "Déjà 1 200+ personnes ont reçu la ressource.",
+    socialProof:
+      "25 ans à faire tourner des systèmes qui n'ont pas le droit de tomber (Airbus, Renault, Orange, Air France) — maintenant au service des coachs indépendants.",
   },
 
   // ── Étape 2 : Ressource (accès) ────────────────────────
   resource: {
     type: "video" as "vsl" | "pdf" | "video" | "quiz",
-    eyebrow: "Ta ressource est prête",
-    title: "Voici ta ressource",
+    eyebrow: "Ta vidéo est prête",
+    title: "La Méthode IA : comment récupérer 10h par semaine sans embaucher",
     description:
-      "Prends le temps de la parcourir. Quand tu es prêt à passer à l'étape suivante, réserve ton appel ci-dessous.",
+      "Regarde les 5 minutes en entier : tu vas voir exactement comment automatiser tes réponses clients sans perdre ton ton, et combien ce temps perdu te coûte réellement chaque mois. Envie de savoir combien TOI tu peux récupérer avec tes messages à toi ? Réserve ton diagnostic gratuit juste en dessous.",
     // Pour type=video/vsl : URL d'embed (YouTube, Vimeo, Tella, Loom...).
     embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     // Pour type=pdf : lien de téléchargement direct.
     downloadUrl: "",
-    ctaToBooking: "Réserver mon appel offert",
+    ctaToBooking: "Réserver mon diagnostic gratuit",
   },
 
   // ── Étape 3 : Réserver (Cal.com) ───────────────────────
   booking: {
     eyebrow: "Dernière étape",
-    headline: "Réserve ton appel découverte",
+    headline: "Réserve ton diagnostic gratuit de 30 minutes",
     description:
-      "Choisis le créneau qui te convient. On fait le point ensemble, sans engagement.",
+      "On regarde ensemble tes messages clients et on chiffre précisément le temps (et l'argent) que tu peux récupérer chaque semaine. Sans engagement, sans vente forcée — tu repars avec le chiffrage, que tu bosses avec moi ou pas.",
     // Ton identifiant Cal.com : cal.com/<username>/<eventSlug>
     calUsername: "delphine-taskzen",
     calEventSlug: "appel-decouverte",
@@ -68,18 +69,18 @@ const config = {
   // ── Étape 4 : Merci ────────────────────────────────────
   thankyou: {
     eyebrow: "C'est confirmé",
-    headline: "Ton appel est réservé",
-    body: "Tu vas recevoir un email de confirmation. À très vite !",
+    headline: "Ton diagnostic est réservé",
+    body: "Tu vas recevoir un email de confirmation avec le lien de visio. D'ici là, jette un œil à tes messages clients de la semaine dernière — combien de temps ça t'a pris ? On en reparle pendant l'appel.",
     nextSteps: [
       "Ajoute le rendez-vous à ton agenda",
-      "Prépare tes questions",
-      "Surveille ta boîte mail",
+      "Note le nombre de messages clients que tu reçois en moyenne par jour",
+      "Prépare tes questions sur l'automatisation",
     ],
   },
 
   legal: {
-    companyName: "Ton Entreprise",
-    contactEmail: "contact@exemple.com",
+    companyName: "Taskzen",
+    contactEmail: "contact@taskzen.fr",
     privacyUrl: "/confidentialite",
   },
 } as const;

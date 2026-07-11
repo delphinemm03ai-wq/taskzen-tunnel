@@ -6,8 +6,8 @@
 
 - [x] Onboarding Phase 1 (business + offre + ressource + stratégie)
 - [x] Business configuré (business.md, offer.md)
-- [ ] Direction artistique définie (brand.md, /design)
-- [ ] Copywriting des 4 pages (copy.md, /copy)
+- [x] Direction artistique définie (brand.md, /design)
+- [x] Copywriting des 4 pages (copy.md, /copy)
 - [x] Airtable connecté (CRM leads)
 - [x] PostHog connecté (analytics)
 - [x] Resend connecté (envoi ressource)
@@ -20,9 +20,9 @@
 |---------|--------|
 | identity/business.md | Configuré |
 | identity/offer.md | Configuré |
-| identity/brand.md | Défaut (terracotta/crème) |
+| identity/brand.md | Configuré (argile brûlée/mousse, direction "chaleureux coach") |
 | funnel/strategy.md | Configuré |
-| funnel/copy.md | À configurer |
+| funnel/copy.md | Configuré (4 pages appliquées dans config.ts) |
 | funnel/config.md | Configuré (Airtable, PostHog, Cal.com) |
 | knowledge/frameworks.md | Référence (pré-rempli) |
 | knowledge/lessons.md | Vide |
@@ -46,7 +46,5 @@
 
 ## Prochaines actions suggérées
 
-1. `/design` — direction artistique personnalisée (le thème est encore celui par défaut)
-2. `/copy` — rédiger les 4 pages du tunnel
-3. `/funnel` — appliquer copy + design dans config.ts
-4. `/preview` — voir le résultat en local
+1. `/deploy` — mettre le tunnel en ligne sur Vercel
+2. `/analytics` — suivre les conversions une fois en ligne
