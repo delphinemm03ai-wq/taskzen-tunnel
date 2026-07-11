@@ -26,10 +26,10 @@ const config = {
 
   // ── Étape 1 : Landing / opt-in ─────────────────────────
   landing: {
-    eyebrow: "Ressource gratuite — 5 minutes",
+    eyebrow: "Ressource gratuite (5 minutes)",
     headline: "Récupère 10 heures par semaine sans embaucher personne",
     subhead:
-      "La vidéo de 5 minutes qui montre comment les coachs sportifs indépendants automatisent leurs réponses WhatsApp, email et SMS — sans paraître robotique, sans rien installer eux-mêmes.",
+      "La vidéo de 5 minutes qui montre comment les coachs sportifs indépendants automatisent leurs réponses WhatsApp, email et SMS. Sans paraître robotique, sans rien installer eux-mêmes.",
     bullets: [
       "Le mécanisme exact pour répondre automatiquement dans TON ton, pas celui d'un robot",
       "Le calcul de ce que ton temps de support te coûte vraiment (le chiffre pique)",
@@ -38,7 +38,7 @@ const config = {
     cta: "Recevoir la vidéo gratuite",
     formLabel: "Ton meilleur email",
     socialProof:
-      "25 ans à faire tourner des systèmes qui n'ont pas le droit de tomber (Airbus, Renault, Orange, Air France) — maintenant au service des coachs indépendants.",
+      "25 ans à faire tourner des systèmes qui n'ont pas le droit de tomber (Airbus, Renault, Orange, Air France), maintenant au service des coachs indépendants.",
   },
 
   // ── Étape 2 : Ressource (accès) ────────────────────────
@@ -60,7 +60,7 @@ const config = {
     eyebrow: "Dernière étape",
     headline: "Réserve ton diagnostic gratuit de 30 minutes",
     description:
-      "On regarde ensemble tes messages clients et on chiffre précisément le temps (et l'argent) que tu peux récupérer chaque semaine. Sans engagement, sans vente forcée — tu repars avec le chiffrage, que tu bosses avec moi ou pas.",
+      "On regarde ensemble tes messages clients et on chiffre précisément le temps (et l'argent) que tu peux récupérer chaque semaine. Sans engagement, sans vente forcée : tu repars avec le chiffrage, que tu bosses avec moi ou pas.",
     // Ton identifiant Cal.com : cal.com/<username>/<eventSlug>
     calUsername: "delphine-taskzen",
     calEventSlug: "appel-decouverte",
@@ -70,7 +70,7 @@ const config = {
   thankyou: {
     eyebrow: "C'est confirmé",
     headline: "Ton diagnostic est réservé",
-    body: "Tu vas recevoir un email de confirmation avec le lien de visio. D'ici là, jette un œil à tes messages clients de la semaine dernière — combien de temps ça t'a pris ? On en reparle pendant l'appel.",
+    body: "Tu vas recevoir un email de confirmation avec le lien de visio. D'ici là, jette un œil à tes messages clients de la semaine dernière : combien de temps ça t'a pris ? On en reparle pendant l'appel.",
     nextSteps: [
       "Ajoute le rendez-vous à ton agenda",
       "Note le nombre de messages clients que tu reçois en moyenne par jour",
