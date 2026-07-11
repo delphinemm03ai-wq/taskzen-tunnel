@@ -1,10 +1,11 @@
+import Image from "next/image";
 import config from "@/config";
 import { OptinForm } from "@/components/funnel/OptinForm";
 import { PageView } from "@/components/funnel/PageView";
 import { FUNNEL_EVENTS } from "@/lib/events";
 
 export default function LandingPage() {
-  const { landing } = config;
+  const { landing, founder } = config;
 
   return (
     <main className="paper-grain" style={{ minHeight: "100vh", position: "relative", overflow: "hidden" }}>
@@ -102,52 +103,45 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* Colonne visuelle — carte éditoriale */}
+        {/* Colonne visuelle - carte editoriale avec photo de la fondatrice */}
         <aside className="reveal reveal-4" style={{ alignSelf: "stretch", display: "flex", alignItems: "center" }}>
           <div
             className="surface-card"
             style={{
-              padding: "2.2rem",
+              padding: "1.4rem",
               width: "100%",
               transform: "rotate(-1.4deg)",
             }}
           >
             <div
               style={{
-                fontFamily: "var(--font-display)",
-                fontSize: "5rem",
-                lineHeight: 1,
-                color: "var(--color-primary)",
+                position: "relative",
+                width: "100%",
+                aspectRatio: "4 / 5",
+                borderRadius: "calc(var(--radius) - 4px)",
+                overflow: "hidden",
               }}
             >
-              “
+              <Image
+                src={founder.photo}
+                alt={founder.name}
+                fill
+                sizes="(max-width: 860px) 90vw, 420px"
+                style={{ objectFit: "cover" }}
+                priority
+              />
             </div>
-            <p style={{ fontFamily: "var(--font-display)", fontSize: "1.5rem", lineHeight: 1.3, marginTop: "-1rem" }}>
-              La meilleure ressource que j'ai reçue cette année. Claire, directe, et qui m'a vraiment fait passer à
-              l'action.
-            </p>
-            <div style={{ marginTop: "1.6rem", display: "flex", alignItems: "center", gap: "0.8rem" }}>
-              <div
-                style={{
-                  width: 42,
-                  height: 42,
-                  borderRadius: "50%",
-                  background: "var(--color-bg-soft)",
-                  border: "1px solid var(--color-line)",
-                  display: "grid",
-                  placeItems: "center",
-                  fontWeight: 700,
-                  color: "var(--color-ink-soft)",
-                }}
-              >
-                A
+
+            <div style={{ padding: "1.4rem 0.4rem 0.6rem" }}>
+              <div style={{ fontFamily: "var(--font-display)", fontSize: "1.2rem", fontWeight: 600 }}>
+                {founder.name}
               </div>
-              <div>
-                <div style={{ fontWeight: 600, fontSize: "0.95rem" }}>Témoignage exemple</div>
-                <div style={{ fontSize: "0.82rem", color: "var(--color-ink-soft)" }}>
-                  Remplaçable via /copy
-                </div>
+              <div style={{ fontSize: "0.85rem", color: "var(--color-ink-soft)", marginBottom: "0.9rem" }}>
+                {founder.role}
               </div>
+              <p style={{ fontSize: "0.92rem", lineHeight: 1.5, color: "var(--color-ink-soft)" }}>
+                {landing.socialProof}
+              </p>
             </div>
           </div>
         </aside>

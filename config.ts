@@ -24,6 +24,12 @@ const config = {
     theme: "light" as "light" | "dark",
   },
 
+  founder: {
+    name: "Delphine Moura Miranda",
+    role: "Fondatrice de Taskzen",
+    photo: "/images/delphine-founder.png",
+  },
+
   // ── Étape 1 : Landing / opt-in ─────────────────────────
   landing: {
     eyebrow: "Ressource gratuite (5 minutes)",
