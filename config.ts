@@ -18,9 +18,9 @@ const config = {
 
   brand: {
     // Couleurs — re-personnalisables via /design. Miroir des variables CSS dans globals.css.
-    colorPrimary: "#c2410c", // terracotta
-    colorAccent: "#0f766e", // teal
-    colorBg: "#faf6f0", // crème
+    colorPrimary: "#a8431f", // argile brûlée
+    colorAccent: "#3f5d3a", // mousse profonde
+    colorBg: "#f3ecdd", // papier chaud
     theme: "light" as "light" | "dark",
   },
 

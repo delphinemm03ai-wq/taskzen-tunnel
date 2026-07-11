@@ -1,31 +1,32 @@
 @import "tailwindcss";
 
 /*
-  Claude Tunnel OS — Design system
-  Direction artistique par défaut : éditorial chaleureux, thème CLAIR.
-  Palette terracotta / crème / encre — volontairement distincte de tout projet existant.
-  Chaque utilisateur re-personnalise via la commande /design (couleurs + fonts dans config.ts).
+  Claude Tunnel OS — Design system — Taskzen
+  Direction artistique : "chaleureux coach", affinée pour Taskzen.
+  Argile brûlée / mousse profonde / papier chaud — signature : le reçu du temps perdu
+  (ticket de caisse qui matérialise le calcul 10h/semaine = 2000€/mois).
 */
 
 :root {
   /* Couleurs (miroir de config.ts > brand) */
-  --color-primary: #c2410c;      /* terracotta */
-  --color-primary-dark: #9a3412;
-  --color-primary-light: #fdba74;
-  --color-accent: #0f766e;       /* teal profond, accent froid */
-  --color-bg: #faf6f0;           /* crème */
-  --color-bg-soft: #f3ece1;
-  --color-surface: #ffffff;
-  --color-ink: #1c1917;          /* encre quasi-noire */
-  --color-ink-soft: #57534e;
-  --color-line: #e7ded1;
+  --color-primary: #a8431f;      /* argile brûlée */
+  --color-primary-dark: #7c3015;
+  --color-primary-light: #e8b48f;
+  --color-accent: #3f5d3a;       /* mousse profonde, accent chaud/vital */
+  --color-bg: #f3ecdd;           /* papier chaud */
+  --color-bg-soft: #eae0c9;
+  --color-surface: #fffcf5;
+  --color-ink: #241c16;          /* encre brune quasi-noire */
+  --color-ink-soft: #6b5b48;
+  --color-line: #dccfae;
 
   --font-display: "Fraunces", "Georgia", serif;
-  --font-body: "Söhne", "Inter", system-ui, -apple-system, sans-serif;
+  --font-body: "Work Sans", system-ui, -apple-system, sans-serif;
+  --font-mono: "Space Mono", "SFMono-Regular", Consolas, monospace;
 
   --radius: 14px;
-  --shadow-card: 0 1px 2px rgba(28, 25, 23, 0.04), 0 8px 24px -8px rgba(28, 25, 23, 0.12);
-  --shadow-lift: 0 12px 40px -12px rgba(154, 52, 18, 0.28);
+  --shadow-card: 0 1px 2px rgba(36, 28, 22, 0.05), 0 8px 24px -8px rgba(36, 28, 22, 0.14);
+  --shadow-lift: 0 12px 40px -12px rgba(124, 48, 21, 0.3);
 }
 
 @theme inline {
@@ -35,6 +36,7 @@
   --color-ink: var(--color-ink);
   --font-display: var(--font-display);
   --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
 }
 
 * {
@@ -210,6 +212,65 @@ h1, h2, h3, h4 {
   inset: 0;
   pointer-events: none;
   opacity: 0.4;
-  background-image: radial-gradient(rgba(28, 25, 23, 0.025) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(36, 28, 22, 0.025) 1px, transparent 1px);
   background-size: 4px 4px;
+}
+
+/* ── Signature : le reçu du temps perdu ─────────────────
+   Ticket de caisse qui matérialise le calcul de l'offre
+   (ex: 10h/semaine perdues = 2000€/mois). Bord inférieur
+   déchiré façon papier thermique. À utiliser pour incarner
+   la preuve chiffrée dans les pages du tunnel. */
+
+.receipt {
+  position: relative;
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  padding: 1.9rem 1.9rem 2.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.92rem;
+  box-shadow: var(--shadow-card);
+  clip-path: polygon(
+    0 0, 100% 0, 100% 97%,
+    95% 100%, 90% 97%, 85% 100%, 80% 97%, 75% 100%,
+    70% 97%, 65% 100%, 60% 97%, 55% 100%, 50% 97%,
+    45% 100%, 40% 97%, 35% 100%, 30% 97%, 25% 100%,
+    20% 97%, 15% 100%, 10% 97%, 5% 100%, 0 97%
+  );
+}
+
+.receipt-heading {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-ink-soft);
+  text-align: center;
+  padding-bottom: 0.9rem;
+  margin-bottom: 0.9rem;
+  border-bottom: 1px dashed var(--color-line);
+}
+
+.receipt-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.4rem 0;
+  border-bottom: 1px dashed var(--color-line);
+  color: var(--color-ink-soft);
+}
+.receipt-row:last-of-type {
+  border-bottom: none;
+}
+
+.receipt-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 0.9rem;
+  padding-top: 0.9rem;
+  border-top: 2px solid var(--color-ink);
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--color-primary-dark);
 }

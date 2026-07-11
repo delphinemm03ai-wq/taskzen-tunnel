@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Fraunces, Work_Sans, Space_Mono } from "next/font/google";
 import "./globals.css";
 import config from "@/config";
 import { PostHogProvider } from "@/components/common/PostHogProvider";
@@ -12,10 +12,17 @@ const display = Fraunces({
   display: "swap",
 });
 
-const body = Inter({
+const body = Work_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
   variable: "--font-body-loaded",
+  display: "swap",
+});
+
+const mono = Space_Mono({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-mono-loaded",
   display: "swap",
 });
 
@@ -30,12 +37,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr" className={`${display.variable} ${body.variable}`}>
+    <html lang="fr" className={`${display.variable} ${body.variable} ${mono.variable}`}>
       <body
         style={
           {
             "--font-display": `var(--font-display-loaded), Georgia, serif`,
             "--font-body": `var(--font-body-loaded), system-ui, sans-serif`,
+            "--font-mono": `var(--font-mono-loaded), Consolas, monospace`,
             "--color-primary": config.brand.colorPrimary,
             "--color-accent": config.brand.colorAccent,
             "--color-bg": config.brand.colorBg,
