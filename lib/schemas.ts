@@ -32,16 +32,15 @@ const utmFields = {
   utmCampaign: z.string().max(255).optional(),
 };
 
-/** Schéma de l'opt-in (étape 1 du tunnel). Email + prénom optionnel + UTM. */
+/** Schéma de l'opt-in (étape 1 du tunnel). Email + prénom requis + UTM. */
 export const optinSchema = z.object({
   email: emailField,
   firstName: z
-    .string()
-    .min(1)
+    .string({ required_error: "Le prénom est requis" })
+    .min(1, "Le prénom est requis")
     .max(50)
     .regex(/^[a-zA-ZÀ-ÿ\s'-]+$/, "Le prénom contient des caractères invalides")
-    .trim()
-    .optional(),
+    .trim(),
   ...utmFields,
 });
 

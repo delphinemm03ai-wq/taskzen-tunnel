@@ -20,6 +20,7 @@ function getUtm() {
 
 export function OptinForm() {
   const router = useRouter();
+  const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -33,7 +34,7 @@ export function OptinForm() {
       const res = await fetch("/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, ...getUtm() }),
+        body: JSON.stringify({ email, firstName, ...getUtm() }),
       });
       const json = await res.json();
 
@@ -62,12 +63,35 @@ export function OptinForm() {
       </label>
       <div style={{ display: "flex", gap: "0.6rem", flexWrap: "wrap" }}>
         <input
+          id="optin-firstname"
+          type="text"
+          required
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          placeholder="Ton prénom"
+          aria-label="Prénom"
+          autoComplete="given-name"
+          maxLength={50}
+          style={{
+            flex: "1 1 140px",
+            padding: "0.95rem 1.1rem",
+            borderRadius: "999px",
+            border: "1.5px solid var(--color-line)",
+            background: "var(--color-surface)",
+            fontSize: "1rem",
+            outline: "none",
+            color: "var(--color-ink)",
+          }}
+        />
+        <input
           id="optin-email"
           type="email"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="prenom@email.com"
+          aria-label="Email"
+          autoComplete="email"
           style={{
             flex: "1 1 220px",
             padding: "0.95rem 1.1rem",
