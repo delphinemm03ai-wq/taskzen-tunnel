@@ -65,7 +65,8 @@ export async function createLead(fields: LeadFields): Promise<AirtableRecord> {
   const allFields: Record<string, unknown> = {
     ...fields,
     Statut: fields.Statut ?? "optin",
-    "Created At": new Date().toISOString(),
+    // Champ Airtable de type "date" (sans heure) : n'accepte que YYYY-MM-DD.
+    "Created At": new Date().toISOString().slice(0, 10),
   };
 
   const res = await fetch(BASE_URL, {
