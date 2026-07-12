@@ -44,6 +44,8 @@
 - L'offre s'appelle "La Méthode IA", pas "La Méthode Taskzen" (décision de nommage à ne pas perdre).
 - Le remote git du repo pointe vers `PierreEvrard/claude-tunnel-os` (dépôt public du template, pas un repo perso) : ne jamais y pousser les infos business/tarifs de Delphine. Le repo perso est le remote `delphine` (github.com/delphinemm03ai-wq/taskzen-tunnel).
 - Le déploiement du 11/07 a échoué : Vercel bloque Next.js 15.1.3 (CVE-2025-66478). Corrigé le 12/07 en passant à Next 15.1.12. Si un futur deploy échoue avec "Vulnerable version of Next.js detected", mettre à jour Next.
+- Le formulaire lead a cassé en prod le 12/07 pour deux raisons cumulées : (1) le token Airtable dans `.env` était tronqué (17 caractères au lieu de 82, seul l'ID du token avait été copié), le token complet vit dans la config MCP de `~/.claude.json` ; (2) le champ Airtable "Created At" est de type date simple (YYYY-MM-DD) et refuse un datetime ISO complet. Les deux sont corrigés, formulaire testé de bout en bout le 12/07 (lead créé puis supprimé).
+- L'URL propre du projet est https://taskzen-tunnel.vercel.app (alias automatique Vercel).
 
 ## Déploiement
 
