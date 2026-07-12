@@ -46,15 +46,15 @@
 - Le déploiement du 11/07 a échoué : Vercel bloque Next.js 15.1.3 (CVE-2025-66478). Corrigé le 12/07 en passant à Next 15.1.12. Si un futur deploy échoue avec "Vulnerable version of Next.js detected", mettre à jour Next.
 - Le formulaire lead a cassé en prod le 12/07 pour deux raisons cumulées : (1) le token Airtable dans `.env` était tronqué (17 caractères au lieu de 82, seul l'ID du token avait été copié), le token complet vit dans la config MCP de `~/.claude.json` ; (2) le champ Airtable "Created At" est de type date simple (YYYY-MM-DD) et refuse un datetime ISO complet. Les deux sont corrigés, formulaire testé de bout en bout le 12/07 (lead créé puis supprimé).
 - L'URL propre du projet est https://taskzen-tunnel.vercel.app (alias automatique Vercel).
+- Domaine taskzen.fr (Hostinger) vérifié dans Resend le 12/07/2026 : enregistrements MX `send`, TXT SPF `send`, TXT DKIM `resend._domainkey` importés chez Hostinger via l'intégration "Go to Hostinger", propagation confirmée, vérification manuelle lancée dans le dashboard Resend. `RESEND_FROM_EMAIL` passé de `onboarding@resend.dev` (mode sandbox, ne délivrait qu'à l'adresse du compte Resend) à `contact@taskzen.fr`. Testé de bout en bout en prod : plus d'erreur `[lead] envoi ressource échoué` dans les logs Vercel après le changement.
 
 ## Déploiement
 
-- **URL production** : https://taskzen-tunnel-delphinemm03ai-wqs-projects.vercel.app
-- Projet Vercel : `taskzen-tunnel` (compte delphinemm03ai-wq), 11 variables d'env configurées en Production le 12/07/2026.
+- **URL production** : https://taskzen-tunnel.vercel.app
+- Projet Vercel : `taskzen-tunnel` (compte delphinemm03ai-wq), 11 variables d'env configurées en Production le 12/07/2026, `RESEND_FROM_EMAIL` mise à jour le 12/07/2026.
 - Déploiement via `vercel deploy --prod --yes` depuis le worktree.
 
 ## Prochaines actions suggérées
 
-1. Brancher un domaine propre (ex. taskzen.fr ou un sous-domaine) sur le projet Vercel
-2. Créer la ressource gratuite (vidéo 5 min "La Méthode IA") et la brancher sur /ressource
-3. `/analytics` — suivre les conversions maintenant que le tunnel est en ligne
+1. Créer la ressource gratuite (vidéo 5 min "La Méthode IA") et la brancher sur /ressource
+2. `/analytics` — suivre les conversions maintenant que le tunnel est en ligne
