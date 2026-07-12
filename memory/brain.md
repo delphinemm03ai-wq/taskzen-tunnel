@@ -12,7 +12,7 @@
 - [x] PostHog connecté (analytics)
 - [x] Resend connecté (envoi ressource)
 - [x] Cal.com configuré (réservation)
-- [ ] Déployé sur Vercel
+- [x] Déployé sur Vercel (production, 12/07/2026)
 
 ## Fichiers mémoire
 
@@ -42,9 +42,17 @@
 > Accumulés au fil des sessions via /memory-save.
 
 - L'offre s'appelle "La Méthode IA", pas "La Méthode Taskzen" (décision de nommage à ne pas perdre).
-- Le remote git du repo pointe vers `PierreEvrard/claude-tunnel-os` (dépôt public du template, pas un repo perso) : ne jamais y pousser les infos business/tarifs de Delphine.
+- Le remote git du repo pointe vers `PierreEvrard/claude-tunnel-os` (dépôt public du template, pas un repo perso) : ne jamais y pousser les infos business/tarifs de Delphine. Le repo perso est le remote `delphine` (github.com/delphinemm03ai-wq/taskzen-tunnel).
+- Le déploiement du 11/07 a échoué : Vercel bloque Next.js 15.1.3 (CVE-2025-66478). Corrigé le 12/07 en passant à Next 15.1.12. Si un futur deploy échoue avec "Vulnerable version of Next.js detected", mettre à jour Next.
+
+## Déploiement
+
+- **URL production** : https://taskzen-tunnel-delphinemm03ai-wqs-projects.vercel.app
+- Projet Vercel : `taskzen-tunnel` (compte delphinemm03ai-wq), 11 variables d'env configurées en Production le 12/07/2026.
+- Déploiement via `vercel deploy --prod --yes` depuis le worktree.
 
 ## Prochaines actions suggérées
 
-1. `/deploy` — mettre le tunnel en ligne sur Vercel
-2. `/analytics` — suivre les conversions une fois en ligne
+1. Brancher un domaine propre (ex. taskzen.fr ou un sous-domaine) sur le projet Vercel
+2. Créer la ressource gratuite (vidéo 5 min "La Méthode IA") et la brancher sur /ressource
+3. `/analytics` — suivre les conversions maintenant que le tunnel est en ligne
