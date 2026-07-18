@@ -104,3 +104,70 @@ export async function updateLead(
   const data: AirtableResponse = await res.json();
   return data.records[0];
 }
+
+/**
+ * Leads en statut "optin" (pas encore réservé) pour la séquence de relance
+ * J+2 / J+4 / J+7. Champs "Relance J2/J4/J7 envoyée" (checkbox) évitent les
+ * doublons d'envoi. "Statut" doit passer à autre chose que "optin" dès qu'un
+ * lead réserve, pour sortir automatiquement de la séquence (voir note dans
+ * memory/funnel/sequence-emails-relance.md : pas encore de webhook Cal.com,
+ * mise à jour manuelle du Statut en attendant).
+ */
+export interface FollowupLead {
+  id: string;
+  email: string;
+  firstName?: string;
+  createdAt: string;
+  relanceJ2Sent: boolean;
+  relanceJ4Sent: boolean;
+  relanceJ7Sent: boolean;
+}
+
+export async function listLeadsForFollowup(): Promise<FollowupLead[]> {
+  const formula = encodeURIComponent(`{Statut} = "optin"`);
+  const leads: FollowupLead[] = [];
+  let offset: string | undefined;
+
+  do {
+    const url = new URL(BASE_URL);
+    url.searchParams.set("filterByFormula", formula);
+    url.searchParams.set("pageSize", "100");
+    if (offset) url.searchParams.set("offset", offset);
+
+    const res = await fetch(url.toString(), { headers: headers() });
+    if (!res.ok) {
+      throw new Error(`Airtable listLeadsForFollowup failed: ${res.status}`);
+    }
+
+    const data: AirtableResponse & { offset?: string } = await res.json();
+    for (const record of data.records) {
+      const createdAt = record.fields["Created At"];
+      if (typeof createdAt !== "string") continue;
+      leads.push({
+        id: record.id,
+        email: String(record.fields.Email ?? ""),
+        firstName: record.fields.Prenom ? String(record.fields.Prenom) : undefined,
+        createdAt,
+        relanceJ2Sent: Boolean(record.fields["Relance J2 envoyee"]),
+        relanceJ4Sent: Boolean(record.fields["Relance J4 envoyee"]),
+        relanceJ7Sent: Boolean(record.fields["Relance J7 envoyee"]),
+      });
+    }
+    offset = data.offset;
+  } while (offset);
+
+  return leads;
+}
+
+export async function markFollowupSent(
+  recordId: string,
+  stage: "j2" | "j4" | "j7"
+): Promise<void> {
+  const field =
+    stage === "j2"
+      ? "Relance J2 envoyee"
+      : stage === "j4"
+        ? "Relance J4 envoyee"
+        : "Relance J7 envoyee";
+  await updateLead(recordId, { [field]: true });
+}
