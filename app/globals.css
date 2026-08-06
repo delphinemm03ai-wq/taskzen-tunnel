@@ -180,8 +180,52 @@ h1, h2, h3, h4 {
 .reveal-3 { animation-delay: 0.31s; }
 .reveal-4 { animation-delay: 0.44s; }
 
+/* Célébration : moment rare (confirmation de RDV sur /merci), traitement
+   distinct du reveal générique. Rebond sur l'échelle, fondu séparé pour
+   ne pas faire dépasser l'opacité au-delà de 1 pendant l'overshoot. */
+@keyframes pop-in-scale {
+  from { transform: scale(0.85); }
+  to { transform: scale(1); }
+}
+@keyframes pop-in-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.pop-in {
+  opacity: 0;
+  transform: scale(0.85);
+  animation:
+    pop-in-scale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.05s forwards,
+    pop-in-fade 0.3s ease-out 0.05s forwards;
+}
+
+/* Message d'erreur du formulaire : évite qu'il surgisse d'un coup sous les champs. */
+@keyframes error-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.error-in {
+  animation: error-in 0.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Halo décoratif de la landing : dérive très lente, amplitude volontairement
+   faible pour rester en arrière-plan et ne jamais concurrencer le contenu. */
+@keyframes blob-drift {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(-2%, 2%) scale(1.04); }
+}
+
+.blob-drift {
+  animation: blob-drift 18s ease-in-out infinite alternate;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal { animation: none; opacity: 1; }
+  .pop-in { animation: pop-in-fade 0.2s ease-out 0.05s forwards; transform: none; }
+  .error-in { animation: none; }
+  .blob-drift { animation: none; }
   html { scroll-behavior: auto; }
 }
 

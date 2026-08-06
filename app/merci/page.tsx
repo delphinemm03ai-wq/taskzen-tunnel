@@ -15,7 +15,7 @@ export default function MerciPage() {
         style={{ maxWidth: "40rem", textAlign: "center", paddingTop: "4rem", paddingBottom: "4rem" }}
       >
         <div
-          className="reveal reveal-1"
+          className="pop-in"
           style={{
             width: 76,
             height: 76,

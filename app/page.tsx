@@ -14,6 +14,7 @@ export default function LandingPage() {
       {/* Forme décorative en arrière-plan */}
       <div
         aria-hidden
+        className="blob-drift"
         style={{
           position: "absolute",
           top: "-12%",
