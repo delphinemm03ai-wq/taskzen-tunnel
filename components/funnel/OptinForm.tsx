@@ -110,7 +110,7 @@ export function OptinForm() {
       </div>
 
       {error && (
-        <p className="error-in" style={{ color: "#b91c1c", fontSize: "0.85rem", marginTop: "0.6rem" }}>
+        <p key={error} className="error-in" style={{ color: "#b91c1c", fontSize: "0.85rem", marginTop: "0.6rem" }}>
           {error}
         </p>
       )}
