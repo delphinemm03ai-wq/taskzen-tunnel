@@ -65,4 +65,11 @@ A command left at `—` is one the agents cannot run: they say so rather than gu
 
 ## Project conventions
 
-<< structure, stack, patterns, naming, commit rules — filled by /ks-architect >>
+- Next.js 15 App Router, TypeScript strict, alias de chemin `@/`. Tailwind 4 + variables CSS de `app/globals.css` (theme argile / mousse / papier).
+- Une page de tunnel = de la donnee : config TS typee dans `funnels/<slug>.ts`, rendue par la bibliotheque de blocs de `components/funnel/`. Aucun LLM dans le chemin de rendu (ADR 003). Toute config invalide doit casser au build.
+- `lib/` : un fichier = un job. Validation zod (`lib/schemas.ts`), reponses API via `lib/api-response.ts`, cadence via `lib/rate-limit.ts`.
+- Donnees : Supabase schema `tunnel`, migrations SQL versionnees dans `supabase/migrations/`, acces serveur uniquement (`lib/supabase.ts`). La cle service_role et la cle secrete Stripe ne touchent jamais le client.
+- Idempotence partout ou argent ou email circule : contraintes d'unicite en base (email, stripe_event_id, envoi par contact/sequence/index).
+- Les routes prod actuelles (`/`, `/ressource`, `/reserver`, `/merci`, `api/lead`) ne se cassent jamais ; le moteur vit sous `/t/`.
+- Textes visibles en francais, tutoiement, jamais de tiret cadratin (U+2014). Commentaires de code en francais, dans le style du depot.
+- Git : commits conventionnels (feat/fix/docs/chore), remote `delphine` uniquement, jamais `origin` (template public). Stripe reste en mode test tant que Delphine n'a pas valide le passage en prod.
