@@ -160,3 +160,63 @@ export async function sendFollowupEmail(input: {
     html: followupEmailHtml(input.stage, input.firstName || "", input.siteUrl),
   });
 }
+
+/**
+ * Email de confirmation d'un opt-in du moteur de pages (bloc `optin`).
+ * Gabarit fixe aux couleurs du thème, même structure que resourceEmailHtml :
+ * la config du tunnel fournit des textes simples, jamais de HTML. Tout est
+ * échappé, en particulier le prénom saisi par le visiteur.
+ */
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function funnelConfirmationEmailHtml(input: {
+  firstName?: string;
+  title: string;
+  text: string;
+  buttonLabel?: string;
+  buttonUrl?: string;
+}): string {
+  const greeting = input.firstName ? `Hello ${escapeHtml(input.firstName)},` : "Hello,";
+  const button =
+    input.buttonLabel && input.buttonUrl
+      ? `
+    <p style="margin:28px 0;">
+      <a href="${escapeHtml(input.buttonUrl)}"
+         style="background:${config.brand.colorPrimary};color:#fff;text-decoration:none;
+                padding:14px 26px;border-radius:999px;font-weight:600;display:inline-block;">
+        ${escapeHtml(input.buttonLabel)}
+      </a>
+    </p>`
+      : "";
+  return `
+  <div style="font-family:system-ui,-apple-system,sans-serif;max-width:520px;margin:0 auto;color:#1c1917;">
+    <h1 style="font-size:22px;color:${config.brand.colorPrimary};">${escapeHtml(input.title)}</h1>
+    <p>${greeting}</p>
+    <p>${escapeHtml(input.text)}</p>
+    ${button}
+    ${signature()}
+  </div>`;
+}
+
+export async function sendFunnelConfirmationEmail(input: {
+  to: string;
+  firstName?: string;
+  subject: string;
+  title: string;
+  text: string;
+  buttonLabel?: string;
+  buttonUrl?: string;
+}): Promise<{ ok: boolean; reason?: string }> {
+  return sendEmail({
+    to: input.to,
+    subject: input.subject,
+    html: funnelConfirmationEmailHtml(input),
+  });
+}

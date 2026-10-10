@@ -5,6 +5,7 @@ import { CtaButton } from "./CtaButton";
 import { Faq } from "./Faq";
 import { Hero } from "./Hero";
 import { ImageBlock } from "./ImageBlock";
+import { OptinBlock } from "./OptinBlock";
 import { RichText } from "./RichText";
 import { Testimonial } from "./Testimonial";
 import { VideoEmbed } from "./VideoEmbed";
@@ -33,6 +34,8 @@ export function BlockRenderer({ block }: { block: Block }) {
       return <Countdown block={block} />;
     case "cta":
       return <CtaButton block={block} />;
+    case "optin":
+      return <OptinBlock block={block} />;
     default: {
       const unhandled: never = block;
       throw new Error(`Type de bloc non géré : ${JSON.stringify(unhandled)}`);

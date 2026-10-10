@@ -55,6 +55,21 @@ const demo = {
           role: "Fondatrice de Taskzen",
         },
         {
+          type: "optin",
+          labelPrenom: "Ton prénom",
+          labelEmail: "Ton email, pour recevoir la méthode",
+          boutonTexte: "Je reçois la méthode",
+          tag: "demo-optin",
+          etapeSuivante: "diagnostic",
+          email: {
+            objet: "Ta méthode pour récupérer 10 heures par semaine",
+            titre: "Bienvenue, c'est parti",
+            texte:
+              "Merci pour ton inscription. Tu vas découvrir comment tes réponses WhatsApp, email et SMS peuvent partir toutes seules, dans ton ton, pendant que tu coaches. Prochaine étape : un diagnostic gratuit de 30 minutes pour chiffrer le temps que tu peux récupérer.",
+            boutonTexte: "Voir mon diagnostic gratuit",
+          },
+        },
+        {
           type: "cta",
           libelle: "Voir le diagnostic gratuit",
           href: "/t/demo/diagnostic",

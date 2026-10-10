@@ -38,3 +38,18 @@ export const tunnelInvalide = {
   // @ts-expect-error le bloc "carrousel" rend l'étape invalide.
   etapes: [{ slug: "a", titre: "A", blocs: [{ type: "carrousel" }] }],
 } satisfies FunnelConfig;
+
+// Opt-in sans tag.
+// @ts-expect-error `tag` est requis sur un bloc optin.
+export const optinSansTag = { type: "optin", labelEmail: "Email", boutonTexte: "Go", etapeSuivante: "b", email: { objet: "O", titre: "T", texte: "X" } } satisfies Block;
+
+// Email de confirmation sans objet.
+export const optinEmailSansObjet = {
+  type: "optin",
+  labelEmail: "Ton email",
+  boutonTexte: "Je m'inscris",
+  tag: "demo",
+  etapeSuivante: "merci",
+  // @ts-expect-error `objet` est requis sur l'email de confirmation.
+  email: { titre: "Bienvenue", texte: "Merci." },
+} satisfies Block;

@@ -92,6 +92,31 @@ export interface CtaBlock {
   note?: string;
 }
 
+/** Email de confirmation envoyé après l'opt-in : gabarit fixe, texte simple, jamais de HTML libre. */
+export interface OptinEmail {
+  objet: string;
+  titre: string;
+  /** Paragraphe principal ; le prénom (s'il est connu) est ajouté par le gabarit. */
+  texte: string;
+  /** Libellé du bouton vers l'étape suivante ; sans libellé, pas de bouton. */
+  boutonTexte?: string;
+}
+
+/** Formulaire d'opt-in : contact upserté, tag posé, email envoyé, puis étape suivante. */
+export interface OptinBlock {
+  type: "optin";
+  labelEmail: string;
+  /** Libellé du champ prénom ; sans libellé, le champ n'est pas affiché. */
+  labelPrenom?: string;
+  prenomRequis?: boolean;
+  boutonTexte: string;
+  /** Tag posé sur le contact à chaque soumission valide. */
+  tag: string;
+  /** Slug de l'étape vers laquelle rediriger, dans le même tunnel. */
+  etapeSuivante: string;
+  email: OptinEmail;
+}
+
 /** Union discriminée par `type` : un nouveau bloc s'ajoute ici ET dans BlockRenderer. */
 export type Block =
   | HeroBlock
@@ -102,7 +127,8 @@ export type Block =
   | FaqBlock
   | TestimonialBlock
   | CountdownBlock
-  | CtaBlock;
+  | CtaBlock
+  | OptinBlock;
 
 export type BlockType = Block["type"];
 
