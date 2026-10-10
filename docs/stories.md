@@ -36,7 +36,7 @@ Aucune.
 - [ ] Un contact se crée avec email unique : réinsérer le même email met à jour la fiche au lieu de dupliquer.
 - [ ] Un script d'import lit un export CSV Systeme.io (email, prénom, tags) et crée contacts et tags ; relancer l'import ne crée aucun doublon.
 - [ ] Un export CSV des contacts avec leurs tags est possible.
-- [ ] La page `/admin` protégée liste les contacts (email, prénom, tags, date) avec recherche par email.
+- [ ] La page `/admin` liste les contacts (email, prénom, tags, date) avec recherche par email, protégée par le mécanisme existant : secret saisi dans la page et vérifié côté serveur (comme `/api/funnel/stats`). Sans secret valide, aucune donnée ne sort.
 
 ### Dependencies
 Aucune (parallèle à s01).
@@ -124,7 +124,7 @@ s02, s03.
 4
 
 ### Acceptance criteria
-- [ ] Un affilié (nom, email, code) se définit dans l'admin ou en config ; son lien est `/t/<tunnel>?aff=<code>`.
+- [ ] Un affilié (nom, email, code) se définit en config (fichier versionné, cohérent avec l'angle du PRD) ; son lien est `/t/<tunnel>?aff=<code>`. Les commissions et leur statut vivent en base, pas en config.
 - [ ] La visite avec `?aff=` pose un cookie de 30 jours ; la vente Stripe qui suit est attribuée au dernier code présent.
 - [ ] La commission vaut 30 % du HT de la vente et s'enregistre avec la vente.
 - [ ] L'admin affiche le tableau des commissions : affilié, vente, date, montant, statut (à payer ou payée) modifiable.
@@ -149,7 +149,7 @@ s04.
 ### Acceptance criteria
 - [ ] Chaque page du moteur envoie un événement de vue PostHog avec tunnel et étape.
 - [ ] L'admin affiche par tunnel : vues par étape, taux de passage d'une étape à la suivante, opt-ins, ventes et chiffre d'affaires (depuis Supabase).
-- [ ] Les chiffres affichés correspondent aux données brutes (vérification documentée sur un parcours test).
+- [ ] Un parcours test défini (3 vues de la page de capture, 1 opt-in, 1 vente en mode test Stripe) donne exactement ces chiffres dans l'admin : 3 vues, 1 opt-in, 1 vente, et les taux correspondants.
 
 ### Dependencies
 s03, s04.
@@ -176,6 +176,7 @@ s03, s04, s05.
 ### Agentic notes
 - Référence cible : les Règles d'automatisation Systeme.io (déclencheurs tag_added et form_subscribed ; actions add_tag, remove_tag, inscription à une campagne).
 - C'est une refactorisation plus une extension : la valeur est la lisibilité et la combinaison libre, pas une capacité nouvelle visible. La garder petite.
+- Première story à sacrifier si le délai de fin novembre serre (constat de la revue) : s09 ne dépend pas d'elle.
 
 ## Story s09-bascule — Le premier tunnel réel tourne chez nous
 **As a** Delphine **I want** mes contacts réels importés et un vrai tunnel en ligne sur mon domaine **so that** je peux commencer à quitter Systeme.io.
@@ -190,7 +191,7 @@ s03, s04, s05.
 - [ ] Une checklist de résiliation Systeme.io est produite : ce qui est couvert, ce qui reste (espace membre, tunnels encore actifs).
 
 ### Dependencies
-s03 et s05 au minimum ; idéalement s04, s06 et s07.
+s03, s04, s05, s06, s07 (fermes : la bascule réelle exige opt-in, vente, séquences, affiliation et stats opérationnels). s08 n'est pas requise.
 
 ### Agentic notes
 - L'export CSV se fait depuis dashboard/contacts de Systeme.io (par Delphine, ou Chrome piloté).
