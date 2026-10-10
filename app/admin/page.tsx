@@ -1,5 +1,6 @@
 import config from "@/config";
 import { FunnelDashboard } from "@/components/admin/FunnelDashboard";
+import { ContactsPanel } from "@/components/admin/ContactsPanel";
 
 export const metadata = {
   title: "Admin — Funnel",
@@ -21,7 +22,9 @@ export default function AdminPage() {
           Taux de conversion par étape, depuis PostHog.
         </p>
 
-        <FunnelDashboard />
+        <FunnelDashboard>
+          <ContactsPanel />
+        </FunnelDashboard>
       </section>
     </main>
   );

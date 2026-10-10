@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import { AdminSecretContext } from "@/components/admin/ContactsPanel";
 
 interface Step {
   key: string;
@@ -8,7 +9,8 @@ interface Step {
   count: number;
 }
 
-export function FunnelDashboard() {
+/** children : panneaux admin affichés après saisie du secret, qui le reçoivent par contexte. */
+export function FunnelDashboard({ children }: { children?: ReactNode }) {
   const [secret, setSecret] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [days, setDays] = useState(30);
@@ -134,6 +136,8 @@ export function FunnelDashboard() {
           })}
         </div>
       )}
+
+      <AdminSecretContext.Provider value={secret}>{children}</AdminSecretContext.Provider>
     </div>
   );
 }
