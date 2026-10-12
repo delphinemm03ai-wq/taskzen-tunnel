@@ -9,6 +9,8 @@ import {
   upsertContact,
 } from "@/lib/supabase";
 import { isResendConfigured, sendFunnelConfirmationEmail } from "@/lib/resend";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { getFunnel } from "@/funnels";
 import type { OptinBlock } from "@/types/funnel";
 
@@ -83,6 +85,13 @@ export async function POST(req: NextRequest) {
       const siteUrl =
         process.env.NEXT_PUBLIC_SITE_URL || `${req.nextUrl.protocol}//${req.nextUrl.host}`;
       after(async () => {
+        // Guide joint : le PDF est lu dans private/guides/ au moment de l'envoi.
+        const attachment = block.guide
+          ? {
+              filename: block.guide,
+              content: (await readFile(path.join(process.cwd(), "private", "guides", block.guide))).toString("base64"),
+            }
+          : undefined;
         const result = await sendFunnelConfirmationEmail({
           to: email,
           firstName,
@@ -91,6 +100,7 @@ export async function POST(req: NextRequest) {
           text: block.email.texte,
           buttonLabel: block.email.boutonTexte,
           buttonUrl: `${siteUrl}${redirectTo}`,
+          attachment,
         });
         if (result.ok) {
           console.log(`[optin] email de confirmation envoyé (${funnel.slug}/${step?.slug})`);

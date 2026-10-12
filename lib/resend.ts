@@ -38,6 +38,8 @@ async function sendEmail(input: {
   to: string;
   subject: string;
   html: string;
+  /** Pièce jointe : contenu encodé en base64. */
+  attachments?: { filename: string; content: string }[];
 }): Promise<{ ok: boolean; reason?: string }> {
   if (!isResendConfigured()) {
     return { ok: false, reason: "resend_not_configured" };
@@ -55,6 +57,7 @@ async function sendEmail(input: {
         to: input.to,
         subject: input.subject,
         html: input.html,
+        ...(input.attachments ? { attachments: input.attachments } : {}),
       }),
     });
 
@@ -213,10 +216,12 @@ export async function sendFunnelConfirmationEmail(input: {
   text: string;
   buttonLabel?: string;
   buttonUrl?: string;
+  attachment?: { filename: string; content: string };
 }): Promise<{ ok: boolean; reason?: string }> {
   return sendEmail({
     to: input.to,
     subject: input.subject,
     html: funnelConfirmationEmailHtml(input),
+    ...(input.attachment ? { attachments: [input.attachment] } : {}),
   });
 }

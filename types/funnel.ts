@@ -114,6 +114,8 @@ export interface OptinBlock {
   tag: string;
   /** Slug de l'étape vers laquelle rediriger, dans le même tunnel. */
   etapeSuivante: string;
+  /** Nom d'un PDF dans private/guides/, joint à l'email de confirmation. */
+  guide?: string;
   email: OptinEmail;
 }
 
