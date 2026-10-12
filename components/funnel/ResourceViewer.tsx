@@ -68,13 +68,22 @@ export function ResourceViewer() {
             inset: 0,
             display: "grid",
             placeItems: "center",
+            alignContent: "center",
             background: "var(--color-bg-soft)",
             color: "var(--color-ink-soft)",
             gap: "0.6rem",
           }}
         >
           <Play size={42} style={{ color: "var(--color-primary)" }} />
-          <span style={{ fontSize: "0.9rem" }}>Ajoute l&apos;URL de ta vidéo dans config.ts</span>
+          {/* Message visiteur tant que resource.embedUrl est vide (vidéo pas encore en ligne). */}
+          <div style={{ textAlign: "center", padding: "0 1.5rem" }}>
+            <strong style={{ display: "block", color: "var(--color-ink)", fontSize: "1.05rem" }}>
+              Ta vidéo arrive très bientôt
+            </strong>
+            <span style={{ fontSize: "0.9rem" }}>
+              En attendant, réserve ton diagnostic gratuit juste en dessous.
+            </span>
+          </div>
         </div>
       )}
     </div>
