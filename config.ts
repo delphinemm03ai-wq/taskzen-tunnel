@@ -35,13 +35,13 @@ const config = {
     eyebrow: "Ressource gratuite (5 minutes)",
     headline: "Récupère 10 heures par semaine sans embaucher personne",
     subhead:
-      "La vidéo de 5 minutes qui montre comment les coachs sportifs indépendants automatisent leurs réponses WhatsApp, email et SMS. Sans paraître robotique, sans rien installer eux-mêmes.",
+      "La vidéo de 5 minutes (bientôt en ligne) qui montre comment les coachs sportifs indépendants automatisent leurs réponses WhatsApp, email et SMS. Sans paraître robotique, sans rien installer eux-mêmes.",
     bullets: [
       "Le mécanisme exact pour répondre automatiquement dans TON ton, pas celui d'un robot",
       "Le calcul de ce que ton temps de support te coûte vraiment (le chiffre pique)",
       "Comment qualifier tes prospects et caler les RDV sans lever le petit doigt",
     ],
-    cta: "Recevoir la vidéo gratuite",
+    cta: "Recevoir la vidéo dès sa sortie",
     formLabel: "Ton meilleur email",
     socialProof:
       "25 ans à faire tourner des systèmes qui n'ont pas le droit de tomber (Airbus, Renault, Orange, Air France), maintenant au service des coachs indépendants.",

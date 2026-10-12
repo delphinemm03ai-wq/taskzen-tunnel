@@ -110,7 +110,7 @@ const FOLLOWUP_CONTENT: Record<
     subject: "Le calcul que tu n'as peut-être pas fait",
     body: (firstName) => `
       <p>Hello ${firstName || "toi"},</p>
-      <p>Tu as reçu la vidéo il y a 2 jours. Une question simple avant d'aller plus loin.</p>
+      <p>Une question simple en attendant la vidéo.</p>
       <p>Combien de temps tu passes chaque semaine à répondre aux mêmes questions sur WhatsApp ? Tarifs, dispo, programme.</p>
       <p>Si c'est 10 heures, fais le calcul avec ton tarif horaire. La plupart des coachs tombent autour de 2000€ par mois de temps non facturé.</p>
       <p>Ce n'est pas une critique. C'est juste le prix de répondre soi-même à tout, tout le temps.</p>
@@ -131,9 +131,9 @@ const FOLLOWUP_CONTENT: Record<
     body: (firstName) => `
       <p>Hello ${firstName || "toi"},</p>
       <p>Je ne vais pas te relancer indéfiniment sur ce sujet, donc je fais simple.</p>
-      <p>Tu as la vidéo depuis une semaine. Si l'idée de récupérer 10h par semaine sans embaucher te parle, le prochain pas c'est 30 minutes avec moi, gratuites, sans engagement.</p>
+      <p>Si l'idée de récupérer 10h par semaine sans embaucher te parle, pas besoin d'attendre la vidéo : le prochain pas, c'est 30 minutes avec moi, gratuites, sans engagement.</p>
       <p>On regarde tes messages clients, je te dis exactement ce que tu peux automatiser et ce que ça change pour toi en temps et en argent. Que tu bosses avec moi après ou pas.</p>
-      <p>Si ce n'est pas le bon moment, pas de souci. Tu gardes la vidéo, et tu me recontactes quand tu veux.</p>`,
+      <p>Si ce n'est pas le bon moment, pas de souci. Tu recevras la vidéo dès sa sortie, et tu me recontactes quand tu veux.</p>`,
   },
 };
 
