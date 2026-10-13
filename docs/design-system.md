@@ -29,7 +29,8 @@ Quinze paires texte/surface mesurées, toutes au-dessus de 4.5:1 (AA) : ink sur 
 | `components/funnel/ResourceViewer` | Vidéo ou PDF de la ressource |
 | `components/funnel/BookingCta` | Appel à la réservation |
 | `components/funnel/PageView` | Événement de vue PostHog |
-| `components/admin/FunnelDashboard` | Tableau de bord admin (secret, périodes, tableaux) |
+| `components/admin/AdminShell` | Admin : secret, onglets Tunnels / Contacts / Ventes, période |
+| `components/admin/FunnelsPanel` | Cartes par tunnel (pages, vues, inscrits, taux) |
 | `components/common/DemoBanner` | Bandeau de démo |
 
 ## UI patterns

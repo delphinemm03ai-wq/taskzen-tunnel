@@ -59,3 +59,29 @@ export async function countEvent(eventName: string, days: number): Promise<numbe
   const value = result.results?.[0]?.[0];
   return typeof value === "number" ? value : 0;
 }
+
+/**
+ * Vues par étape du moteur sur les `days` derniers jours, clé `${tunnel}/${etape}`.
+ * Une étape absente de la Map n'a eu aucune vue. `days` est forcé en entier
+ * borné avant d'entrer dans la requête (pas d'interpolation libre).
+ */
+export async function countStepViews(days: number): Promise<Map<string, number>> {
+  const safeDays = Math.min(Math.max(Math.trunc(days), 1), 90);
+  const sql = `
+    SELECT properties.tunnel AS tunnel, properties.etape AS etape, count() AS c
+    FROM events
+    WHERE event = 'funnel_step_view'
+      AND timestamp > now() - INTERVAL ${safeDays} DAY
+      ${PROD_HOST_FILTER}
+    GROUP BY tunnel, etape
+  `;
+  const result = await queryHogQL(sql);
+  const views = new Map<string, number>();
+  for (const row of result.results ?? []) {
+    const [tunnel, etape, count] = row;
+    if (typeof tunnel === "string" && typeof etape === "string" && typeof count === "number") {
+      views.set(`${tunnel}/${etape}`, count);
+    }
+  }
+  return views;
+}

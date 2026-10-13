@@ -26,5 +26,8 @@ export function initPostHog(): void {
 /** Capture un event du funnel. No-op si PostHog n'est pas configuré (mode démo). */
 export function track(event: FunnelEvent, props?: Record<string, unknown>): void {
   if (!POSTHOG_KEY || typeof window === "undefined") return;
+  // Les effets des composants enfants (PageView) s'exécutent avant celui du
+  // PostHogProvider parent : sans init préalable, posthog-js jette l'événement.
+  initPostHog();
   posthog.capture(event, props);
 }

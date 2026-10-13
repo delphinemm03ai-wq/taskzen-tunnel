@@ -2,12 +2,11 @@ import { NextRequest } from "next/server";
 import { success, errors } from "@/lib/api-response";
 import { countEvent, isPostHogQueryConfigured } from "@/lib/posthog-query";
 import { FUNNEL_STEPS } from "@/lib/events";
+import { isAdminRequest } from "@/lib/admin-auth";
 
+/** Stats des 4 pages historiques. Secret dans l'en-tête x-admin-secret uniquement. */
 export async function GET(req: NextRequest) {
-  const secret = req.nextUrl.searchParams.get("secret");
-  const adminSecret = process.env.ADMIN_SECRET;
-
-  if (!adminSecret || secret !== adminSecret) {
+  if (!isAdminRequest(req)) {
     return errors.unauthorized("Secret invalide");
   }
 

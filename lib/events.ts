@@ -10,6 +10,8 @@ export const FUNNEL_EVENTS = {
   BOOKING_CLICK: "booking_click",
   BOOKING_VIEW: "booking_view",
   BOOKING_COMPLETED: "booking_completed",
+  /** Vue d'une étape du moteur de pages, propriétés { tunnel, etape } (s07). */
+  FUNNEL_STEP_VIEW: "funnel_step_view",
 } as const;
 
 export type FunnelEvent = (typeof FUNNEL_EVENTS)[keyof typeof FUNNEL_EVENTS];

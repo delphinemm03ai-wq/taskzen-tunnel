@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import type { ContactsPage } from "@/types/contacts";
 
 /**
- * Secret admin déjà saisi dans FunnelDashboard, partagé avec les panneaux
+ * Secret admin déjà saisi dans AdminShell, partagé avec les panneaux
  * montés en dessous (une seule saisie pour toute la page /admin).
  */
 export const AdminSecretContext = createContext<string>("");
@@ -25,12 +25,17 @@ const cellStyle = {
   verticalAlign: "top" as const,
 };
 
-/** Contacts du tunnel (Supabase) : liste, recherche par email, export CSV. */
-export function ContactsPanel() {
+/**
+ * Contacts du tunnel (Supabase) : liste, recherche par email, filtre par tag,
+ * export CSV. Le tag est tenu par AdminShell (un clic dans l'onglet Tunnels
+ * ouvre cet onglet déjà filtré).
+ */
+export function ContactsPanel({ tag, onTagChange }: { tag: string; onTagChange: (tag: string) => void }) {
   const secret = useContext(AdminSecretContext);
   const [draft, setDraft] = useState("");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const [tags, setTags] = useState<string[]>([]);
   const [data, setData] = useState<ContactsPage | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -38,10 +43,19 @@ export function ContactsPanel() {
 
   useEffect(() => {
     if (!secret) return;
+    fetch("/api/admin/tags", { headers: { "x-admin-secret": secret } })
+      .then((r) => r.json())
+      .then((json) => setTags(json.ok ? json.data.tags : []))
+      .catch(() => setTags([]));
+  }, [secret]);
+
+  useEffect(() => {
+    if (!secret) return;
     setLoading(true);
     setError(null);
     const params = new URLSearchParams({ page: String(page) });
     if (search) params.set("search", search);
+    if (tag) params.set("tag", tag);
     fetch(`/api/admin/contacts?${params}`, { headers: { "x-admin-secret": secret } })
       .then((r) => r.json())
       .then((json) => {
@@ -54,7 +68,7 @@ export function ContactsPanel() {
       })
       .catch(() => setError("Connexion impossible"))
       .finally(() => setLoading(false));
-  }, [secret, search, page]);
+  }, [secret, search, tag, page]);
 
   async function exportCsv() {
     setExporting(true);
@@ -62,6 +76,7 @@ export function ContactsPanel() {
     try {
       const params = new URLSearchParams({ format: "csv" });
       if (search) params.set("search", search);
+      if (tag) params.set("tag", tag);
       const res = await fetch(`/api/admin/contacts?${params}`, {
         headers: { "x-admin-secret": secret },
       });
@@ -85,9 +100,12 @@ export function ContactsPanel() {
   }
 
   const pageCount = data ? Math.max(1, Math.ceil(data.total / data.pageSize)) : 1;
+  // Un tag venu de l'onglet Tunnels peut arriver avant la liste : on l'affiche quand même.
+  const options = tag && !tags.includes(tag) ? [tag, ...tags] : tags;
+  const filtre = [search ? `« ${search} »` : "", tag ? `le tag « ${tag} »` : ""].filter(Boolean).join(" et ");
 
   return (
-    <section style={{ display: "grid", gap: "1rem", marginTop: "1.6rem" }}>
+    <section style={{ display: "grid", gap: "1rem" }}>
       <h2 style={{ fontSize: "1.5rem", margin: 0 }}>Contacts</h2>
 
       <form
@@ -106,6 +124,23 @@ export function ContactsPanel() {
           aria-label="Rechercher par email"
           style={inputStyle}
         />
+        <select
+          id="contacts-tag"
+          aria-label="Filtrer par tag"
+          value={tag}
+          onChange={(e) => {
+            setPage(1);
+            onTagChange(e.target.value);
+          }}
+          style={inputStyle}
+        >
+          <option value="">Tous les tags</option>
+          {options.map((t) => (
+            <option key={t} value={t}>
+              {t}
+            </option>
+          ))}
+        </select>
         <button type="submit" className="btn-outline" style={{ padding: "0.5rem 1rem", fontSize: "0.85rem" }}>
           Rechercher
         </button>
@@ -129,8 +164,8 @@ export function ContactsPanel() {
 
       {data && !error && data.total === 0 && (
         <div className="surface-card" style={{ padding: "1.4rem", color: "var(--color-ink-soft)" }}>
-          {search
-            ? `Aucun contact ne correspond à « ${search} ».`
+          {filtre
+            ? `Aucun contact ne correspond à ${filtre}.`
             : "Base vide ou projet endormi : aucun contact pour l'instant. Lance l'import Systeme.io pour la remplir."}
         </div>
       )}
@@ -140,7 +175,7 @@ export function ContactsPanel() {
           <p style={{ color: "var(--color-ink-soft)", fontSize: "0.85rem", margin: 0 }}>
             <span style={{ fontFamily: "var(--font-mono)" }}>{data.total.toLocaleString("fr-FR")}</span>{" "}
             contact{data.total > 1 ? "s" : ""}
-            {search ? ` pour « ${search} »` : ""}
+            {filtre ? ` pour ${filtre}` : ""}
           </p>
           <div className="surface-card" style={{ padding: "0.4rem", overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.9rem" }}>

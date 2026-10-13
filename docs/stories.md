@@ -149,13 +149,13 @@ s04.
 3
 
 ### Acceptance criteria
-- [ ] `/admin` garde la saisie du secret et présente trois onglets : Tunnels (par défaut), Contacts, Ventes. Le secret n'est plus pré-rempli ni transmis par l'adresse (`?secret=` supprimé partout).
-- [ ] Onglet Tunnels : une carte par tunnel de la config (`funnels/index.ts`) plus une carte « Tunnel Méthode IA (pages historiques) ». Chaque carte liste ses pages dans l'ordre avec titre, adresse publique cliquable (nouvel onglet), vues sur la période, taux de passage depuis la page précédente, et pour une page opt-in le nombre d'inscrits (comptage Supabase par tag) et le taux de conversion inscrits / vues. Sélecteur 7 / 30 / 90 jours.
-- [ ] Chaque page du moteur envoie un seul événement PostHog `funnel_step_view` avec les propriétés `tunnel` et `etape` ; les 4 pages historiques gardent leurs événements actuels.
-- [ ] Un clic sur le nombre d'inscrits d'une page ouvre l'onglet Contacts filtré sur son tag. L'onglet Contacts garde recherche, pagination et export CSV et gagne un filtre par tag (liste des tags existants).
-- [ ] Onglet Ventes : encart « Les ventes et le chiffre d'affaires apparaîtront ici avec le paiement Stripe (story s04). »
-- [ ] Toutes les routes admin (`/api/admin/funnels` nouvelle, `/api/admin/contacts`, `/api/funnel/stats`) exigent le secret dans l'en-tête `x-admin-secret` ; sans secret ou avec un faux, 401 et aucune donnée.
-- [ ] Dégradation propre : PostHog absent ou en panne, les vues passent en tiret avec un message, pages et inscrits restent affichés ; Supabase injoignable, les inscrits passent en tiret avec un message ; aucune source ne bloque toute la page.
+- [x] `/admin` garde la saisie du secret et présente trois onglets : Tunnels (par défaut), Contacts, Ventes. Le secret n'est plus pré-rempli ni transmis par l'adresse (`?secret=` supprimé partout).
+- [x] Onglet Tunnels : une carte par tunnel de la config (`funnels/index.ts`) plus une carte « Tunnel Méthode IA (pages historiques) ». Chaque carte liste ses pages dans l'ordre avec titre, adresse publique cliquable (nouvel onglet), vues sur la période, taux de passage depuis la page précédente, et pour une page opt-in le nombre d'inscrits (comptage Supabase par tag) et le taux de conversion inscrits / vues. Sélecteur 7 / 30 / 90 jours.
+- [x] Chaque page du moteur envoie un seul événement PostHog `funnel_step_view` avec les propriétés `tunnel` et `etape` ; les 4 pages historiques gardent leurs événements actuels.
+- [x] Un clic sur le nombre d'inscrits d'une page ouvre l'onglet Contacts filtré sur son tag. L'onglet Contacts garde recherche, pagination et export CSV et gagne un filtre par tag (liste des tags existants).
+- [x] Onglet Ventes : encart « Les ventes et le chiffre d'affaires apparaîtront ici avec le paiement Stripe (story s04). »
+- [x] Toutes les routes admin (`/api/admin/funnels` nouvelle, `/api/admin/contacts`, `/api/funnel/stats`) exigent le secret dans l'en-tête `x-admin-secret` ; sans secret ou avec un faux, 401 et aucune donnée.
+- [x] Dégradation propre : PostHog absent ou en panne, les vues passent en tiret avec un message, pages et inscrits restent affichés ; Supabase injoignable, les inscrits passent en tiret avec un message ; aucune source ne bloque toute la page.
 - [ ] Parcours test réel sur le domaine de prod non filtré (`pages.taskzen.fr`) : 3 ouvertures d'une page d'inscription de `guides-sommet` et 1 opt-in avec une adresse réelle simple donnent 3 vues, 1 inscrit, 33 % de conversion et 1 contact dans Contacts filtré sur ce tag. Les pages publiques `/t/...` sont inchangées. `npm run build` passe.
 
 ### Dependencies

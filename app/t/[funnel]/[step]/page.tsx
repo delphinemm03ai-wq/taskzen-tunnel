@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BlockRenderer } from "@/components/funnel/blocks/BlockRenderer";
 import { allFunnels, getFunnel } from "@/funnels";
+import { PageView } from "@/components/funnel/PageView";
+import { FUNNEL_EVENTS } from "@/lib/events";
 
 type Params = Promise<{ funnel: string; step: string }>;
 
@@ -35,6 +37,10 @@ export default async function FunnelStepPage({ params }: { params: Params }) {
 
   return (
     <main className="paper-grain" style={{ minHeight: "100vh", position: "relative" }}>
+      <PageView
+        event={FUNNEL_EVENTS.FUNNEL_STEP_VIEW}
+        props={{ tunnel: found.funnel.slug, etape: found.step.slug }}
+      />
       {found.step.blocs.map((block, i) => (
         <section
           key={i}

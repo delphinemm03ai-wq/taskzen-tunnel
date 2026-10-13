@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { success, errors } from "@/lib/api-response";
+import { isAdminRequest } from "@/lib/admin-auth";
 import { countContacts, isSupabaseConfigured, listContacts } from "@/lib/supabase";
 import type { ContactsPage, ContactWithTags } from "@/types/contacts";
 
@@ -9,6 +10,7 @@ const EXPORT_CHUNK = 1000;
 
 const querySchema = z.object({
   search: z.string().max(200, "Recherche trop longue (200 caractères max)").optional(),
+  tag: z.string().trim().min(1, "Tag vide").max(100, "Tag trop long (100 caractères max)").optional(),
   page: z.coerce
     .number({ invalid_type_error: "Page invalide" })
     .int("Page invalide")
@@ -23,16 +25,11 @@ const querySchema = z.object({
 /**
  * Contacts du tunnel pour l'admin : liste paginée + recherche par email
  * (format=json), ou export CSV complet de la recherche (format=csv).
- * Protégé par ADMIN_SECRET, même mécanisme que /api/funnel/stats : en-tête
- * x-admin-secret de préférence (le query string finit dans les logs),
- * ?secret= accepté aussi pour la cohérence avec l'existant.
+ * Filtre optionnel par tag (nom exact). Protégé par ADMIN_SECRET dans
+ * l'en-tête x-admin-secret uniquement (lib/admin-auth.ts).
  */
 export async function GET(req: NextRequest) {
-  const secret =
-    req.headers.get("x-admin-secret") ?? req.nextUrl.searchParams.get("secret");
-  const adminSecret = process.env.ADMIN_SECRET;
-
-  if (!adminSecret || secret !== adminSecret) {
+  if (!isAdminRequest(req)) {
     return errors.unauthorized("Secret invalide");
   }
 
@@ -45,22 +42,23 @@ export async function GET(req: NextRequest) {
   const params = req.nextUrl.searchParams;
   const parsed = querySchema.safeParse({
     search: params.get("search") ?? undefined,
+    tag: params.get("tag") ?? undefined,
     page: params.get("page") ?? undefined,
     format: params.get("format") ?? undefined,
   });
   if (!parsed.success) {
     return errors.badRequest(parsed.error.issues[0]?.message || "Paramètres invalides");
   }
-  const { search, page, format } = parsed.data;
+  const { search, tag, page, format } = parsed.data;
 
   try {
     if (format === "csv") {
-      return csvResponse(await listAll(search));
+      return csvResponse(await listAll(search, tag));
     }
 
     const [contacts, total] = await Promise.all([
-      listContacts({ search, limit: PAGE_SIZE, offset: (page - 1) * PAGE_SIZE }),
-      countContacts(search),
+      listContacts({ search, tag, limit: PAGE_SIZE, offset: (page - 1) * PAGE_SIZE }),
+      countContacts(search, tag),
     ]);
     const data: ContactsPage = { contacts, total, page, pageSize: PAGE_SIZE };
     return success(data);
@@ -72,10 +70,10 @@ export async function GET(req: NextRequest) {
 }
 
 /** Tous les contacts de la recherche, par paquets (export). */
-async function listAll(search?: string): Promise<ContactWithTags[]> {
+async function listAll(search?: string, tag?: string): Promise<ContactWithTags[]> {
   const all: ContactWithTags[] = [];
   for (let offset = 0; ; offset += EXPORT_CHUNK) {
-    const chunk = await listContacts({ search, limit: EXPORT_CHUNK, offset });
+    const chunk = await listContacts({ search, tag, limit: EXPORT_CHUNK, offset });
     all.push(...chunk);
     if (chunk.length < EXPORT_CHUNK) return all;
   }

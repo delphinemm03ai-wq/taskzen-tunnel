@@ -130,6 +130,21 @@ function applySearch(url: URL, search?: string): void {
   if (term) url.searchParams.set("email", `ilike.*${term}*`);
 }
 
+/**
+ * Filtre par tag sans liste d'identifiants dans l'adresse : une jointure
+ * interne aliasée `filtre` ne garde que les contacts porteurs du tag, tandis
+ * que l'embed `tunnel_contact_tags(tunnel_tags(name))` continue de renvoyer
+ * tous les tags du contact. Le nom du tag est comparé tel quel (eq).
+ */
+function applyTag(url: URL, select: string, tag?: string): void {
+  if (!tag) {
+    url.searchParams.set("select", select);
+    return;
+  }
+  url.searchParams.set("select", `${select},filtre:tunnel_contact_tags!inner(tunnel_tags!inner(name))`);
+  url.searchParams.set("filtre.tunnel_tags.name", `eq.${tag}`);
+}
+
 interface ContactRow extends Contact {
   tunnel_contact_tags: { tunnel_tags: { name: string } | null }[];
 }
@@ -137,13 +152,15 @@ interface ContactRow extends Contact {
 /** Contacts récents d'abord, avec leurs tags (jointure embarquée PostgREST). */
 export async function listContacts(opts: {
   search?: string;
+  tag?: string;
   limit: number;
   offset: number;
 }): Promise<ContactWithTags[]> {
   const url = restUrl("tunnel_contacts");
-  url.searchParams.set(
-    "select",
-    "id,email,first_name,created_at,updated_at,unsubscribed_at,tunnel_contact_tags(tunnel_tags(name))"
+  applyTag(
+    url,
+    "id,email,first_name,created_at,updated_at,unsubscribed_at,tunnel_contact_tags(tunnel_tags(name))",
+    opts.tag
   );
   url.searchParams.set("order", "created_at.desc,id.asc");
   url.searchParams.set("limit", String(opts.limit));
@@ -151,8 +168,8 @@ export async function listContacts(opts: {
   applySearch(url, opts.search);
 
   const res = await call(url, { headers: headers() }, "listContacts");
-  const rows: ContactRow[] = await res.json();
-  return rows.map(({ tunnel_contact_tags, ...contact }) => ({
+  const rows: (ContactRow & { filtre?: unknown })[] = await res.json();
+  return rows.map(({ tunnel_contact_tags, filtre: _filtre, ...contact }) => ({
     ...contact,
     tags: tunnel_contact_tags
       .map((link) => link.tunnel_tags?.name)
@@ -161,15 +178,58 @@ export async function listContacts(opts: {
   }));
 }
 
-/** Nombre de contacts correspondant à la recherche (en-tête Content-Range). */
-export async function countContacts(search?: string): Promise<number> {
+/** Lit le total d'un en-tête Content-Range ("0-0/123", ou étoile/0 si vide). */
+function totalFromContentRange(res: Response): number {
+  const total = res.headers.get("content-range")?.split("/")[1];
+  return total && total !== "*" ? parseInt(total, 10) : 0;
+}
+
+/** Nombre de contacts correspondant à la recherche et au tag (en-tête Content-Range). */
+export async function countContacts(search?: string, tag?: string): Promise<number> {
   const url = restUrl("tunnel_contacts");
-  url.searchParams.set("select", "id");
+  applyTag(url, "id", tag);
   url.searchParams.set("limit", "1");
   applySearch(url, search);
 
   const res = await call(url, { headers: headers("count=exact") }, "countContacts");
-  // Content-Range : "0-0/123" ou "*/0".
-  const total = res.headers.get("content-range")?.split("/")[1];
-  return total && total !== "*" ? parseInt(total, 10) : 0;
+  return totalFromContentRange(res);
+}
+
+/** Taille d'une page PostgREST : Supabase plafonne chaque réponse à 1000 lignes (max-rows). */
+const PAGE_ROWS = 1000;
+
+/**
+ * Nombre d'inscriptions par tag depuis `sinceIso` (date de pose du tag,
+ * colonne tunnel_contact_tags.created_at), comptées en mémoire. Lecture par
+ * pages de 1000 lignes : Supabase tronque silencieusement au-delà. Un tag
+ * sans inscription est absent de la Map. Peu d'appels, donc une panne
+ * Supabase ne multiplie pas les connexions en échec.
+ */
+export async function countContactsPerTag(sinceIso: string): Promise<Map<string, number>> {
+  const counts = new Map<string, number>();
+  for (let offset = 0; ; offset += PAGE_ROWS) {
+    const url = restUrl("tunnel_contact_tags");
+    url.searchParams.set("select", "tunnel_tags(name)");
+    url.searchParams.set("created_at", `gte.${sinceIso}`);
+    url.searchParams.set("order", "created_at.asc,contact_id.asc,tag_id.asc");
+    url.searchParams.set("limit", String(PAGE_ROWS));
+    url.searchParams.set("offset", String(offset));
+    const res = await call(url, { headers: headers() }, "countContactsPerTag");
+    const rows: { tunnel_tags: { name: string } | null }[] = await res.json();
+    for (const row of rows) {
+      const name = row.tunnel_tags?.name;
+      if (name) counts.set(name, (counts.get(name) ?? 0) + 1);
+    }
+    if (rows.length < PAGE_ROWS) return counts;
+  }
+}
+
+/** Noms de tags existants, triés, pour le filtre de l'admin. */
+export async function listTagNames(): Promise<string[]> {
+  const url = restUrl("tunnel_tags");
+  url.searchParams.set("select", "name");
+  url.searchParams.set("order", "name.asc");
+  const res = await call(url, { headers: headers() }, "listTagNames");
+  const rows: { name: string }[] = await res.json();
+  return rows.map((r) => r.name);
 }

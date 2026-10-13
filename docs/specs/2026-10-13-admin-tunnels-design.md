@@ -97,7 +97,15 @@ Le dépôt n'a pas de tests automatisés (cadrage AGENTS.local.md). La preuve es
 - `git push` sur le remote `delphine` et déploiement Vercel.
 - Propagation DNS de `pages.taskzen.fr` et passage de ses liens publics sur ce domaine : sans cela PostHog ne compte aucune vue (`*.vercel.app` filtré).
 
-## 8. Fichiers touchés (prévision pour le plan)
+## 8. Écarts décidés à l'implémentation (13/10/2026, revue finale)
+
+- **Inscrits sur la période, pas en total.** Les vues sont sur 7 / 30 / 90 jours ; compter les inscrits en total donnait une conversion qui mélange deux horizons (plus de 100 % possible). Les inscrits d'une page et d'un tunnel sont les tags posés sur la période (`tunnel_contact_tags.created_at`). Le total de contacts reste lisible dans l'onglet Contacts.
+- **Passage calculé depuis les liens de la config, pas depuis « la page précédente ».** Les onze pages d'inscription des guides sont parallèles : comparer l'une à l'autre n'a pas de sens. Le dénominateur est la somme des vues des pages qui mènent à celle-ci (`etapeSuivante` d'un opt-in, `href` d'un CTA interne). Sans page amont, tiret.
+- **Comptage des inscrits en une lecture paginée de `tunnel_contact_tags`** (1000 lignes par page, plafond Supabase) au lieu d'une requête count par tag ; filtre Contacts par tag via une jointure interne aliasée (aucune liste d'identifiants dans l'adresse).
+- **Secret vérifié à la saisie** (appel à `/api/admin/tags`) : un faux secret reste sur le formulaire avec le message, conformément à la section 5.
+- `FunnelDashboard.tsx` supprimé ; `AdminShell` tient secret, onglets et période ; la carte historique vient de la route comme les autres.
+
+## 9. Fichiers touchés (prévision pour le plan)
 
 - Nouveaux : `app/api/admin/funnels/route.ts`, `app/api/admin/tags/route.ts`, `components/admin/AdminTabs.tsx`, `components/admin/FunnelsPanel.tsx`, `components/admin/SalesPlaceholder.tsx`, `docs/verif/s07-admin-tunnels.md`.
 - Modifiés : `app/admin/page.tsx`, `components/admin/FunnelDashboard.tsx` (devient une carte), `components/admin/ContactsPanel.tsx` (filtre tag), `app/api/admin/contacts/route.ts`, `app/api/funnel/stats/route.ts`, `lib/supabase.ts`, `lib/posthog-query.ts`, `lib/events.ts`, `components/funnel/PageView.tsx`, `app/t/[funnel]/[step]/page.tsx`.
