@@ -209,3 +209,5 @@ s03, s04, s05, s06, s07 (fermes : la bascule réelle exige opt-in, vente, séque
 
 ## Ordre d'exécution
 s01 et s02 en parallèle, puis s03, puis s07 (avancée le 13/10/2026, ne dépend que de s03), puis s04, s05, s06, s08, s09. L'onglet Ventes de s07 se remplit avec s04.
+
+Phase 2 (SaaS MCP) : voir `docs/stories-saas-mcp.md` (s10 à s18), après s04, s05, s06 et s09.
