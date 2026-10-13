@@ -140,23 +140,32 @@ s04.
 - Référence cible : l'affiliation Systeme.io (liens sa..., Factures affiliés, commission sur le HT : 18,59 € = 30 % de 61,98 € constaté le 10/10).
 - Le paiement des commissions reste manuel (virement par Delphine) : le tableau remplace les Factures affiliés, pas Wise.
 
-## Story s07-stats — Les conversions du tunnel se lisent dans l'admin
-**As a** Delphine **I want** voir vues, conversions par étape et ventes **so that** je pilote sans ouvrir PostHog.
+## Story s07-admin-tunnels : Le tableau de bord de l'admin montre chaque tunnel, ses pages, ses inscrits et ses vues
+**As a** Delphine **I want** voir dans `/admin`, tunnel par tunnel, mes pages avec leur lien, leurs vues, leurs inscrits et leurs taux, et filtrer mes contacts par tag **so that** je pilote mes tunnels sans ouvrir PostHog ni Supabase.
+
+> Avancée le 13/10/2026 à la demande de Delphine et découplée de Stripe : l'onglet Ventes est un encart d'attente jusqu'à s04. Design détaillé : `docs/specs/2026-10-13-admin-tunnels-design.md`.
 
 ### Complexity
-2
+3
 
 ### Acceptance criteria
-- [ ] Chaque page du moteur envoie un événement de vue PostHog avec tunnel et étape.
-- [ ] L'admin affiche par tunnel : vues par étape, taux de passage d'une étape à la suivante, opt-ins, ventes et chiffre d'affaires (depuis Supabase).
-- [ ] Un parcours test défini (3 vues de la page de capture, 1 opt-in, 1 vente en mode test Stripe) donne exactement ces chiffres dans l'admin : 3 vues, 1 opt-in, 1 vente, et les taux correspondants.
+- [ ] `/admin` garde la saisie du secret et présente trois onglets : Tunnels (par défaut), Contacts, Ventes. Le secret n'est plus pré-rempli ni transmis par l'adresse (`?secret=` supprimé partout).
+- [ ] Onglet Tunnels : une carte par tunnel de la config (`funnels/index.ts`) plus une carte « Tunnel Méthode IA (pages historiques) ». Chaque carte liste ses pages dans l'ordre avec titre, adresse publique cliquable (nouvel onglet), vues sur la période, taux de passage depuis la page précédente, et pour une page opt-in le nombre d'inscrits (comptage Supabase par tag) et le taux de conversion inscrits / vues. Sélecteur 7 / 30 / 90 jours.
+- [ ] Chaque page du moteur envoie un seul événement PostHog `funnel_step_view` avec les propriétés `tunnel` et `etape` ; les 4 pages historiques gardent leurs événements actuels.
+- [ ] Un clic sur le nombre d'inscrits d'une page ouvre l'onglet Contacts filtré sur son tag. L'onglet Contacts garde recherche, pagination et export CSV et gagne un filtre par tag (liste des tags existants).
+- [ ] Onglet Ventes : encart « Les ventes et le chiffre d'affaires apparaîtront ici avec le paiement Stripe (story s04). »
+- [ ] Toutes les routes admin (`/api/admin/funnels` nouvelle, `/api/admin/contacts`, `/api/funnel/stats`) exigent le secret dans l'en-tête `x-admin-secret` ; sans secret ou avec un faux, 401 et aucune donnée.
+- [ ] Dégradation propre : PostHog absent ou en panne, les vues passent en tiret avec un message, pages et inscrits restent affichés ; Supabase injoignable, les inscrits passent en tiret avec un message ; aucune source ne bloque toute la page.
+- [ ] Parcours test réel sur le domaine de prod non filtré (`pages.taskzen.fr`) : 3 ouvertures d'une page d'inscription de `guides-sommet` et 1 opt-in avec une adresse réelle simple donnent 3 vues, 1 inscrit, 33 % de conversion et 1 contact dans Contacts filtré sur ce tag. Les pages publiques `/t/...` sont inchangées. `npm run build` passe.
 
 ### Dependencies
-s03, s04.
+s03. Ne dépend plus de s04 : ventes et CA arrivent dans l'onglet Ventes avec s04.
 
 ### Agentic notes
-- `lib/posthog-client.ts`, `lib/posthog-query.ts` et `components/funnel/PageView.tsx` existent : les généraliser au moteur multi-tunnels.
-- Référence cible : l'onglet Statistiques d'un tunnel Systeme.io (vues, inscrits, taux).
+- `lib/posthog-client.ts`, `lib/posthog-query.ts` (HogQL, `PROD_HOST_FILTER`) et `components/funnel/PageView.tsx` existent : les généraliser au moteur multi-tunnels. Le filtre d'hôte exclut `localhost` et `*.vercel.app` : en local on vérifie l'arrivée de l'événement dans PostHog, le chiffre se vérifie en prod sur `pages.taskzen.fr`.
+- `components/admin/FunnelDashboard.tsx` et `ContactsPanel.tsx` (contexte `AdminSecretContext`) existent : l'admin devient un conteneur à onglets, les stats historiques deviennent une carte.
+- Référence cible : l'onglet Statistiques d'un tunnel Systeme.io (vues, inscrits, taux) et sa liste de contacts filtrée par tag.
+- La clé service_role Supabase et la clé personnelle PostHog restent côté serveur.
 
 ## Story s08-automatisations — Une règle "événement vers action" se déclare en config
 **As a** Delphine **I want** déclarer des règles (formulaire soumis donne tag ; tag posé lance séquence ; achat pose tag) **so that** les enchaînements se font tout seuls et restent lisibles au même endroit.
@@ -191,7 +200,7 @@ s03, s04, s05.
 - [ ] Une checklist de résiliation Systeme.io est produite : ce qui est couvert, ce qui reste (espace membre, tunnels encore actifs).
 
 ### Dependencies
-s03, s04, s05, s06, s07 (fermes : la bascule réelle exige opt-in, vente, séquences, affiliation et stats opérationnels). s08 n'est pas requise.
+s03, s04, s05, s06, s07 (fermes : la bascule réelle exige opt-in, vente, séquences, affiliation et admin des tunnels opérationnels). s08 n'est pas requise.
 
 ### Agentic notes
 - L'export CSV se fait depuis dashboard/contacts de Systeme.io (par Delphine, ou Chrome piloté).
@@ -199,4 +208,4 @@ s03, s04, s05, s06, s07 (fermes : la bascule réelle exige opt-in, vente, séque
 - Ne rien résilier : la story produit la checklist, Delphine décide.
 
 ## Ordre d'exécution
-s01 et s02 en parallèle, puis s03, s04, s05, s06, s07, s08, s09.
+s01 et s02 en parallèle, puis s03, puis s07 (avancée le 13/10/2026, ne dépend que de s03), puis s04, s05, s06, s08, s09. L'onglet Ventes de s07 se remplit avec s04.
