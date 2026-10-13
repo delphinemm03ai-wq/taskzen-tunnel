@@ -27,7 +27,7 @@ Ordre décidé le 13/10/2026 : **1 puis 2**, 3 plus tard.
 
 Utilisateurs finaux des pages : les visiteurs et acheteurs des clients.
 
-## Perimeter — the 20% that matters
+## Perimeter : the 20% that matters
 
 ### Replicated (core loop)
 Les six actions du board, moins les A/B tests (version 2).
