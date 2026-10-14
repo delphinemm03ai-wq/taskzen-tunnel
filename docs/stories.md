@@ -156,7 +156,7 @@ s04.
 - [x] Onglet Ventes : encart « Les ventes et le chiffre d'affaires apparaîtront ici avec le paiement Stripe (story s04). »
 - [x] Toutes les routes admin (`/api/admin/funnels` nouvelle, `/api/admin/contacts`, `/api/funnel/stats`) exigent le secret dans l'en-tête `x-admin-secret` ; sans secret ou avec un faux, 401 et aucune donnée.
 - [x] Dégradation propre : PostHog absent ou en panne, les vues passent en tiret avec un message, pages et inscrits restent affichés ; Supabase injoignable, les inscrits passent en tiret avec un message ; aucune source ne bloque toute la page.
-- [ ] Parcours test réel sur le domaine de prod non filtré (`pages.taskzen.fr`) : 3 ouvertures d'une page d'inscription de `guides-sommet` et 1 opt-in avec une adresse réelle simple donnent 3 vues, 1 inscrit, 33 % de conversion et 1 contact dans Contacts filtré sur ce tag. Les pages publiques `/t/...` sont inchangées. `npm run build` passe.
+- [x] Parcours test réel sur le domaine de prod non filtré (`pages.taskzen.fr`) : 3 ouvertures d'une page d'inscription de `guides-sommet` et 1 opt-in avec une adresse réelle simple donnent 3 vues, 1 inscrit, 33 % de conversion et 1 contact dans Contacts filtré sur ce tag. Les pages publiques `/t/...` sont inchangées. `npm run build` passe.
 
 ### Dependencies
 s03. Ne dépend plus de s04 : ventes et CA arrivent dans l'onglet Ventes avec s04.

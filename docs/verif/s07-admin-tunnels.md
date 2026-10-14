@@ -46,8 +46,21 @@ Quatre points importants corrigés, chacun observé en échec puis en succès :
 
 `npx tsc --noEmit` exit 0, `npm run build` exit 0 après les corrections. Mineurs reportés (voir le message de fin de story) : accord « au tag » dans les libellés de Contacts, statut PostHog de la carte historique, délai maximal sur les fetch, réponses dans le désordre lors de clics rapides, liens construits depuis l'hôte de la requête, `days` non borné sur `/api/funnel/stats`, mentions de `FunnelDashboard` dans `docs/architecture.md`.
 
+## Parcours test réel en production (14/10/2026)
+
+Déploiement : push de `main` par Delphine le 13/10 (d528b19), Vercel READY, alias `pages.taskzen.fr` (DNS propagé, HTTPS 200). Redéploiement du 14/10 pour un nouveau `ADMIN_SECRET` : un premier essai a échoué au build sur `next/font` (téléchargement Google Fonts, `Cannot read properties of null (reading '1')`), relancé sans changement de code : READY.
+
+| Étape | Observé |
+| --- | --- |
+| Base avant le test (PostHog, 7 jours) | `guides-sommet/inscription-quiz-reponse-ia` : 0 vue |
+| 3 ouvertures dans Chrome (16h34, 16h34, 16h35, Paris) | 3 événements `funnel_step_view` {tunnel, etape}, hôte `pages.taskzen.fr` |
+| 4e ouverture (16h40, même navigateur, hors protocole) | comptée aussi : 4 vues au total |
+| Opt-in réel (16h41) par `POST /api/optin` avec l'adresse de test de Delphine | `{"ok":true,"data":{"redirectTo":"/t/guides-sommet/merci"}}`, tag `guide-quiz-reponse-ia` posé (Supabase) |
+| Tableau de bord `/admin` (lu par Delphine) | ligne « Ta réponse IA est-elle fiable ? » : 4 vues, 1 inscrit, 25 % |
+| Protection | `/api/admin/tags` sans en-tête : 401 avant et après redéploiement |
+
+Écart avec le critère : 4 vues et 25 % au lieu de 3 et 33 %, à cause d'une ouverture supplémentaire hors protocole ; le comptage reste exact (une vue par ouverture, un inscrit par opt-in).
+
 ## Gestes humains restants
 
-- Push de la branche fusionnée sur `main` (remote `delphine`) et déploiement Vercel.
-- Propagation DNS de `pages.taskzen.fr`.
-- Parcours test réel (tâche 9) puis suppression du contact de test, avec accord.
+- Garder ou supprimer le contact de test (adresse de Delphine, tags de plusieurs guides), avec son accord.
