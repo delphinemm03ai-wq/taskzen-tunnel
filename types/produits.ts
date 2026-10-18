@@ -26,7 +26,7 @@ export interface Produit {
   nom: string;
   /** Prix TTC en centimes, TVA incluse (ex. 2700 pour 27 €). Montant envoyé à Stripe. */
   prixTtc: number;
-  /** Taux de TVA en pourcentage (5.5 pour un livre numérique, 20 pour un service). */
+  /** Taux de TVA en pourcentage (0 en franchise en base, 5.5 pour un livre numérique, 20 pour un service). */
   tauxTva: number;
   /** Tag posé sur l'acheteur, ex. "client-livre". */
   tag: string;

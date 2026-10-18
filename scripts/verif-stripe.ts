@@ -44,6 +44,7 @@ verifie(
 );
 verifie("v0 seul refusé", verifyStripeSignature(BODY, signe(BODY, SECRET, NOW, "v0"), SECRET, NOW), false);
 verifie("en-tête absent refusé", verifyStripeSignature(BODY, null, SECRET, NOW), false);
-verifie("prixHt 2700 à 5,5 % = 2559", prixHt(produits.livre), 2559);
+verifie("prixHt 2700 en franchise de TVA = 2700", prixHt(produits.livre), 2700);
+verifie("prixHt 2700 à 5,5 % = 2559", prixHt({ ...produits.livre, tauxTva: 5.5 }), 2559);
 
 console.log(`${passes} vérifications passées`);

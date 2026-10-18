@@ -11,8 +11,9 @@ export const produits = {
   livre: {
     nom: "E-book du Sommet IA en 5 Jours",
     prixTtc: 2700,
-    // Livre numérique : taux réduit de 5,5 % (art. 278-0 bis A du CGI).
-    tauxTva: 5.5,
+    // TVA non applicable, art. 293 B du CGI (franchise en base) : HT = TTC.
+    // Le jour où la franchise saute, un livre numérique passe à 5,5 (art. 278-0 bis A).
+    tauxTva: 0,
     tag: "client-livre",
     livraison: {
       objet: "Ton e-book du Sommet IA est prêt",
@@ -31,7 +32,7 @@ export function getProduit(slug: string): Produit | undefined {
   return Object.hasOwn(produits, slug) ? produits[slug as ProduitSlug] : undefined;
 }
 
-/** Montant HT en centimes : round(TTC / (1 + taux/100)). 2700 à 5,5 % donne 2559. */
+/** Montant HT en centimes : round(TTC / (1 + taux/100)). 2700 à 0 % donne 2700, à 5,5 % donnerait 2559. */
 export function prixHt(produit: Produit): number {
   return Math.round(produit.prixTtc / (1 + produit.tauxTva / 100));
 }
