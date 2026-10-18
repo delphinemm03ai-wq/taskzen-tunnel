@@ -154,6 +154,28 @@ Email de livraison : envoi accepté par Resend (log serveur). La réception dans
 - La pose du tag après un échec ponctuel : si `tagContact` échoue après `insertSale`, un rejeu ne repose pas le tag (vente déjà là). Signalé pour la revue.
 - Rate-limit en mémoire par instance (limite connue de `lib/rate-limit.ts`, non changée).
 
+### Preuve réelle en production (18/10 soir, pages.taskzen.fr)
+
+Mise en ligne : push de main (3887219), webhook Stripe test créé par Delphine vers
+`https://pages.taskzen.fr/api/stripe/webhook` (checkout.session.completed et
+async_payment_succeeded), `STRIPE_SECRET_KEY` et `STRIPE_WEBHOOK_SECRET` posées par Delphine
+dans Vercel Production (type sensible), redéploiement dpl_GRgeJEVvKdnx2xwV6kvvHTkVUXsN READY.
+Contrôle : POST sans signature sur la route répond 400 (sans secret elle répondrait 500).
+
+Achat 4242 par Delphine sur /t/demo/livre en prod, lu par l'API de gestion Supabase :
+vente 60fbae29 (livre, 2700 TTC, session cs_test_a19O…, événement evt_1URwi5K5…),
+`delivered_at` posé 1 s après `created_at`, tag `client-livre` ajouté au contact existant
+(prénom conservé), 1 seule vente. PDF téléchargé et email reçu : confirmés par Delphine (« ok »).
+
+Correctif après la preuve : la vente avait été enregistrée avec TVA 5,5 % (HT 2559) alors que
+le tunnel vend en franchise en base (art. 293 B du CGI). Commit 9ee5e94 : `tauxTva: 0`,
+HT = TTC, vérification `prixHt` ajoutée (8 vérifications vertes, build vert), déployé
+dpl_ENcoHWYvdkyVkH2QvQ2fqcCcCk79 READY. Non rejoué en prod après le correctif.
+
+Nettoyage : SQL exécuté par Delphine dans le SQL Editor (le classificateur refuse toute écriture
+depuis l'orchestrateur), relu par l'API : 0 vente, tag `client-livre` absent, contact avec ses
+3 tags guide.
+
 Verification status: complete (tâches 1 à 11 ; réception de l'email de livraison à confirmer par Delphine)
 
 ## Passe de correction du 16/10 (D1 à D8)
@@ -310,4 +332,4 @@ dans le SQL Editor, relu par l'API de gestion le 18/10 : `tunnel_sales` 0 ligne,
 `client-livre` absent, contact delphinemm03.ai@gmail.com toujours là avec ses 3 tags guide.
 Base revenue à son état d'avant le test.
 
-Verification status: complete (passe de correction prouvée en réel le 18/10, base nettoyée)
+Verification status: complete (prouvée en réel en local et en production le 18/10, base nettoyée)
