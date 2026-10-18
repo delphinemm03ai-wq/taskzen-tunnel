@@ -1,4 +1,5 @@
 import type { Block } from "@/types/funnel";
+import { AcheterBlock } from "./AcheterBlock";
 import { Bullets } from "./Bullets";
 import { Countdown } from "./Countdown";
 import { CtaButton } from "./CtaButton";
@@ -7,6 +8,7 @@ import { Hero } from "./Hero";
 import { ImageBlock } from "./ImageBlock";
 import { OptinBlock } from "./OptinBlock";
 import { RichText } from "./RichText";
+import { TelechargerBlock } from "./TelechargerBlock";
 import { Testimonial } from "./Testimonial";
 import { VideoEmbed } from "./VideoEmbed";
 
@@ -36,6 +38,10 @@ export function BlockRenderer({ block }: { block: Block }) {
       return <CtaButton block={block} />;
     case "optin":
       return <OptinBlock block={block} />;
+    case "acheter":
+      return <AcheterBlock block={block} />;
+    case "telecharger":
+      return <TelechargerBlock block={block} />;
     default: {
       const unhandled: never = block;
       throw new Error(`Type de bloc non géré : ${JSON.stringify(unhandled)}`);

@@ -10,6 +10,7 @@
  */
 
 import type { Contact, ContactWithTags, Tag } from "@/types/contacts";
+import type { Sale } from "@/types/produits";
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -232,4 +233,130 @@ export async function listTagNames(): Promise<string[]> {
   const res = await call(url, { headers: headers() }, "listTagNames");
   const rows: { name: string }[] = await res.json();
   return rows.map((r) => r.name);
+}
+
+/** La vente déjà enregistrée pour cette session Checkout, ou null. */
+export async function findSaleBySession(sessionId: string): Promise<Sale | null> {
+  const url = restUrl("tunnel_sales");
+  url.searchParams.set("select", "*");
+  url.searchParams.set("stripe_session_id", `eq.${sessionId}`);
+  url.searchParams.set("limit", "1");
+  const res = await call(url, { headers: headers() }, "findSaleBySession");
+  const rows: Sale[] = await res.json();
+  return rows[0] ?? null;
+}
+
+/**
+ * Enregistre une vente, une seule fois (migration 002).
+ *
+ * 1. Session déjà vendue (autre événement de la même session) : rien n'est écrit.
+ * 2. Sinon POST on_conflict=stripe_event_id + resolution=ignore-duplicates :
+ *    un événement rejoué renvoie un tableau vide au lieu du 409 que call()
+ *    transformerait en exception (et en 500, que Stripe réessaierait sans fin).
+ *
+ * `inserted` vaut true seulement pour la première écriture. Tag et email de
+ * livraison n'en dépendent pas : le webhook les rejoue à chaque événement payé
+ * (tag idempotent, email gardé par delivered_at).
+ */
+export async function insertSale(input: {
+  contactId: string;
+  productSlug: string;
+  amountTtc: number;
+  amountHt: number;
+  vatRate: number;
+  stripeEventId: string;
+  stripeSessionId: string;
+}): Promise<{ inserted: boolean }> {
+  const existing = await findSaleBySession(input.stripeSessionId);
+  if (existing) return { inserted: false };
+
+  const url = restUrl("tunnel_sales");
+  url.searchParams.set("on_conflict", "stripe_event_id");
+  url.searchParams.set("select", "id");
+  const res = await call(
+    url,
+    {
+      method: "POST",
+      headers: headers("resolution=ignore-duplicates,return=representation"),
+      body: JSON.stringify([
+        {
+          contact_id: input.contactId,
+          product_slug: input.productSlug,
+          amount_ttc: input.amountTtc,
+          amount_ht: input.amountHt,
+          vat_rate: input.vatRate,
+          stripe_event_id: input.stripeEventId,
+          stripe_session_id: input.stripeSessionId,
+        },
+      ]),
+    },
+    "insertSale"
+  );
+  const rows: { id: string }[] = await res.json();
+  return { inserted: rows.length > 0 };
+}
+
+/**
+ * Marque l'email de livraison de la vente comme parti (migration 003).
+ * Filtre delivered_at=is.null : une date déjà posée n'est jamais réécrite.
+ */
+export async function markSaleDelivered(sessionId: string): Promise<void> {
+  const url = restUrl("tunnel_sales");
+  url.searchParams.set("stripe_session_id", `eq.${sessionId}`);
+  url.searchParams.set("delivered_at", "is.null");
+  await call(
+    url,
+    {
+      method: "PATCH",
+      headers: headers("return=minimal"),
+      body: JSON.stringify({ delivered_at: new Date().toISOString() }),
+    },
+    "markSaleDelivered"
+  );
+}
+
+/** Le contact de cet email (casse et espaces ignorés), ou null. */
+export async function findContactByEmail(email: string): Promise<Contact | null> {
+  const url = restUrl("tunnel_contacts");
+  url.searchParams.set("select", "*");
+  url.searchParams.set("email", `eq.${normalizeEmail(email)}`);
+  url.searchParams.set("limit", "1");
+  const res = await call(url, { headers: headers() }, "findContactByEmail");
+  const rows: Contact[] = await res.json();
+  return rows[0] ?? null;
+}
+
+/**
+ * Contact d'un acheteur Stripe : le prénom venu du paiement (souvent le nom
+ * porté sur la carte) ne remplace jamais un prénom déjà connu.
+ *
+ * 1. Contact absent : créé par upsertContact, avec ce prénom.
+ * 2. Contact présent sans prénom : prénom écrit, filtre first_name=is.null
+ *    pour ne pas écraser un prénom posé entre la lecture et l'écriture.
+ * 3. Contact présent avec prénom : rien n'est écrit.
+ */
+export async function upsertBuyerContact(input: {
+  email: string;
+  firstName?: string | null;
+}): Promise<Contact> {
+  const existing = await findContactByEmail(input.email);
+  if (!existing) return upsertContact(input);
+
+  const firstName = input.firstName?.trim();
+  if (existing.first_name || !firstName) return existing;
+
+  const url = restUrl("tunnel_contacts");
+  url.searchParams.set("id", `eq.${existing.id}`);
+  url.searchParams.set("first_name", "is.null");
+  const res = await call(
+    url,
+    {
+      method: "PATCH",
+      headers: headers("return=representation"),
+      body: JSON.stringify({ first_name: firstName }),
+    },
+    "upsertBuyerContact"
+  );
+  const rows: Contact[] = await res.json();
+  return rows[0] ?? existing;
 }

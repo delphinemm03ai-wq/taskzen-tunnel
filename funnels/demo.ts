@@ -133,6 +133,49 @@ const demo = {
         },
       ],
     },
+    {
+      slug: "livre",
+      titre: "L'e-book du Sommet IA en 5 Jours",
+      metaDescription:
+        "Les méthodes des intervenants du Sommet IA en 5 Jours, rassemblées dans un e-book à 27 euros TTC.",
+      blocs: [
+        {
+          type: "hero",
+          eyebrow: "E-book du sommet",
+          titre: "Toutes les méthodes du Sommet IA, dans un seul e-book",
+          sousTitre:
+            "Ce que les intervenants ont partagé pendant 5 jours, rangé pour que tu passes à l'action. 27 euros TTC, à télécharger juste après ton paiement.",
+        },
+        {
+          type: "acheter",
+          produit: "livre",
+          boutonTexte: "J'achète l'e-book, 27 euros",
+          etapeSucces: "livre-merci",
+          etapeAnnulation: "livre",
+        },
+      ],
+    },
+    {
+      slug: "livre-merci",
+      titre: "Merci pour ton achat",
+      metaDescription: "Ton paiement est confirmé, ton e-book est à télécharger.",
+      blocs: [
+        {
+          type: "hero",
+          eyebrow: "Paiement confirmé",
+          titre: "Merci, ton e-book est prêt",
+          sousTitre:
+            "Télécharge-le juste en dessous. Tu reçois aussi un email avec ton lien de téléchargement : garde-le, il reste valable.",
+        },
+        {
+          type: "telecharger",
+          produit: "livre",
+          boutonTexte: "Je télécharge mon e-book",
+          texteAttente:
+            "Ton lien de téléchargement est dans l'email de confirmation de ton achat. Pense à regarder tes spams si tu ne le vois pas.",
+        },
+      ],
+    },
   ],
 } satisfies FunnelConfig;
 

@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "node scripts/verif-stripe.ts"
   },
   "dependencies": {
     "@calcom/embed-react": "^1.5.3",

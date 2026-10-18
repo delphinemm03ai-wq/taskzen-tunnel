@@ -6,6 +6,7 @@
  * la directive devient inutile et c'est elle qui casse le build.
  */
 import type { Block, FunnelConfig, FunnelStep } from "./funnel";
+import type { Produit } from "./produits";
 
 // Bloc au type inconnu.
 // @ts-expect-error "carrousel" n'est pas un type de bloc.
@@ -53,3 +54,11 @@ export const optinEmailSansObjet = {
   // @ts-expect-error `objet` est requis sur l'email de confirmation.
   email: { titre: "Bienvenue", texte: "Merci." },
 } satisfies Block;
+
+// Bouton d'achat sans produit.
+// @ts-expect-error `produit` est requis sur un bloc acheter.
+export const acheterSansProduit = { type: "acheter", boutonTexte: "J'achète", etapeSucces: "merci", etapeAnnulation: "vente" } satisfies Block;
+
+// Produit sans prix TTC.
+// @ts-expect-error `prixTtc` est requis sur un produit.
+export const produitSansPrix = { nom: "E-book", tauxTva: 5.5, tag: "client-x", livraison: { objet: "O", titre: "T", texte: "X", boutonTexte: "B", fichier: "x.pdf" } } satisfies Produit;

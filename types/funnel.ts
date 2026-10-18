@@ -119,6 +119,36 @@ export interface OptinBlock {
   email: OptinEmail;
 }
 
+/**
+ * Bouton d'achat : crée une session Stripe Checkout pour un produit de
+ * funnels/produits.ts. Le navigateur n'envoie que le tunnel et l'étape ;
+ * produit et prix sont relus côté serveur dans la config.
+ */
+export interface AcheterBlock {
+  type: "acheter";
+  /** Slug d'un produit du registre funnels/produits.ts. */
+  produit: string;
+  boutonTexte: string;
+  /** Slug de l'étape affichée après un paiement réussi, dans le même tunnel. */
+  etapeSucces: string;
+  /** Slug de l'étape affichée si l'acheteur annule depuis Stripe, dans le même tunnel. */
+  etapeAnnulation: string;
+}
+
+/**
+ * Bouton de téléchargement d'un produit acheté, sur l'étape de succès d'un
+ * bloc `acheter`. Il lit `session_id` (ajouté par Stripe à l'URL de retour)
+ * et pointe vers /api/telecharger, qui revérifie le paiement côté serveur.
+ */
+export interface TelechargerBlock {
+  type: "telecharger";
+  /** Slug du produit livré, dans le registre funnels/produits.ts. */
+  produit: string;
+  boutonTexte: string;
+  /** Texte affiché à la place du bouton quand l'URL n'a pas de session_id. */
+  texteAttente: string;
+}
+
 /** Union discriminée par `type` : un nouveau bloc s'ajoute ici ET dans BlockRenderer. */
 export type Block =
   | HeroBlock
@@ -130,7 +160,9 @@ export type Block =
   | TestimonialBlock
   | CountdownBlock
   | CtaBlock
-  | OptinBlock;
+  | OptinBlock
+  | AcheterBlock
+  | TelechargerBlock;
 
 export type BlockType = Block["type"];
 

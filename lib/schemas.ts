@@ -68,3 +68,15 @@ export const funnelOptinSchema = z.object({
 });
 
 export type FunnelOptinInput = z.infer<typeof funnelOptinSchema>;
+
+/**
+ * Schéma de la création d'une session Stripe Checkout (bloc `acheter`,
+ * route /api/stripe/checkout). Seuls le tunnel et l'étape viennent du
+ * navigateur : produit et prix sont relus dans la config par la route.
+ */
+export const stripeCheckoutSchema = z.object({
+  funnel: z.string({ required_error: "Tunnel manquant" }).min(1, "Tunnel manquant").max(100),
+  step: z.string({ required_error: "Étape manquante" }).min(1, "Étape manquante").max(100),
+});
+
+export type StripeCheckoutInput = z.infer<typeof stripeCheckoutSchema>;
