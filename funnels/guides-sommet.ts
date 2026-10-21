@@ -27,6 +27,7 @@ const GUIDES: readonly Guide[] = [
   { slug: "studio-ou-ia", titre: "Produire un épisode : studio ou IA ?", fichier: "05-frank-2-1850-dollars-infographie.pdf" },
   { slug: "erreurs-ia-juridique", titre: "Les erreurs à éviter avec l'IA juridique", fichier: "03-stephane-1-erreur-numero-une-checklist.pdf" },
   { slug: "quick-capture-obsidian", titre: "Quick Capture d'Obsidian : noter une idée en 3 gestes", fichier: "10-delphine-quick-capture-obsidian-memo.pdf" },
+  { slug: "shorts-avec-claude", titre: "Transformer une vidéo en shorts avec Claude : les outils et la méthode", fichier: "11-delphine-shorts-avec-claude-guide.pdf" },
 ];
 
 const etapeInscription = (guide: Guide): FunnelStep => ({
