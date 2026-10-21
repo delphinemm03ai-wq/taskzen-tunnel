@@ -8,6 +8,15 @@ const nextConfig: NextConfig = {
     "/api/optin": ["./private/guides/**/*"],
     "/api/telecharger": ["./private/produits/**/*"],
   },
+  // Liens courts pour les descriptions YouTube et les légendes (redirections temporaires,
+  // pour pouvoir changer la cible plus tard sans que les navigateurs gardent l'ancienne).
+  async redirects() {
+    return [
+      { source: "/g/:slug", destination: "/t/guides-sommet/inscription-:slug", permanent: false },
+      { source: "/livre", destination: "https://sommet.taskzen.fr/livre", permanent: false },
+      { source: "/sommet-rentable", destination: "https://business-affiliation.com/r/820b42f036", permanent: false },
+    ];
+  },
 };
 
 export default nextConfig;
