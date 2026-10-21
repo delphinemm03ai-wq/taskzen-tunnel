@@ -26,6 +26,7 @@ const GUIDES: readonly Guide[] = [
   { slug: "premiere-tache-automatiser", titre: "Quelle tâche automatiser en premier ?", fichier: "02-armel-1-100-salaries-virtuels-checklist.pdf" },
   { slug: "studio-ou-ia", titre: "Produire un épisode : studio ou IA ?", fichier: "05-frank-2-1850-dollars-infographie.pdf" },
   { slug: "erreurs-ia-juridique", titre: "Les erreurs à éviter avec l'IA juridique", fichier: "03-stephane-1-erreur-numero-une-checklist.pdf" },
+  { slug: "quick-capture-obsidian", titre: "Quick Capture d'Obsidian : noter une idée en 3 gestes", fichier: "10-delphine-quick-capture-obsidian-memo.pdf" },
 ];
 
 const etapeInscription = (guide: Guide): FunnelStep => ({
