@@ -8,7 +8,7 @@ import type { FunnelConfig, FunnelStep } from "@/types/funnel";
  * Les PDF sont dans private/guides/ (hors site public).
  */
 
-interface Guide {
+export interface Guide {
   slug: string;
   titre: string;
   fichier: string;
@@ -26,11 +26,9 @@ const GUIDES: readonly Guide[] = [
   { slug: "premiere-tache-automatiser", titre: "Quelle tâche automatiser en premier ?", fichier: "02-armel-1-100-salaries-virtuels-checklist.pdf" },
   { slug: "studio-ou-ia", titre: "Produire un épisode : studio ou IA ?", fichier: "05-frank-2-1850-dollars-infographie.pdf" },
   { slug: "erreurs-ia-juridique", titre: "Les erreurs à éviter avec l'IA juridique", fichier: "03-stephane-1-erreur-numero-une-checklist.pdf" },
-  { slug: "quick-capture-obsidian", titre: "Quick Capture d'Obsidian : noter une idée en 3 gestes", fichier: "10-delphine-quick-capture-obsidian-memo.pdf" },
-  { slug: "shorts-avec-claude", titre: "Transformer une vidéo en shorts avec Claude : les outils et la méthode", fichier: "11-delphine-shorts-avec-claude-guide.pdf" },
 ];
 
-const etapeInscription = (guide: Guide): FunnelStep => ({
+export const etapeInscription = (guide: Guide): FunnelStep => ({
   slug: `inscription-${guide.slug}`,
   titre: guide.titre,
   blocs: [
@@ -56,7 +54,7 @@ const etapeInscription = (guide: Guide): FunnelStep => ({
   ],
 });
 
-const etapeMerci: FunnelStep = {
+export const etapeMerci: FunnelStep = {
   slug: "merci",
   titre: "Merci, ton guide arrive par e-mail",
   blocs: [

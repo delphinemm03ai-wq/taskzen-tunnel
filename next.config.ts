@@ -12,7 +12,13 @@ const nextConfig: NextConfig = {
   // pour pouvoir changer la cible plus tard sans que les navigateurs gardent l'ancienne).
   async redirects() {
     return [
+      // Guides hors sommet : tunnel « guides » (les règles précises passent avant la règle générale).
+      { source: "/g/quick-capture-obsidian", destination: "/t/guides/inscription-quick-capture-obsidian", permanent: false },
+      { source: "/g/shorts-avec-claude", destination: "/t/guides/inscription-shorts-avec-claude", permanent: false },
       { source: "/g/:slug", destination: "/t/guides-sommet/inscription-:slug", permanent: false },
+      // Anciennes adresses déjà partagées : elles continuent de marcher.
+      { source: "/t/guides-sommet/inscription-quick-capture-obsidian", destination: "/t/guides/inscription-quick-capture-obsidian", permanent: false },
+      { source: "/t/guides-sommet/inscription-shorts-avec-claude", destination: "/t/guides/inscription-shorts-avec-claude", permanent: false },
       { source: "/livre", destination: "https://sommet.taskzen.fr/livre", permanent: false },
       { source: "/sommet-rentable", destination: "https://business-affiliation.com/r/820b42f036", permanent: false },
     ];
