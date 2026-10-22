@@ -20,6 +20,7 @@ const nextConfig: NextConfig = {
       { source: "/t/guides-sommet/inscription-quick-capture-obsidian", destination: "/t/guides/inscription-quick-capture-obsidian", permanent: false },
       { source: "/t/guides-sommet/inscription-shorts-avec-claude", destination: "/t/guides/inscription-shorts-avec-claude", permanent: false },
       { source: "/livre", destination: "https://sommet.taskzen.fr/livre", permanent: false },
+      { source: "/whisper-modele", destination: "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v3-turbo.bin", permanent: false },
       { source: "/sommet-rentable", destination: "https://business-affiliation.com/r/820b42f036", permanent: false },
     ];
   },
