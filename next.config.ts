@@ -15,6 +15,7 @@ const nextConfig: NextConfig = {
       // Guides hors sommet : tunnel « guides » (les règles précises passent avant la règle générale).
       { source: "/g/quick-capture-obsidian", destination: "/t/guides/inscription-quick-capture-obsidian", permanent: false },
       { source: "/g/shorts-avec-claude", destination: "/t/guides/inscription-shorts-avec-claude", permanent: false },
+      { source: "/g/tunnel-avec-ia", destination: "/t/guides/inscription-tunnel-avec-ia", permanent: false },
       { source: "/g/:slug", destination: "/t/guides-sommet/inscription-:slug", permanent: false },
       // Anciennes adresses déjà partagées : elles continuent de marcher.
       { source: "/t/guides-sommet/inscription-quick-capture-obsidian", destination: "/t/guides/inscription-quick-capture-obsidian", permanent: false },

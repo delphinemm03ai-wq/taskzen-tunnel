@@ -10,6 +10,7 @@ import { etapeInscription, etapeMerci, type Guide } from "./guides-sommet";
 const GUIDES: readonly Guide[] = [
   { slug: "quick-capture-obsidian", titre: "Quick Capture d'Obsidian : noter une idée en 3 gestes", fichier: "10-delphine-quick-capture-obsidian-memo.pdf" },
   { slug: "shorts-avec-claude", titre: "Transformer une vidéo en shorts avec Claude : les outils et la méthode", fichier: "11-delphine-shorts-avec-claude-guide.pdf" },
+  { slug: "tunnel-avec-ia", titre: "Construire son tunnel de vente avec l'IA : la méthode et les vrais bugs", fichier: "12-delphine-tunnel-avec-ia-guide.pdf" },
 ];
 
 const guides = {
