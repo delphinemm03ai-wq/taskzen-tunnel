@@ -73,7 +73,7 @@ export const etapeMerci: FunnelStep = {
 
 const guidesSommet = {
   slug: "guides-sommet",
-  nom: "Guides du sommet IA en 5 Jours",
+  nom: "Guides IA",
   etapes: [...GUIDES.map(etapeInscription), etapeMerci],
 } satisfies FunnelConfig;
 
