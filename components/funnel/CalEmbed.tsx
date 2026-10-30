@@ -9,7 +9,7 @@ import { track } from "@/lib/posthog-client";
 import { FUNNEL_EVENTS } from "@/lib/events";
 import { setFunnelCookie, FUNNEL_COOKIES } from "@/lib/funnel";
 
-export function CalEmbed() {
+export function CalEmbed({ prefill }: { prefill?: Record<string, string> } = {}) {
   const router = useRouter();
   const { calUsername, calEventSlug } = config.booking;
   const calLink =
@@ -66,7 +66,7 @@ export function CalEmbed() {
       <Cal
         calLink={calLink}
         style={{ width: "100%", height: "100%", minHeight: "640px" }}
-        config={{ layout: "month_view" }}
+        config={{ layout: "month_view", ...prefill }}
       />
     </div>
   );

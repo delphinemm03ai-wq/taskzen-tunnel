@@ -71,6 +71,23 @@ const config = {
     // Ton identifiant Cal.com : cal.com/<username>/<eventSlug>
     calUsername: "delphine-taskzen",
     calEventSlug: "audit-30mn",
+    // Filtre avant le calendrier : seuls les CA "qualified" voient l'agenda.
+    // "calValue" doit être identique à l'option du formulaire Cal.com (préremplie).
+    gate: {
+      question: "Quel est ton chiffre d'affaires mensuel ?",
+      calField: "chiffre-affaires",
+      options: [
+        { label: "Moins de 3 000 €", calValue: "Moins de 3 000 €", qualified: false },
+        { label: "3 000 à 10 000 €", calValue: "3 000 à 10 000 €", qualified: false },
+        { label: "10 000 à 30 000 €", calValue: "10 000 à 30 000 €", qualified: true },
+        { label: "Plus de 30 000 €", calValue: "Plus de 30 000 €", qualified: true },
+      ],
+      refusalTitle: "Merci pour ta franchise",
+      refusalText:
+        "Mon accompagnement est pensé pour les entreprises qui font au moins 10 000 € par mois. En dessous, l'investissement ne serait pas rentable pour toi, et je préfère te le dire tout de suite. En attendant, tu trouveras des idées d'automatisation simples à mettre en place seul sur mon site.",
+      refusalCtaLabel: "Lire mes articles",
+      refusalCtaUrl: "https://taskzen.fr",
+    },
   },
 
   // ── Étape 4 : Merci ────────────────────────────────────
