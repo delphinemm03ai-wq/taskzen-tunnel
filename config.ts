@@ -12,7 +12,7 @@
 const config = {
   business: {
     name: "Taskzen",
-    tagline: "Récupère 10 heures par semaine sans embaucher personne.",
+    tagline: "Arrête de perdre tes soirées à répondre aux mêmes messages clients.",
     domain: "taskzen.fr",
   },
 
@@ -33,9 +33,9 @@ const config = {
   // ── Étape 1 : Landing / opt-in ─────────────────────────
   landing: {
     eyebrow: "Ressource gratuite (5 minutes)",
-    headline: "Récupère 10 heures par semaine sans embaucher personne",
+    headline: "Arrête de perdre tes soirées à répondre aux mêmes messages clients",
     subhead:
-      "La vidéo de 5 minutes (bientôt en ligne) qui montre comment les coachs sportifs indépendants automatisent leurs réponses WhatsApp, email et SMS. Sans paraître robotique, sans rien installer eux-mêmes.",
+      "La vidéo de 5 minutes (bientôt en ligne) qui montre comment les entrepreneurs automatisent leurs réponses WhatsApp, email et SMS. Sans paraître robotique, sans rien installer eux-mêmes.",
     bullets: [
       "Le mécanisme exact pour répondre automatiquement dans TON ton, pas celui d'un robot",
       "Le calcul de ce que ton temps de support te coûte vraiment (le chiffre pique)",
@@ -44,14 +44,14 @@ const config = {
     cta: "Recevoir la vidéo dès sa sortie",
     formLabel: "Ton meilleur email",
     socialProof:
-      "25 ans à faire tourner des systèmes qui n'ont pas le droit de tomber (Airbus, Renault, Orange, Air France), maintenant au service des coachs indépendants.",
+      "25 ans à faire tourner des systèmes qui n'ont pas le droit de tomber (Airbus, Renault, Orange, Air France), maintenant au service des entrepreneurs.",
   },
 
   // ── Étape 2 : Ressource (accès) ────────────────────────
   resource: {
     type: "video" as "vsl" | "pdf" | "video" | "quiz",
     eyebrow: "Merci pour ton inscription",
-    title: "La Méthode IA : comment récupérer 10h par semaine sans embaucher",
+    title: "La Méthode IA : comment récupérer du temps sans embaucher",
     description:
       "En 5 minutes, tu vas voir exactement comment automatiser tes réponses clients sans perdre ton ton, et combien ce temps perdu te coûte réellement chaque mois. Envie de savoir combien TOI tu peux récupérer avec tes messages à toi ? Réserve ton diagnostic gratuit juste en dessous.",
     // Pour type=video/vsl : URL d'embed (YouTube, Vimeo, Tella, Loom...).
