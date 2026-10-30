@@ -17,7 +17,7 @@
 ## Cal.com
 
 - **Username** : delphine-taskzen
-- **Event slug** : appel-decouverte
+- **Event slug** : audit-30mn
 
 ## Vercel / GitHub
 

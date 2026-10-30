@@ -65,12 +65,12 @@ const config = {
   // ── Étape 3 : Réserver (Cal.com) ───────────────────────
   booking: {
     eyebrow: "Dernière étape",
-    headline: "Réserve ton diagnostic gratuit de 30 minutes",
+    headline: "Réserve ton audit gratuit de 30 minutes",
     description:
       "On regarde ensemble tes messages clients et on chiffre précisément le temps (et l'argent) que tu peux récupérer chaque semaine. Sans engagement, sans vente forcée : tu repars avec le chiffrage, que tu bosses avec moi ou pas.",
     // Ton identifiant Cal.com : cal.com/<username>/<eventSlug>
     calUsername: "delphine-taskzen",
-    calEventSlug: "appel-decouverte",
+    calEventSlug: "audit-30mn",
   },
 
   // ── Étape 4 : Merci ────────────────────────────────────
