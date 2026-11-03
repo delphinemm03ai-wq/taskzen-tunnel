@@ -5,7 +5,7 @@
 .ed-root *{box-sizing:border-box}
 .ed-root button{font:inherit;color:inherit;cursor:pointer}
 .ed-root :focus-visible{outline:2px solid var(--lav);outline-offset:2px}
-.ed-root h1,.ed-root h2,.ed-root h3{font-family:Fraunces,Georgia,serif;letter-spacing:-.02em;margin:0;line-height:1.2}
+.ed-root h1,.ed-root h2,.ed-root h3,.ed-dash h1,.ed-gate h1{font-family:Fraunces,Georgia,serif;letter-spacing:-.02em;margin:0;line-height:1.2;color:inherit}
 
 .ed-top{display:flex;align-items:center;gap:16px;padding:0 18px;background:var(--surface2);border-bottom:1px solid var(--border)}
 .ed-brand img{width:36px;height:36px;border-radius:10px;display:block}

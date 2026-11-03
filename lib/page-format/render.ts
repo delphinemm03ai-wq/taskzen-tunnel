@@ -84,7 +84,7 @@ ${fields.includes("first_name") ? `<label>Prénom<input name="firstName" autocom
     case "faq":
       return `<div class="tz-faq" ${attrs(b)}>${(b.items as { question: string; answer: string }[]).map((q) => `<details><summary>${esc(q.question)}</summary><p>${esc(q.answer)}</p></details>`).join("")}</div>`;
     case "timer":
-      return `<div class="tz-timer" ${attrs(b)} data-ends-at="${esc(b.ends_at)}" data-redirect="${esc(b.expired_redirect ?? "")}" role="timer" aria-live="off"><span data-timer-out>--</span></div>`;
+      return `<div class="tz-timer" ${attrs(b)} data-ends-at="${esc(b.ends_at)}" data-redirect="${esc(b.expired_redirect ?? "")}" role="timer" aria-live="off"><span data-timer-out>Fin le ${esc(String(b.ends_at).slice(8, 10))}/${esc(String(b.ends_at).slice(5, 7))}/${esc(String(b.ends_at).slice(0, 4))}</span></div>`;
     case "popup":
       return `<div ${attrs(b)}><button class="tz-btn" type="button" data-popup-open="${esc(b.id)}">${esc(b.trigger_label)}</button>
 <dialog class="tz-popup" id="popup-${esc(b.id)}" aria-label="${esc(b.title)}"><button class="tz-popup-x" type="button" aria-label="Fermer" data-popup-close>×</button><h2 class="tz-h">${esc(b.title)}</h2>${(b.children as Block[]).map(renderBlock).join("")}</dialog></div>`;
@@ -137,6 +137,7 @@ export const EDITOR_CSS = `
 .ed-tools{position:absolute;z-index:10;display:flex;gap:2px;padding:3px;border-radius:999px;background:#131428;box-shadow:0 6px 18px rgba(0,0,0,.5)}
 .ed-tools button{width:32px;height:30px;border:0;border-radius:999px;background:transparent;color:#fff;font-size:14px;cursor:pointer}
 .ed-tools button:hover:not(:disabled){background:#6a3fc0}.ed-tools button:disabled{opacity:.35;cursor:default}
+html{overflow-x:hidden}
 .ed-empty{border:2px dashed #6a3fc0;border-radius:1.5rem;padding:32px;text-align:center;color:var(--lav2);font-weight:600}
 `;
 

@@ -28,6 +28,7 @@ export function Canvas(props: Props) {
   const latest = useRef(props);
   latest.current = props;
   const [ready, setReady] = useState(false);
+  const positionBar = useRef<() => void>(() => {});
   const [srcDoc] = useState(() => renderPageHtml(props.page, { editor: true }));
 
   // Écouteurs posés une fois sur le document de l'iframe : clic = sélection, la page ne navigue jamais.
@@ -50,6 +51,8 @@ export function Canvas(props: Props) {
       closestBlock(e.target)?.classList.add("ed-hover");
     });
     doc.addEventListener("mouseleave", () => doc.querySelectorAll(".ed-hover").forEach((n) => n.classList.remove("ed-hover")));
+    // la barre d'outils suit la sélection quand la largeur change (bascule ordinateur / téléphone)
+    doc.defaultView?.addEventListener("resize", () => positionBar.current());
     setReady(true);
   }
 
@@ -91,10 +94,15 @@ export function Canvas(props: Props) {
       mk("Dupliquer", "⧉", "duplicate");
       mk("Supprimer", "✕", "delete");
       doc.body.appendChild(bar);
-      const r = sel.getBoundingClientRect();
-      const top = r.top + doc.defaultView!.scrollY - 40;
-      bar.style.top = `${Math.max(4, top)}px`;
-      bar.style.left = `${Math.max(4, Math.min(r.right - 140, doc.documentElement.clientWidth - 150))}px`;
+      positionBar.current = () => {
+        const r = sel.getBoundingClientRect();
+        const top = r.top + doc.defaultView!.scrollY - 40;
+        bar.style.top = `${Math.max(4, top)}px`;
+        bar.style.left = `${Math.max(4, Math.min(r.right - 140, doc.documentElement.clientWidth - 150))}px`;
+      };
+      positionBar.current();
+    } else {
+      positionBar.current = () => {};
     }
   }, [ready, props.page, props.selectedId, props.preview, props.canUp, props.canDown]); // eslint-disable-line react-hooks/exhaustive-deps
 

@@ -30,7 +30,7 @@ Chaque point est un choix le plus simple possible, faute de précision dans le c
 21. Publication : l'adresse publique est `/p/<tunnel>/<étape>`. Les visiteurs voient la copie publiée, pas le brouillon.
 
 ## Éditeur visuel (X7)
-22. L'éditeur visuel (F02) n'est pas dans le lot 1. X7 est prouvé au niveau du format et des opérations : l'interface web `/api/pages/[id]` (GET, PATCH) utilise les mêmes opérations et le même schéma que l'outil MCP. L'ouverture à la souris dans un vrai éditeur reste à prouver avec l'interface.
+22. (Remplacé, voir « Éditeur visuel » plus bas.) X7 est prouvé par la même API et les mêmes opérations pour l'éditeur et pour l'IA.
 
 ## Seuils (X2 à X5)
 23. Aucun seuil chiffré n'est imposé. Les tailles sont mesurées et affichées par les tests (voir le rapport).
@@ -41,3 +41,16 @@ Chaque point est un choix le plus simple possible, faute de précision dans le c
 26. Tunnel tout ou rien : un seul appel `rpc/tunnel_create_funnel`, fonction SQL qui écrit tunnel, pages et séquence dans une transaction. Adresse déjà prise = conflit `slug_taken`, rien n'est écrit. La fonction n'est exécutable que par service_role.
 27. Contacts : tables existantes (migration 001). Consentement = contact non désinscrit (`unsubscribed_at` nul), faute de colonne de consentement. À remplacer quand F23 (import avec accord) existera.
 28. Les séquences sont stockées mais jamais exécutées (pas de moteur d'envoi au lot 1).
+
+## Éditeur visuel (F02, X7, F09)
+29. Pages : `/admin/tunnels` (liste des tunnels et pages, lien « Ouvrir ») et `/admin/editeur/[id]`. Accès : même secret admin que l'admin existant (en-tête `x-admin-secret`, vérifié par le serveur). Le secret est gardé pour l'onglet (sessionStorage) pour passer de la liste à l'éditeur ; il n'est jamais dans une adresse.
+30. L'éditeur lit et écrit par `lib/pages-api.ts` via `/api/admin/pages/[id]` (GET, PATCH, `expected_version` obligatoire) : mêmes opérations (`applyChanges`) et même schéma que l'outil `update_page`.
+31. Enregistrement : l'éditeur calcule la différence entre la page enregistrée et la page éditée (`lib/editor/diff.ts`), vérifie qu'en rejouant les opérations on retrouve exactement la page éditée, puis envoie seulement ces opérations. Enregistrement automatique 1,5 s après la dernière modification, bouton « Enregistrer », avertissement à la fermeture si des modifications ne sont pas enregistrées.
+32. Conflit : si la version a changé (IA ou autre onglet), le serveur répond 409 avec la version actuelle. L'éditeur la charge sans l'écraser, reporte par-dessus les modifications locales non enregistrées (si elles s'appliquent encore, sinon elles sont abandonnées et le bandeau le dit), et suspend l'enregistrement automatique jusqu'à un clic sur « Enregistrer ». Même chose, sans conflit, quand une vérification toutes les 8 secondes voit une version plus récente.
+33. Annuler et rétablir : 20 actions (valeur proposée). Des frappes successives dans un même champ à moins d'une seconde comptent pour une seule action. L'historique est local à l'onglet et disparaît à la fermeture ou après un rechargement forcé par conflit.
+34. Rendu : l'éditeur utilise `renderPageHtml(page, { editor: true })` (même moteur que le public) dans une iframe dont la largeur donne l'aperçu : ordinateur (pleine largeur), tablette (768 px), téléphone (375 px). En mode édition aucun script public n'est chargé (pas de redirection du minuteur, pas de pop-up, pas d'envoi de formulaire). Le minuteur affiche « Fin le jj/mm/aaaa » au lieu du décompte en direct.
+35. Éléments : clic sur un élément du panneau = ajout après l'élément sélectionné (dans une section ou un pop-up sélectionné : à la fin de son contenu ; sinon à la fin de la page). Déplacement par flèches haut et bas, pas par glisser-déposer. Copie et suppression dans la barre d'outils de l'élément. Le nombre de colonnes d'un bloc Colonnes ne se change pas (2 à la création). Les textes par défaut des nouveaux éléments (dont le témoignage) sont des exemples à remplacer.
+36. Réglages : élément puis page, empilés dans un seul panneau (choix n°4), sans onglets. Couleur : 5 pastilles de la charte (le dégradé par défaut retire le réglage). Espacement : Auto, Aucun, S, M, L, XL (pas de curseur en pixels). Valeur refusée par le format (lien dangereux par exemple) : message sous le champ, rien n'est appliqué.
+37. Pas dans cet éditeur : bouton « Publier » (la publication reste par `publish_page` ou `publish_funnel`, qui demandent confirmation pour un changement de prix), bloc de code libre (F04), date limite par visiteur (F06), délai du pop-up (F05), réglage d'image de partage par téléversement (adresse https seulement), éditeur sur téléphone (choix n°5), glisser-déposer.
+38. Tableau de bord : seulement la liste des tunnels et pages avec leur état et la date de modification. Visites, inscrits, ventes, contacts et statistiques (maquette tableau-de-bord.html) viennent avec leurs lots.
+39. Le prix d'un bloc de paiement modifié dans l'éditeur ne change que l'affichage de la page : l'éditeur ne touche ni à la route Stripe ni au code qui encaisse.

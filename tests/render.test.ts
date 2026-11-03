@@ -37,6 +37,7 @@ describe("format de page et rendu serveur", () => {
     const page = newPage("pg_p", { title: "Vente", blocks: [{ type: "payment_button", label: "Acheter", product: "offre", price_cents: 9700 }] });
     const html = renderPageHtml(page, { funnelSlug: "mon-tunnel", stepSlug: "offre" });
     expect(html).toContain('data-funnel="mon-tunnel" data-step="offre"');
+    expect(renderPageHtml(newPage("pg_t", { title: "T", blocks: [{ type: "timer", mode: "fixed_date", ends_at: "2030-01-31T00:00:00Z" }] }))).toContain("Fin le 31/01/2030");
     expect(html).toContain("/api/stripe/checkout");
     expect(html).not.toContain("/api/checkout");
   });
