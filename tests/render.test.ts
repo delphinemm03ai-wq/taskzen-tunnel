@@ -26,11 +26,19 @@ describe("format de page et rendu serveur", () => {
     expect(new Set(ALL_BLOCKS.map((b) => b.type))).toEqual(new Set(BLOCK_TYPES));
     const page = newPage("pg_t", { title: "Tout", blocks: ALL_BLOCKS as never });
     const html = renderPageHtml(page);
-    for (const marker of ["<h1", "<ul", "<img", "<iframe", "tz-hr", "tz-cols", "tz-section", "tz-form", "/api/checkout?product=offre", "tz-testimonials", "<details", "tz-timer", "<dialog"]) {
+    for (const marker of ["<h1", "<ul", "<img", "<iframe", "tz-hr", "tz-cols", "tz-section", "tz-form", "data-checkout", "tz-testimonials", "<details", "tz-timer", "<dialog"]) {
       expect(html).toContain(marker);
     }
     // chaque bloc porte son id stable dans le HTML (utile à l'éditeur)
     for (const id of JSON.stringify(page).match(/"id":"b[0-9a-f]{8}"/g) ?? []) expect(html).toContain(id.slice(6, -1));
+  });
+
+  it("le bouton de paiement appelle la route Stripe existante avec tunnel et étape", () => {
+    const page = newPage("pg_p", { title: "Vente", blocks: [{ type: "payment_button", label: "Acheter", product: "offre", price_cents: 9700 }] });
+    const html = renderPageHtml(page, { funnelSlug: "mon-tunnel", stepSlug: "offre" });
+    expect(html).toContain('data-funnel="mon-tunnel" data-step="offre"');
+    expect(html).toContain("/api/stripe/checkout");
+    expect(html).not.toContain("/api/checkout");
   });
 
   it("le rendu est pur : aucun appel réseau, résultat identique à chaque affichage", () => {

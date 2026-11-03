@@ -1,5 +1,5 @@
 import { applyChanges, PageError } from "@/lib/page-format/ops";
-import type { Store } from "@/lib/store/store";
+import { StoreConflictError, type Store } from "@/lib/store/store";
 
 /**
  * Lecture et modification d'une page pour l'éditeur visuel (X7).
@@ -18,9 +18,15 @@ export async function patchPageFromEditor(store: Store, pageId: string, body: { 
     throw new PageError("version_conflict", `La page est en version ${rec.version}.`);
   }
   const { page, applied } = applyChanges(rec.page, body.changes);
+  const readVersion = rec.version;
   rec.page = page;
   rec.version += 1;
   rec.updatedAt = new Date().toISOString();
-  await store.putPage(pageId, rec);
+  try {
+    await store.putPage(pageId, rec, { expectedVersion: readVersion });
+  } catch (e) {
+    if (e instanceof StoreConflictError) throw new PageError("version_conflict", "La page a changé entre-temps.");
+    throw e;
+  }
   return { page_id: pageId, version: rec.version, applied };
 }

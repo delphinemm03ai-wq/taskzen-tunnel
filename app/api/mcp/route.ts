@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getStore } from "@/lib/store/store";
+import { getStore } from "@/lib/store";
 import { NotConfiguredMailer } from "@/lib/mcp/tools";
 import { handleRpc } from "@/lib/mcp/server";
 import { authenticate } from "@/lib/mcp/auth";

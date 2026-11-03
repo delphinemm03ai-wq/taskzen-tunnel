@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
-import { getStore } from "@/lib/store/store";
+import { getStore } from "@/lib/store";
 import { authenticate } from "@/lib/mcp/auth";
 import { patchPageFromEditor, readPageForEditor } from "@/lib/pages-api";
 import { PageError } from "@/lib/page-format/ops";

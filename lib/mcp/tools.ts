@@ -3,7 +3,7 @@ import {
   Block, Page, blockSchema, pageInputSchema, safeLink, shareSchema, slugify,
 } from "@/lib/page-format/schema";
 import { PageError, applyChanges, changesSchema, collectPrices, newPage, walk } from "@/lib/page-format/ops";
-import type { FunnelRecord, FunnelStep, PageRecord, SequenceRecord, Store } from "@/lib/store/store";
+import { StoreConflictError, type FunnelRecord, type FunnelStep, type PageRecord, type SequenceRecord, type Store } from "@/lib/store/store";
 
 /** Port d'envoi d'email. L'implémentation réelle (Resend) se branche ici ; aucune n'est faite au lot 1. */
 export interface Mailer {
@@ -171,7 +171,7 @@ export const handlers: { [K in ToolName]: (ctx: ToolContext, args: z.infer<(type
     assertNoPlaceholders(args.blocks as Block[]);
     const pageId = ctx.store.newId("pg");
     const page = newPage(pageId, args);
-    await ctx.store.putPage(pageId, { page, version: 1, status: "draft", published: null, updatedAt: new Date().toISOString() });
+    await ctx.store.putPage(pageId, { page, version: 1, status: "draft", published: null, updatedAt: new Date().toISOString() }, { insert: true });
     return { page_id: pageId, version: 1, status: "draft" };
   },
 
@@ -182,10 +182,16 @@ export const handlers: { [K in ToolName]: (ctx: ToolContext, args: z.infer<(type
     }
     const { page, applied } = applyChanges(rec.page, args.changes);
     assertNoPlaceholders(page.blocks as Block[]);
+    const readVersion = rec.version;
     rec.page = page;
     rec.version += 1;
     rec.updatedAt = new Date().toISOString();
-    await ctx.store.putPage(args.page_id, rec);
+    try {
+      await ctx.store.putPage(args.page_id, rec, { expectedVersion: readVersion });
+    } catch (e) {
+      if (e instanceof StoreConflictError) throw new ToolError("version_conflict", "La page a changé pendant ta modification. Relis-la avec get_page.");
+      throw e;
+    }
     return { page_id: args.page_id, version: rec.version, applied };
   },
 
@@ -235,10 +241,14 @@ export const handlers: { [K in ToolName]: (ctx: ToolContext, args: z.infer<(type
     });
     const sequence = args.email_sequence ? sequenceRecord(ctx, args.email_sequence) : null;
 
-    for (const b of built) await ctx.store.putPage(b.step.pageId, b.rec);
     const funnel: FunnelRecord = { id: funnelId, name: args.name, slug: funnelSlug, steps: built.map((b) => b.step), status: "draft" };
-    await ctx.store.putFunnel(funnel);
-    if (sequence) await ctx.store.putSequence(sequence);
+    // une seule écriture groupée : le tunnel existe en entier ou pas du tout
+    try {
+      await ctx.store.saveFunnelBundle({ funnel, pages: built.map((b) => b.rec), sequence });
+    } catch (e) {
+      if (e instanceof StoreConflictError) throw new ToolError("slug_taken", "Cette adresse de tunnel est déjà prise. Réessaie.");
+      throw e;
+    }
 
     return {
       funnel_id: funnelId,
@@ -307,7 +317,12 @@ async function publishRecord(ctx: ToolContext, pageId: string, rec: PageRecord, 
   }
   rec.published = structuredClone(rec.page);
   rec.status = "published";
-  await ctx.store.putPage(pageId, rec);
+  try {
+    await ctx.store.putPage(pageId, rec, { expectedVersion: rec.version });
+  } catch (e) {
+    if (e instanceof StoreConflictError) throw new ToolError("version_conflict", "La page a changé pendant la publication. Relis-la avec get_page.");
+    throw e;
+  }
   return { page_id: pageId, version: rec.version, status: "published" };
 }
 

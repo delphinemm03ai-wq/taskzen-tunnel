@@ -68,7 +68,7 @@ async function callTool(ctx: ToolContext, caller: CallerKey, params: Record<stri
   const name = params.name as ToolName;
   const out = (payload: unknown, isError: boolean) => {
     const text = JSON.stringify(payload);
-    void ctx.store.logCall({ at: new Date().toISOString(), keyId: caller.id, tool: String(name), requestBytes: rawBytes, responseBytes: Buffer.byteLength(text), ok: !isError });
+    ctx.store.logCall({ at: new Date().toISOString(), keyId: caller.id, tool: String(name), requestBytes: rawBytes, responseBytes: Buffer.byteLength(text), ok: !isError }).catch((e) => console.error("[mcp] journal des appels indisponible :", e instanceof Error ? e.message : e));
     return { content: [{ type: "text", text }], isError };
   };
 

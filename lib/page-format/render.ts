@@ -14,6 +14,13 @@ export function esc(s: unknown): string {
     .replace(/'/g, "&#39;");
 }
 
+/** Contexte d'affichage : adresse du tunnel et de l'étape (le bouton de paiement en a besoin). Rendu synchrone, donc sans risque de mélange. */
+export interface RenderContext {
+  funnelSlug?: string;
+  stepSlug?: string;
+}
+let CTX: RenderContext = {};
+
 const SPACING: Record<string, string> = { none: "0", s: "8px", m: "20px", l: "40px", xl: "72px" };
 
 function style(b: Block): string {
@@ -68,8 +75,9 @@ ${fields.includes("first_name") ? `<label>Prénom<input name="firstName" autocom
     }
     case "payment_button": {
       const price = ((b.price_cents as number) / 100).toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
-      // Lien réel vers la route de commande. Le paiement Stripe arrive au lot 2 : la route répond honnêtement 501 d'ici là.
-      return `<p class="tz-btnwrap" ${attrs(b)}><a class="tz-btn" href="/api/checkout?product=${encodeURIComponent(String(b.product))}" data-price-cents="${b.price_cents}">${esc(b.label)} (${esc(price)})</a></p>`;
+      // Vrai bouton : le script public appelle la route Stripe existante (POST /api/stripe/checkout { funnel, step })
+      // et redirige vers l'adresse Stripe renvoyée. Prix et produit sont relus côté serveur dans la config, jamais ici.
+      return `<p class="tz-btnwrap" ${attrs(b)}><button class="tz-btn" type="button" data-checkout data-funnel="${esc(CTX.funnelSlug ?? "")}" data-step="${esc(CTX.stepSlug ?? "")}" data-price-cents="${b.price_cents}">${esc(b.label)} (${esc(price)})</button><span class="tz-form-msg" role="status" aria-live="polite"></span></p>`;
     }
     case "testimonials":
       return `<div class="tz-testimonials" ${attrs(b)}>${(b.items as { quote: string; author: string }[]).map((t) => `<figure><blockquote>${esc(t.quote)}</blockquote><figcaption>${esc(t.author)}</figcaption></figure>`).join("")}</div>`;
@@ -132,6 +140,11 @@ document.querySelectorAll('[data-popup-open]').forEach(function(b){
 document.querySelectorAll('dialog.tz-popup').forEach(function(d){
   d.querySelector('[data-popup-close]').addEventListener('click',function(){d.close()});
   d.addEventListener('click',function(e){if(e.target===d)d.close()})});
+document.querySelectorAll('[data-checkout]').forEach(function(b){
+  b.addEventListener('click',function(){var msg=b.parentNode.querySelector('.tz-form-msg');b.disabled=true;
+    fetch('/api/stripe/checkout',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({funnel:b.dataset.funnel,step:b.dataset.step})})
+      .then(function(r){return r.json()}).then(function(j){if(j&&j.ok&&j.data&&j.data.url)location.href=j.data.url;else throw 0})
+      .catch(function(){b.disabled=false;msg.textContent='Le paiement n\\u2019a pas pu d\\u00e9marrer, r\\u00e9essaie.'})})});
 document.querySelectorAll('form.tz-form').forEach(function(f){
   f.addEventListener('submit',function(e){e.preventDefault();var msg=f.querySelector('.tz-form-msg');
     var body={email:f.email.value};if(f.firstName)body.firstName=f.firstName.value;
@@ -142,12 +155,13 @@ document.querySelectorAll('form.tz-form').forEach(function(f){
 `;
 
 /** Fragment HTML du corps de page (utilisé aussi par l'aperçu). */
-export function renderBlocksHtml(page: Page): string {
+export function renderBlocksHtml(page: Page, ctx: RenderContext = {}): string {
+  CTX = ctx;
   return (page.blocks as Block[]).map(renderBlock).join("\n");
 }
 
 /** Document HTML complet. Image de partage : réglage de page, sinon titre + première image (F08). */
-export function renderPageHtml(page: Page, opts: { logoUrl?: string } = {}): string {
+export function renderPageHtml(page: Page, opts: { logoUrl?: string } & RenderContext = {}): string {
   const firstImage = findFirstImage(page.blocks as Block[]);
   const ogTitle = page.share.title ?? page.title;
   const ogImage = page.share.image ?? firstImage;
@@ -162,7 +176,7 @@ ${ogImage ? `<meta property="og:image" content="${esc(ogImage)}">` : ""}
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>${PAGE_CSS}</style></head>
 <body><div class="tz-wrap"><div class="tz-brand"><img src="${esc(logo)}" alt="" width="32" height="32">Taskzen</div>
-<main>${renderBlocksHtml(page)}</main></div><script>${PAGE_JS}</script></body></html>`;
+<main>${renderBlocksHtml(page, opts)}</main></div><script>${PAGE_JS}</script></body></html>`;
 }
 
 function findFirstImage(blocks: Block[]): string | undefined {

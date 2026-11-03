@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { getStore } from "@/lib/store/store";
+import { getStore } from "@/lib/store";
 import { renderPageHtml } from "@/lib/page-format/render";
 
 export const dynamic = "force-dynamic";
@@ -9,5 +9,5 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ fun
   const { funnel, step } = await params;
   const rec = await getStore().findPublishedByPath(funnel, step);
   if (!rec || !rec.published) return new Response("Page introuvable", { status: 404, headers: { "content-type": "text/plain; charset=utf-8" } });
-  return new Response(renderPageHtml(rec.published), { headers: { "content-type": "text/html; charset=utf-8" } });
+  return new Response(renderPageHtml(rec.published, { funnelSlug: funnel, stepSlug: step }), { headers: { "content-type": "text/html; charset=utf-8" } });
 }

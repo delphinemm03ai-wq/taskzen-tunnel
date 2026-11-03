@@ -58,11 +58,33 @@ export interface CallLogEntry {
   ok: boolean;
 }
 
+/** Conflit d'écriture : la page a changé (ou existe déjà) depuis la lecture. */
+export class StoreConflictError extends Error {
+  constructor(message = "Conflit de version") {
+    super(message);
+  }
+}
+
+export interface PutPageOptions {
+  /** Création : échoue si l'identifiant existe déjà. */
+  insert?: boolean;
+  /** Mise à jour : échoue si la version stockée n'est plus celle-ci. */
+  expectedVersion?: number;
+}
+
+export interface FunnelBundle {
+  funnel: FunnelRecord;
+  pages: PageRecord[];
+  sequence: SequenceRecord | null;
+}
+
 /** Port de stockage. Une implémentation durable (base de données) se branche ici plus tard. */
 export interface Store {
   newId(prefix: string): string;
   getPage(id: string): Promise<PageRecord | null>;
-  putPage(id: string, rec: PageRecord): Promise<void>;
+  putPage(id: string, rec: PageRecord, opts?: PutPageOptions): Promise<void>;
+  /** Écrit un tunnel, ses pages et sa séquence en bloc : tout ou rien. */
+  saveFunnelBundle(bundle: FunnelBundle): Promise<void>;
   deletePage(id: string): Promise<void>;
   findPublishedByPath(funnelSlug: string, stepSlug: string): Promise<PageRecord | null>;
   getFunnel(id: string): Promise<FunnelRecord | null>;
@@ -90,8 +112,17 @@ export class MemoryStore implements Store {
     const r = this.pages.get(id);
     return r ? structuredClone(r) : null;
   }
-  async putPage(id: string, rec: PageRecord) {
+  async putPage(id: string, rec: PageRecord, opts: PutPageOptions = {}) {
+    const current = this.pages.get(id);
+    if (opts.insert && current) throw new StoreConflictError("Cette page existe déjà");
+    if (opts.expectedVersion !== undefined && current?.version !== opts.expectedVersion) throw new StoreConflictError();
     this.pages.set(id, structuredClone(rec));
+  }
+  async saveFunnelBundle(b: FunnelBundle) {
+    if (await this.findFunnelBySlug(b.funnel.slug)) throw new StoreConflictError("Cette adresse de tunnel existe déjà");
+    for (const p of b.pages) this.pages.set(p.page.id, structuredClone(p));
+    this.funnels.set(b.funnel.id, structuredClone(b.funnel));
+    if (b.sequence) this.sequences.set(b.sequence.id, structuredClone(b.sequence));
   }
   async deletePage(id: string) {
     this.pages.delete(id);
@@ -138,7 +169,14 @@ export class MemoryStore implements Store {
 }
 
 const g = globalThis as unknown as { __tzStore?: Store };
-/** Instance partagée du processus (en mémoire tant que le stockage durable n'est pas branché). */
-export function getStore(): Store {
-  return (g.__tzStore ??= new MemoryStore());
+/**
+ * Instance partagée du processus. Supabase si SUPABASE_URL et SUPABASE_SERVICE_ROLE_KEY sont définis
+ * (sauf TUNNEL_STORE=memory), sinon mémoire (tests, développement sans base).
+ * Le choix est fait dans lib/store/index.ts pour éviter un import circulaire.
+ */
+export function setStore(s: Store) {
+  g.__tzStore = s;
+}
+export function currentStore(): Store | undefined {
+  return g.__tzStore;
 }
