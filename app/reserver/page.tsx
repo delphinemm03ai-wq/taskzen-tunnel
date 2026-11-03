@@ -1,5 +1,5 @@
 import config from "@/config";
-import { BookingGate } from "@/components/funnel/BookingGate";
+import { CalEmbed } from "@/components/funnel/CalEmbed";
 import { PageView } from "@/components/funnel/PageView";
 import { FUNNEL_EVENTS } from "@/lib/events";
 
@@ -36,7 +36,7 @@ export default function ReserverPage() {
         </header>
 
         <div className="reveal reveal-3">
-          <BookingGate />
+          <CalEmbed />
         </div>
       </section>
     </main>
