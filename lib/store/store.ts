@@ -88,6 +88,7 @@ export interface Store {
   deletePage(id: string): Promise<void>;
   findPublishedByPath(funnelSlug: string, stepSlug: string): Promise<PageRecord | null>;
   getFunnel(id: string): Promise<FunnelRecord | null>;
+  listFunnels(): Promise<FunnelRecord[]>;
   putFunnel(rec: FunnelRecord): Promise<void>;
   findFunnelBySlug(slug: string): Promise<FunnelRecord | null>;
   putSequence(rec: SequenceRecord): Promise<void>;
@@ -134,6 +135,9 @@ export class MemoryStore implements Store {
     if (!step) return null;
     const rec = await this.getPage(step.pageId);
     return rec && rec.status === "published" && rec.published ? rec : null;
+  }
+  async listFunnels() {
+    return structuredClone([...this.funnels.values()]);
   }
   async getFunnel(id: string) {
     const f = this.funnels.get(id);

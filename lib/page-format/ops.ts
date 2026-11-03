@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { randomUUID } from "node:crypto";
 import { Block, Page, PageInput, blockSchema, pageSchema, PAGE_FORMAT_VERSION, shareSchema, slugify } from "./schema";
 
 export class PageError extends Error {
@@ -22,8 +21,11 @@ export function walk(blocks: Block[], fn: (b: Block, siblings: Block[], index: n
   });
 }
 
-function shortId(): string {
-  return "b" + randomUUID().replace(/-/g, "").slice(0, 8);
+/** Identifiant de bloc court. Sans dépendance Node : l'éditeur (navigateur) l'utilise aussi. */
+export function shortId(): string {
+  const c = globalThis.crypto;
+  const raw = c?.randomUUID ? c.randomUUID().replace(/-/g, "") : Math.random().toString(16).slice(2) + Math.random().toString(16).slice(2);
+  return "b" + raw.slice(0, 8);
 }
 
 /** Donne un id stable à chaque bloc qui n'en a pas et vérifie l'unicité. */
@@ -69,7 +71,8 @@ export function allBlockIds(page: Page): string[] {
  */
 const changeSchema = z.discriminatedUnion("op", [
   z.object({ op: z.literal("set_title"), title: z.string().min(1).max(200) }).strict(),
-  z.object({ op: z.literal("set_share"), share: shareSchema }).strict(),
+  // une valeur null retire le réglage de partage correspondant
+  z.object({ op: z.literal("set_share"), share: z.object({ title: z.string().nullable(), description: z.string().nullable(), image: z.string().nullable() }).partial().strict() }).strict(),
   z.object({ op: z.literal("set_props"), block_id: z.string(), props: z.record(z.unknown()) }).strict(),
   z
     .object({
@@ -125,13 +128,20 @@ export function applyChanges(page: Page, rawChanges: unknown): { page: Page; app
         next.title = c.title;
         break;
       case "set_share":
-        next.share = { ...next.share, ...c.share };
+        for (const [k, v] of Object.entries(c.share)) {
+          if (v === null) delete (next.share as Record<string, unknown>)[k];
+          else if (v !== undefined) (next.share as Record<string, unknown>)[k] = v;
+        }
         break;
       case "set_props": {
         const f = findBlock(next, c.block_id);
         if (!f) throw new PageError("block_not_found", `Bloc introuvable : ${c.block_id}`);
         if ("id" in c.props || "type" in c.props) throw new PageError("immutable", "id et type d'un bloc ne se modifient pas");
-        Object.assign(f.block, c.props);
+        // une valeur null retire la propriété (réglage vidé dans l'éditeur)
+        for (const [k, v] of Object.entries(c.props)) {
+          if (v === null) delete f.block[k];
+          else f.block[k] = v;
+        }
         break;
       }
       case "add_block": {

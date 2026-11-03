@@ -30,3 +30,27 @@ export async function patchPageFromEditor(store: Store, pageId: string, body: { 
   }
   return { page_id: pageId, version: rec.version, applied };
 }
+
+export interface TunnelSummary {
+  funnel_id: string;
+  name: string;
+  slug: string;
+  status: "draft" | "published";
+  steps: { step_id: string; slug: string; kind: string; page_id: string; title: string; status: "draft" | "published"; version: number; updated_at: string }[];
+}
+
+/** Liste des tunnels et de leurs pages pour le tableau de bord (lecture seule, sans le contenu des pages). */
+export async function listTunnelsForAdmin(store: Store): Promise<TunnelSummary[]> {
+  const funnels = await store.listFunnels();
+  const out: TunnelSummary[] = [];
+  for (const f of funnels) {
+    const steps: TunnelSummary["steps"] = [];
+    for (const s of f.steps) {
+      const rec = await store.getPage(s.pageId);
+      if (!rec) continue;
+      steps.push({ step_id: s.id, slug: s.slug, kind: s.kind, page_id: s.pageId, title: rec.page.title, status: rec.status, version: rec.version, updated_at: rec.updatedAt });
+    }
+    out.push({ funnel_id: f.id, name: f.name, slug: f.slug, status: f.status, steps });
+  }
+  return out;
+}

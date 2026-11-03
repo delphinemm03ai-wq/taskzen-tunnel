@@ -156,6 +156,10 @@ export class SupabaseStore implements Store {
     const r = rows(must(await this.rest({ method: "GET", path: "tunnel_funnels", query: { select: "*", id: `eq.${id}`, limit: "1" } }), "getFunnel"));
     return r[0] ? (r[0] as unknown as FunnelRecord) : null;
   }
+  async listFunnels() {
+    const r = rows(must(await this.rest({ method: "GET", path: "tunnel_funnels", query: { select: "*", order: "created_at.desc" } }), "listFunnels"));
+    return r as unknown as FunnelRecord[];
+  }
   async findFunnelBySlug(slug: string) {
     const r = rows(must(await this.rest({ method: "GET", path: "tunnel_funnels", query: { select: "*", slug: `eq.${slug}`, limit: "1" } }), "findFunnelBySlug"));
     return r[0] ? (r[0] as unknown as FunnelRecord) : null;

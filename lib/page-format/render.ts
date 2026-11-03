@@ -125,6 +125,21 @@ h1.tz-h{font-size:clamp(1.9rem,6vw,2.8rem)}h2.tz-h{font-size:clamp(1.5rem,4.5vw,
 .tz-popup-x{position:absolute;top:8px;right:8px;min-width:44px;min-height:44px;border:0;background:transparent;color:var(--fg);font-size:1.6rem;cursor:pointer}
 `;
 
+/**
+ * Habillage de l'éditeur visuel (le même moteur de rendu, en mode édition) : cadres de survol et de sélection.
+ * Les clics sont interceptés par l'éditeur, pas par la page : aucun script public n'est chargé en mode édition.
+ */
+export const EDITOR_CSS = `
+[data-block]{position:relative;border-radius:12px;outline:2px solid transparent;outline-offset:4px;cursor:pointer}
+[data-block].ed-hover{outline:2px dashed rgba(181,139,249,.75)}
+[data-block].ed-sel{outline:2px solid #b58bf9;box-shadow:0 0 0 6px rgba(181,139,249,.18)}
+[data-block].ed-hover::before,[data-block].ed-sel::before{content:attr(data-label);position:absolute;top:-26px;left:-2px;z-index:5;font:600 11px Inter,sans-serif;background:#6a3fc0;color:#fff;padding:3px 9px;border-radius:8px 8px 8px 0;white-space:nowrap;pointer-events:none}
+.ed-tools{position:absolute;z-index:10;display:flex;gap:2px;padding:3px;border-radius:999px;background:#131428;box-shadow:0 6px 18px rgba(0,0,0,.5)}
+.ed-tools button{width:32px;height:30px;border:0;border-radius:999px;background:transparent;color:#fff;font-size:14px;cursor:pointer}
+.ed-tools button:hover:not(:disabled){background:#6a3fc0}.ed-tools button:disabled{opacity:.35;cursor:default}
+.ed-empty{border:2px dashed #6a3fc0;border-radius:1.5rem;padding:32px;text-align:center;color:var(--lav2);font-weight:600}
+`;
+
 /** Petit script public (aucun appel à une IA) : minuteur à date fixe, pop-up, formulaire d'inscription. */
 export const PAGE_JS = `
 (function(){
@@ -161,7 +176,7 @@ export function renderBlocksHtml(page: Page, ctx: RenderContext = {}): string {
 }
 
 /** Document HTML complet. Image de partage : réglage de page, sinon titre + première image (F08). */
-export function renderPageHtml(page: Page, opts: { logoUrl?: string } & RenderContext = {}): string {
+export function renderPageHtml(page: Page, opts: { logoUrl?: string; editor?: boolean } & RenderContext = {}): string {
   const firstImage = findFirstImage(page.blocks as Block[]);
   const ogTitle = page.share.title ?? page.title;
   const ogImage = page.share.image ?? firstImage;
@@ -174,9 +189,9 @@ ${page.share.description ? `<meta property="og:description" content="${esc(page.
 ${ogImage ? `<meta property="og:image" content="${esc(ogImage)}">` : ""}
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>${PAGE_CSS}</style></head>
+<style>${PAGE_CSS}${opts.editor ? EDITOR_CSS : ""}</style></head>
 <body><div class="tz-wrap"><div class="tz-brand"><img src="${esc(logo)}" alt="" width="32" height="32">Taskzen</div>
-<main>${renderBlocksHtml(page, opts)}</main></div><script>${PAGE_JS}</script></body></html>`;
+<main>${renderBlocksHtml(page, opts)}</main></div>${opts.editor ? "" : `<script>${PAGE_JS}</script>`}</body></html>`;
 }
 
 function findFirstImage(blocks: Block[]): string | undefined {
