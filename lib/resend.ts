@@ -19,7 +19,7 @@ function resourceEmailHtml(siteUrl: string): string {
   const resourceUrl = `${siteUrl}/ressource`;
   const title = config.resource.title;
   return `
-  <div style="font-family:system-ui,-apple-system,sans-serif;max-width:520px;margin:0 auto;color:#1c1917;">
+  <div style="font-family:system-ui,-apple-system,sans-serif;max-width:520px;margin:0 auto;color:#131428;">
     <h1 style="font-size:22px;color:${config.brand.colorPrimary};">${title}</h1>
     <p>Merci pour ton inscription !</p>
     <p>Voici l'accès à ta ressource :</p>
@@ -30,7 +30,7 @@ function resourceEmailHtml(siteUrl: string): string {
         Accéder à ma ressource
       </a>
     </p>
-    <p style="color:#57534e;font-size:14px;">À très vite,<br/>Delphine Moura-Miranda - Automatisation IA<br/>Taskzen</p>
+    <p style="color:#4a4963;font-size:14px;">À très vite,<br/>Delphine Moura-Miranda - Automatisation IA<br/>Taskzen</p>
   </div>`;
 }
 
@@ -102,7 +102,7 @@ function bookingButton(siteUrl: string): string {
 }
 
 function signature(): string {
-  return `<p style="color:#57534e;font-size:14px;">À très vite,<br/>Delphine Moura-Miranda - Automatisation IA<br/>Taskzen</p>`;
+  return `<p style="color:#4a4963;font-size:14px;">À très vite,<br/>Delphine Moura-Miranda - Automatisation IA<br/>Taskzen</p>`;
 }
 
 const FOLLOWUP_CONTENT: Record<
@@ -143,7 +143,7 @@ const FOLLOWUP_CONTENT: Record<
 function followupEmailHtml(stage: FollowupStage, firstName: string, siteUrl: string): string {
   const content = FOLLOWUP_CONTENT[stage];
   return `
-  <div style="font-family:system-ui,-apple-system,sans-serif;max-width:520px;margin:0 auto;color:#1c1917;">
+  <div style="font-family:system-ui,-apple-system,sans-serif;max-width:520px;margin:0 auto;color:#131428;">
     ${content.body(firstName)}
     ${bookingButton(siteUrl)}
     ${signature()}
@@ -199,7 +199,7 @@ function funnelConfirmationEmailHtml(input: {
     </p>`
       : "";
   return `
-  <div style="font-family:system-ui,-apple-system,sans-serif;max-width:520px;margin:0 auto;color:#1c1917;">
+  <div style="font-family:system-ui,-apple-system,sans-serif;max-width:520px;margin:0 auto;color:#131428;">
     <h1 style="font-size:22px;color:${config.brand.colorPrimary};">${escapeHtml(input.title)}</h1>
     <p>${greeting}</p>
     <p>${escapeHtml(input.text)}</p>

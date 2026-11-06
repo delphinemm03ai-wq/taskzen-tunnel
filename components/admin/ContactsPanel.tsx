@@ -157,7 +157,7 @@ export function ContactsPanel({ tag, onTagChange }: { tag: string; onTagChange: 
 
       {loading && <p style={{ color: "var(--color-ink-soft)" }}>Chargement…</p>}
       {error && (
-        <div className="surface-card" style={{ padding: "1.4rem", color: "#b91c1c" }}>
+        <div className="surface-card" style={{ padding: "1.4rem", color: "var(--color-error)" }}>
           {error}
         </div>
       )}

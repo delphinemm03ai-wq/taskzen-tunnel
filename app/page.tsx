@@ -25,8 +25,8 @@ export default function LandingPage() {
           maxHeight: 620,
           borderRadius: "50%",
           background:
-            "radial-gradient(circle at 30% 30%, var(--color-primary-light), transparent 62%)",
-          opacity: 0.5,
+            "radial-gradient(circle, var(--color-primary-light), transparent 68%)",
+          opacity: 0.28,
           pointerEvents: "none",
         }}
       />

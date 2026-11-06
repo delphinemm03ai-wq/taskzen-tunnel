@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Work_Sans, Space_Mono } from "next/font/google";
+import { Fraunces, Inter, Space_Mono } from "next/font/google";
 import "./globals.css";
 import config from "@/config";
 import { PostHogProvider } from "@/components/common/PostHogProvider";
@@ -12,7 +12,7 @@ const display = Fraunces({
   display: "swap",
 });
 
-const body = Work_Sans({
+const body = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
   variable: "--font-body-loaded",
@@ -44,9 +44,6 @@ export default function RootLayout({
             "--font-display": `var(--font-display-loaded), Georgia, serif`,
             "--font-body": `var(--font-body-loaded), system-ui, sans-serif`,
             "--font-mono": `var(--font-mono-loaded), Consolas, monospace`,
-            "--color-primary": config.brand.colorPrimary,
-            "--color-accent": config.brand.colorAccent,
-            "--color-bg": config.brand.colorBg,
           } as React.CSSProperties
         }
       >

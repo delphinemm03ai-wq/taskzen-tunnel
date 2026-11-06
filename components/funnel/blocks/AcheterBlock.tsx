@@ -63,7 +63,7 @@ export function AcheterBlock({ block }: { block: AcheterBlockConfig }) {
           key={error}
           role="alert"
           className="error-in"
-          style={{ color: "#b91c1c", fontSize: "0.85rem", marginTop: "0.9rem" }}
+          style={{ color: "var(--color-error)", fontSize: "0.85rem", marginTop: "0.9rem" }}
         >
           {error}
         </p>

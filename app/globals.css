@@ -1,32 +1,34 @@
 @import "tailwindcss";
 
 /*
-  Claude Tunnel OS — Design system — Taskzen
-  Direction artistique : "chaleureux coach", affinée pour Taskzen.
-  Argile brûlée / mousse profonde / papier chaud — signature : le reçu du temps perdu
-  (ticket de caisse qui matérialise le calcul 10h/semaine = 2000€/mois).
+  Design system : charte Taskzen (context/charte-taskzen.md de l'AIOS, relevé de taskzen.fr).
+  Indigo nuit, lavande, violet. Valeurs OKLCH d'origine, hex approché en commentaire.
 */
 
 :root {
-  /* Couleurs (miroir de config.ts > brand) */
-  --color-primary: #a8431f;      /* argile brûlée */
-  --color-primary-dark: #7c3015;
-  --color-primary-light: #e8b48f;
-  --color-accent: #3f5d3a;       /* mousse profonde, accent chaud/vital */
-  --color-bg: #f3ecdd;           /* papier chaud */
-  --color-bg-soft: #eae0c9;
-  --color-surface: #fffcf5;
-  --color-ink: #241c16;          /* encre brune quasi-noire */
-  --color-ink-soft: #6b5b48;
-  --color-line: #dccfae;
+  --color-primary: oklch(0.72 0.16 300);       /* #b58bf9 lavande */
+  /* Sert de texte d'emphase sur fond sombre : c'est donc l'accent clair, pas le violet foncé. */
+  --color-primary-dark: oklch(0.78 0.13 300);  /* #c4a4fe */
+  --color-primary-light: oklch(0.72 0.18 305); /* #bf83fe lueur lotus, décoratif */
+  --color-accent: oklch(0.72 0.18 305);        /* #bf83fe */
+  --color-bg: oklch(0.16 0.04 275);            /* #090b1e indigo nuit */
+  --color-bg-soft: oklch(0.2 0.045 278);       /* sections alternées, entre le fond et les cartes */
+  --color-surface: oklch(0.24 0.05 280);       /* #1b1c36 cartes et champs */
+  --color-ink: oklch(0.96 0.012 300);          /* #f3f0f9 */
+  --color-ink-soft: oklch(0.72 0.03 290);      /* #a4a2b7 */
+  --color-line: oklch(0.32 0.04 285);          /* #313047 */
+  --color-error: #ff9db0;                      /* lisible sur fond sombre */
+
+  /* Dégradé assombri par rapport à la charte : le texte blanc y atteint le contraste AA. */
+  --gradient-primary: linear-gradient(135deg, #8a55e0, #6a3fc0);
 
   --font-display: "Fraunces", "Georgia", serif;
-  --font-body: "Work Sans", system-ui, -apple-system, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, sans-serif;
   --font-mono: "Space Mono", "SFMono-Regular", Consolas, monospace;
 
-  --radius: 14px;
-  --shadow-card: 0 1px 2px rgba(36, 28, 22, 0.05), 0 8px 24px -8px rgba(36, 28, 22, 0.14);
-  --shadow-lift: 0 12px 40px -12px rgba(124, 48, 21, 0.3);
+  --radius: 1rem;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
+  --shadow-lift: 0 12px 40px -12px rgba(125, 81, 210, 0.7);
 }
 
 @theme inline {
@@ -92,13 +94,13 @@ h1, h2, h3, h4 {
   box-shadow: var(--shadow-card);
 }
 
-/* Bouton principal — plein, terracotta */
+/* Bouton principal : pilule en dégradé violet */
 .btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background: var(--color-primary);
+  background: var(--gradient-primary);
   color: #fff;
   font-weight: 600;
   padding: 0.95rem 1.8rem;
@@ -108,7 +110,7 @@ h1, h2, h3, h4 {
   transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
 }
 .btn-primary:hover {
-  background: var(--color-primary-dark);
+  filter: brightness(1.08);
   transform: translateY(-2px);
   box-shadow: var(--shadow-lift);
 }
@@ -255,7 +257,7 @@ h1, h2, h3, h4 {
   inset: 0;
   pointer-events: none;
   opacity: 0.4;
-  background-image: radial-gradient(rgba(36, 28, 22, 0.025) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px);
   background-size: 4px 4px;
 }
 

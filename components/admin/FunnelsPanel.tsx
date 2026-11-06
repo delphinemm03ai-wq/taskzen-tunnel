@@ -208,7 +208,7 @@ export function FunnelsPanel({
     <section style={{ display: "grid", gap: "1.2rem" }}>
       {loading && <p style={{ color: "var(--color-ink-soft)", margin: 0 }}>Chargement…</p>}
       {error && (
-        <div className="surface-card" style={{ padding: "1.4rem", color: "#b91c1c" }}>
+        <div className="surface-card" style={{ padding: "1.4rem", color: "var(--color-error)" }}>
           {error}
         </div>
       )}

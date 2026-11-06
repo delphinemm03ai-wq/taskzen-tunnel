@@ -17,11 +17,11 @@ const config = {
   },
 
   brand: {
-    // Couleurs — re-personnalisables via /design. Miroir des variables CSS dans globals.css.
-    colorPrimary: "#a8431f", // argile brûlée
-    colorAccent: "#3f5d3a", // mousse profonde
-    colorBg: "#f3ecdd", // papier chaud
-    theme: "light" as "light" | "dark",
+    // Pour les e-mails seulement (fond blanc, hex obligatoire) : le site lit app/globals.css.
+    colorPrimary: "#7d51d2", // violet Taskzen
+    colorAccent: "#bf83fe", // lueur lotus
+    colorBg: "#090b1e", // indigo nuit
+    theme: "dark" as "light" | "dark",
   },
 
   founder: {

@@ -94,7 +94,7 @@ ${fields.includes("first_name") ? `<label>Prénom<input name="firstName" autocom
 }
 
 export const PAGE_CSS = `
-:root{--ink:#090b1e;--ink2:#1b1c36;--line:#313047;--fg:#f3f0f9;--mute:#a4a2b7;--lav:#b58bf9;--lav2:#c4a4fe;--deep:#7d51d2;--cream:#f9f7fd;--grad:linear-gradient(135deg,#9a63ec,#6f43c4)}
+:root{--ink:#090b1e;--ink2:#1b1c36;--line:#313047;--fg:#f3f0f9;--mute:#a4a2b7;--lav:#b58bf9;--lav2:#c4a4fe;--deep:#7d51d2;--cream:#f9f7fd;--grad:linear-gradient(135deg,#8a55e0,#6a3fc0)}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:Inter,system-ui,sans-serif;background:var(--ink);color:var(--fg);line-height:1.6;font-size:17px;overflow-x:hidden}

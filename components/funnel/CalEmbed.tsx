@@ -19,6 +19,13 @@ export function CalEmbed({ prefill }: { prefill?: Record<string, string> } = {})
     if (!calLink) return;
     (async () => {
       const cal = await getCalApi();
+      cal("ui", {
+        theme: "dark",
+        cssVarsPerTheme: {
+          light: { "cal-brand": "#7d51d2" },
+          dark: { "cal-brand": "#b58bf9" },
+        },
+      });
       // À la confirmation d'un booking : event + cookie + redirection /merci
       cal("on", {
         action: "bookingSuccessful",

@@ -112,7 +112,7 @@ export function OptinBlock({ block }: { block: OptinBlockConfig }) {
               key={error}
               role="alert"
               className="error-in"
-              style={{ color: "#b91c1c", fontSize: "0.85rem", marginTop: "0.6rem" }}
+              style={{ color: "var(--color-error)", fontSize: "0.85rem", marginTop: "0.6rem" }}
             >
               {error}
             </p>

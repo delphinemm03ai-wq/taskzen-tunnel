@@ -75,12 +75,12 @@ export function AdminShell() {
           style={{
             padding: "0.85rem 1rem",
             borderRadius: 10,
-            border: `1.5px solid ${secretError ? "#b91c1c" : "var(--color-line)"}`,
+            border: `1.5px solid ${secretError ? "var(--color-error)" : "var(--color-line)"}`,
             fontSize: "1rem",
           }}
         />
         {secretError && (
-          <p id="admin-secret-error" className="error-in" style={{ margin: 0, color: "#b91c1c", fontSize: "0.9rem" }}>
+          <p id="admin-secret-error" className="error-in" style={{ margin: 0, color: "var(--color-error)", fontSize: "0.9rem" }}>
             {secretError}
           </p>
         )}

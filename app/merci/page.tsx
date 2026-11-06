@@ -58,7 +58,7 @@ export default function MerciPage() {
                     width: 24,
                     height: 24,
                     borderRadius: "50%",
-                    background: "var(--color-primary)",
+                    background: "var(--gradient-primary)",
                     color: "#fff",
                     fontSize: "0.8rem",
                     fontWeight: 700,

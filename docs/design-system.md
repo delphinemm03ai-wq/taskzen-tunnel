@@ -1,18 +1,16 @@
 # Design System — Tunnel maison Taskzen
 
-Capture du système existant (direction "chaleureux coach", signature du reçu du temps perdu), déjà en prod. Source de vérité des tokens : `app/globals.css` (`:root`), miroir partiel dans `config.ts > brand`. Thème clair uniquement (pas de mode sombre dans ce produit).
+Charte Taskzen (relevé de taskzen.fr, `context/charte-taskzen.md` de l'AIOS), décidée par Delphine le 06/11/2026 à la place de l'ancien thème argile et papier. Source de vérité des tokens : `app/globals.css` (`:root`). `config.ts > brand` ne sert qu'aux e-mails. Thème sombre uniquement.
 
 ## Tokens
 - Colors :
-  - `--color-primary` #a8431f (argile brûlée, actions principales), `--color-primary-dark` #7c3015 (survol, emphase), `--color-primary-light` #e8b48f (décoratif uniquement, jamais du texte sur fond clair)
-  - `--color-accent` #3f5d3a (mousse profonde, accents et validations)
-  - Fonds : `--color-bg` #f3ecdd (papier chaud), `--color-bg-soft` #eae0c9, `--color-surface` #fffcf5 (cartes)
-  - Texte : `--color-ink` #241c16 (encre brune), `--color-ink-soft` #6b5b48 (secondaire), `--color-line` #dccfae (filets, jamais du texte)
-- Typography : `--font-display` Fraunces (titres h1-h4, 600, interlettrage -0.02em), `--font-body` Work Sans (corps, line-height 1.6), `--font-mono` Space Mono (le reçu, les chiffres).
-- Spacing / radius : `--radius` 14px partout ; conteneurs `.container-tight` (max 64rem) ; ombres `--shadow-card` (cartes) et `--shadow-lift` (éléments mis en avant).
-
-## Contrastes (mesurés le 10/10/2026, WCAG)
-Quinze paires texte/surface mesurées, toutes au-dessus de 4.5:1 (AA) : ink sur bg 14.25, ink sur surface 16.36, ink-soft sur bg 5.55, primary sur bg 5.12, accent sur bg 6.29, blanc sur primary 5.88, blanc sur primary-dark 8.95, blanc sur accent 7.22, primary-light sur primary-dark 4.96. Aucune correction de token nécessaire. `primary-light` sur fonds clairs est décoratif, pas du texte.
+  - `--color-primary` #b58bf9 (lavande), `--color-primary-dark` #c4a4fe (texte d'emphase sur fond sombre, jamais un fond sous du texte blanc), `--color-primary-light` #bf83fe (décoratif)
+  - `--color-accent` #bf83fe (accents et validations), `--color-error` #ff9db0
+  - `--gradient-primary` #8a55e0 vers #6a3fc0 (boutons, seul fond admis sous du texte blanc)
+  - Fonds : `--color-bg` #090b1e (indigo nuit), `--color-bg-soft` (sections alternées), `--color-surface` #1b1c36 (cartes et champs)
+  - Texte : `--color-ink` #f3f0f9, `--color-ink-soft` #a4a2b7 (secondaire), `--color-line` #313047 (filets, jamais du texte)
+- Typography : `--font-display` Fraunces (titres h1-h4, 600, interlettrage -0.02em), `--font-body` Inter (corps, line-height 1.6), `--font-mono` Space Mono (le reçu, les chiffres).
+- Spacing / radius : `--radius` 1rem ; conteneurs `.container-tight` (max 64rem) ; ombres `--shadow-card` (cartes) et `--shadow-lift` (éléments mis en avant).
 
 ## Available components
 | Component | Usage |
@@ -42,5 +40,5 @@ Quinze paires texte/surface mesurées, toutes au-dessus de 4.5:1 (AA) : ink sur 
 ## Do / Don't
 - Fais : tout nouveau bloc du moteur consomme ces tokens et classes ; une page reste lisible sans JavaScript ; un seul CTA primaire par étape.
 - Fais : l'admin reste utilitaire (tableaux, mono pour les chiffres), même thème.
-- Ne fais pas : de nouvelle couleur hors tokens, de texte en `primary-light` ou `line` sur fond clair, de tiret cadratin dans les textes.
-- Ne fais pas : de mode sombre, d'animation bloquante, de dépendance UI externe (pas de librairie de composants en plus).
+- Ne fais pas : de nouvelle couleur hors tokens, de texte blanc sur `primary` ou `accent`, de texte en `line`, de tiret cadratin dans les textes.
+- Ne fais pas : de mode clair, d'animation bloquante, de dépendance UI externe (pas de librairie de composants en plus).
