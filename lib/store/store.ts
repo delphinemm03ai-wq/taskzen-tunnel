@@ -41,6 +41,8 @@ export interface SequenceRecord {
   emails: SequenceEmail[];
   exit_on: ("purchase" | "unsubscribe")[];
   status: "scheduled";
+  /** Rien ne part tant que ce champ est vide. */
+  activated_at: string | null;
 }
 
 export interface ContactRecord {

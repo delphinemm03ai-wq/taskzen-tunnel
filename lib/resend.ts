@@ -34,12 +34,13 @@ function resourceEmailHtml(siteUrl: string): string {
   </div>`;
 }
 
-async function sendEmail(input: {
+export async function sendEmail(input: {
   to: string;
   subject: string;
   html: string;
   /** Pièce jointe : contenu encodé en base64. */
   attachments?: { filename: string; content: string }[];
+  headers?: Record<string, string>;
 }): Promise<{ ok: boolean; reason?: string }> {
   if (!isResendConfigured()) {
     return { ok: false, reason: "resend_not_configured" };
@@ -58,6 +59,7 @@ async function sendEmail(input: {
         subject: input.subject,
         html: input.html,
         ...(input.attachments ? { attachments: input.attachments } : {}),
+        ...(input.headers ? { headers: input.headers } : {}),
       }),
     });
 

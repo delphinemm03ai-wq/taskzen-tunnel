@@ -3,6 +3,8 @@ import { getStore } from "@/lib/store";
 import { NotConfiguredMailer } from "@/lib/mcp/tools";
 import { handleRpc } from "@/lib/mcp/server";
 import { authenticate } from "@/lib/mcp/auth";
+import { isResendConfigured } from "@/lib/resend";
+import { ResendMailer } from "@/lib/sequences/mailer";
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +21,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ jsonrpc: "2.0", id: null, error: { code: -32700, message: "JSON invalide" } }, { status: 400 });
   }
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || `${req.nextUrl.protocol}//${req.nextUrl.host}`;
-  const ctx = { store: getStore(), mailer: new NotConfiguredMailer(), baseUrl };
+  const ctx = { store: getStore(), mailer: isResendConfigured() ? new ResendMailer() : new NotConfiguredMailer(), baseUrl };
   const res = await handleRpc(ctx, caller, body, Buffer.byteLength(raw));
   if (res === null) return new NextResponse(null, { status: 202 });
   return NextResponse.json(res);

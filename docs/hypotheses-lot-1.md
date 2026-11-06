@@ -2,6 +2,16 @@
 
 Chaque point est un choix le plus simple possible, faute de précision dans le cahier des charges. À corriger sur un mot de Delphine.
 
+## Lot webinaire du 17/11 (remplace les points 9, 10, 18, 28 et une partie du 37)
+- Publier : bouton dans l'éditeur, qui enregistre d'abord puis passe par le même outil que l'IA, donc la même confirmation si un prix en ligne change.
+- Formulaire d'une page : route `/api/page-optin`, écrit le contact et son étiquette dans Supabase. Sans étiquette sur le bloc : `tunnel-<adresse du tunnel>`.
+- Paiement d'une page : prix et nom relus dans la version publiée. Le webhook enregistre le montant réellement encaissé, TVA 0 (franchise en base), étiquette `client-<produit>`, e-mail de confirmation sans fichier. Après paiement : étape suivante du tunnel.
+- Séquences : rien ne part sans `activate_email_sequence` et ses deux confirmations. Activation refusée sans étiquette, avec le déclencheur `purchase` (pas géré à l'envoi), ou s'il reste un marqueur comme `{lien}`.
+- Qui reçoit : étiquette posée après l'activation ; pour une date fixe, tous les porteurs de l'étiquette, sauf ceux arrivés après l'heure prévue de cet e-mail.
+- Retard maximal avant abandon de l'e-mail : 1 h pour une date fixe, 24 h sinon (valeurs proposées). Une personne qui achète ou se désinscrit sort de la séquence.
+- Route `/api/cron/sequences` protégée par `CRON_SECRET`, à appeler toutes les 5 minutes depuis l'extérieur. 50 envois par passage, 600 ms entre deux (valeurs proposées, limite de Resend non vérifiée).
+- Désinscription : lien signé avec `CRON_SECRET` (le changer invalide les liens déjà envoyés), confirmation par bouton, en-têtes de désinscription en un clic.
+
 ## Base de code
 1. (Mis à jour) La branche est rebasée sur le main du dépôt (AGENTS.md, AGENTS.local.md, Supabase, moteur de pages sous `/t/`). Les routes de production existantes ne sont pas touchées. Le serveur d'outils a son propre rendu sous `/p/<tunnel>/<étape>`, distinct du moteur `/t/` à config TypeScript : les deux coexistent, leur fusion n'est pas décidée.
 2. Stockage : interface `Store` (`lib/store/store.ts`) avec deux implémentations. Mémoire (tests et développement). Supabase (`lib/store/supabase-store.ts`), en fetch REST pur comme `lib/supabase.ts`, sans SDK. Le choix se fait dans `lib/store/index.ts` : Supabase si `SUPABASE_URL` et `SUPABASE_SERVICE_ROLE_KEY` sont définies, sauf si `TUNNEL_STORE=memory` ; sinon mémoire (avertissement en production). Tant que la migration 004 n'est pas lancée, ne définis pas ces variables côté serveur du serveur d'outils, ou les appels échoueront.

@@ -3,6 +3,7 @@ import {
   Block, Page, blockSchema, pageInputSchema, safeLink, shareSchema, slugify,
 } from "@/lib/page-format/schema";
 import { PageError, applyChanges, changesSchema, collectPrices, newPage, walk } from "@/lib/page-format/ops";
+import { findPlaceholders } from "@/lib/sequences/render";
 import { StoreConflictError, type FunnelRecord, type FunnelStep, type PageRecord, type SequenceRecord, type Store } from "@/lib/store/store";
 
 /** Port d'envoi d'email. L'implémentation réelle (Resend) se branche ici ; aucune n'est faite au lot 1. */
@@ -60,7 +61,8 @@ const sequenceInput = z
       .array(
         z
           .object({
-            delay_hours: z.number().int().min(0).max(24 * 365),
+            // Décimales permises : un rappel à 15 minutes près s'écrit 0.25.
+            delay_hours: z.number().min(0).max(24 * 365),
             subject: z.string().min(1).max(200),
             body: z.string().min(1).max(10000),
           })
@@ -87,6 +89,13 @@ export const schemas = {
     .strict(),
   publish_funnel: z.object({ funnel_id: id, confirm: z.boolean().optional() }).strict(),
   schedule_email_sequence: sequenceInput,
+  send_test_email: z.object({ sequence_id: id, to: z.string().email() }).strict(),
+  activate_email_sequence: z
+    .object({
+      sequence_id: id,
+      confirm: z.object({ test_reviewed: z.boolean(), recipients_consent: z.boolean() }).partial().optional(),
+    })
+    .strict(),
   send_email_to_list: z
     .object({
       tag: z.string().max(60).optional(),
@@ -107,7 +116,9 @@ export const TOOL_META: Record<ToolName, { description: string; write: boolean }
   delete_page: { description: "Supprime une page. Action sensible : demande confirm:true.", write: true },
   create_funnel: { description: "Crée un tunnel complet (toutes les étapes et leurs pages, séquence d'emails facultative) en UN appel. Liens entre étapes : \"@next\" ou \"@step:slug\".", write: true },
   publish_funnel: { description: "Publie toutes les pages d'un tunnel.", write: true },
-  schedule_email_sequence: { description: "Programme une séquence complète d'emails en UN appel (déclencheur, puis emails avec délai en heures après le précédent).", write: true },
+  schedule_email_sequence: { description: "Enregistre une séquence complète d'emails en UN appel (déclencheur, puis emails avec délai en heures après le précédent, décimales permises). Rien ne part avant activate_email_sequence.", write: true },
+  send_test_email: { description: "Envoie tous les emails d'une séquence à une seule adresse, pour les relire. Objet préfixé [TEST].", write: true },
+  activate_email_sequence: { description: "Active l'envoi réel d'une séquence. Action sensible : exige confirm.test_reviewed et confirm.recipients_consent à true. Refusée sans étiquette, ou s'il reste un marqueur à remplir comme {lien}.", write: true },
   send_email_to_list: { description: "Envoie un email réel à une liste. Action sensible : exige confirm.test_reviewed et confirm.recipients_consent à true.", write: true },
 };
 
@@ -163,6 +174,7 @@ function sequenceRecord(ctx: ToolContext, input: z.infer<typeof sequenceInput>):
     emails: input.emails.map((e) => ({ id: ctx.store.newId("em"), ...e })),
     exit_on: ["purchase", "unsubscribe"],
     status: "scheduled",
+    activated_at: null,
   };
 }
 
@@ -279,7 +291,41 @@ export const handlers: { [K in ToolName]: (ctx: ToolContext, args: z.infer<(type
   async schedule_email_sequence(ctx, args) {
     const seq = sequenceRecord(ctx, args);
     await ctx.store.putSequence(seq);
-    return { sequence_id: seq.id, status: seq.status, emails: seq.emails.length };
+    return { sequence_id: seq.id, status: seq.status, active: false, emails: seq.emails.length };
+  },
+
+  async send_test_email(ctx, args) {
+    const seq = await ctx.store.getSequence(args.sequence_id);
+    if (!seq) throw new ToolError("sequence_not_found", `Séquence introuvable : ${args.sequence_id}`);
+    for (const e of seq.emails) await ctx.mailer.send({ to: args.to, subject: `[TEST] ${e.subject}`, body: e.body });
+    return { sent: seq.emails.length, to: args.to };
+  },
+
+  async activate_email_sequence(ctx, args) {
+    const seq = await ctx.store.getSequence(args.sequence_id);
+    if (!seq) throw new ToolError("sequence_not_found", `Séquence introuvable : ${args.sequence_id}`);
+    if (seq.trigger.type === "purchase") {
+      throw new ToolError("trigger_not_supported", "Le déclencheur purchase n'est pas encore géré à l'envoi. Utilise une étiquette (client-<produit>).");
+    }
+    // Sans étiquette, tout nouveau contact de tous les tunnels recevrait la séquence.
+    if (!seq.trigger.tag) throw new ToolError("tag_required", "Une séquence doit viser une étiquette (trigger.tag) pour être activée.");
+    const placeholders = [...new Set(seq.emails.flatMap((e) => findPlaceholders(`${e.subject}\n${e.body}`)))];
+    if (placeholders.length) {
+      throw new ToolError("placeholders_left", `Il reste à remplir : ${placeholders.join(", ")}. Corrige la séquence avant de l'activer.`);
+    }
+    const c = args.confirm ?? {};
+    if (c.test_reviewed !== true || c.recipients_consent !== true) {
+      const contacts = await ctx.store.listContacts(seq.trigger.tag);
+      const missing = [c.test_reviewed !== true && "test_reviewed", c.recipients_consent !== true && "recipients_consent"].filter(Boolean).join(" et ");
+      return refusal(
+        "activate_email_sequence",
+        `Activer « ${seq.name} » déclenche de vrais envois (${contacts.length} personne(s) portent déjà l'étiquette « ${seq.trigger.tag} »). Confirmation manquante : ${missing}.`,
+        "Rappelle activate_email_sequence avec confirm:{test_reviewed:true, recipients_consent:true} une fois le test relu et l'accord de la personne obtenu."
+      );
+    }
+    seq.activated_at = new Date().toISOString();
+    await ctx.store.putSequence(seq);
+    return { sequence_id: seq.id, active: true, activated_at: seq.activated_at };
   },
 
   async send_email_to_list(ctx, args) {

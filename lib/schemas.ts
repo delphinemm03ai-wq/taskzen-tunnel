@@ -64,6 +64,7 @@ export const funnelOptinSchema = z.object({
   ),
   funnel: z.string({ required_error: "Tunnel manquant" }).min(1, "Tunnel manquant").max(100),
   step: z.string({ required_error: "Étape manquante" }).min(1, "Étape manquante").max(100),
+  block: z.string().max(60).optional(),
   website: z.string().max(500).optional(),
 });
 
@@ -77,6 +78,7 @@ export type FunnelOptinInput = z.infer<typeof funnelOptinSchema>;
 export const stripeCheckoutSchema = z.object({
   funnel: z.string({ required_error: "Tunnel manquant" }).min(1, "Tunnel manquant").max(100),
   step: z.string({ required_error: "Étape manquante" }).min(1, "Étape manquante").max(100),
+  block: z.string().max(60).optional(),
 });
 
 export type StripeCheckoutInput = z.infer<typeof stripeCheckoutSchema>;

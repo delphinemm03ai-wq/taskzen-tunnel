@@ -315,6 +315,22 @@ export async function markSaleDelivered(sessionId: string): Promise<void> {
   );
 }
 
+/** Désinscrit le contact. Filtre unsubscribed_at=is.null : la première date reste. */
+export async function markUnsubscribed(contactId: string): Promise<void> {
+  const url = restUrl("tunnel_contacts");
+  url.searchParams.set("id", `eq.${contactId}`);
+  url.searchParams.set("unsubscribed_at", "is.null");
+  await call(
+    url,
+    {
+      method: "PATCH",
+      headers: headers("return=minimal"),
+      body: JSON.stringify({ unsubscribed_at: new Date().toISOString() }),
+    },
+    "markUnsubscribed"
+  );
+}
+
 /** Le contact de cet email (casse et espaces ignorés), ou null. */
 export async function findContactByEmail(email: string): Promise<Contact | null> {
   const url = restUrl("tunnel_contacts");

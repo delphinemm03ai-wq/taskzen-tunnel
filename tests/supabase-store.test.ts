@@ -70,7 +70,7 @@ describe("SupabaseStore : tunnel écrit tout ou rien", () => {
   const bundle = (store: SupabaseStore, slug: string) => ({
     funnel: { id: store.newId("fn"), name: "F", slug, status: "draft" as const, steps: [] },
     pages: [rec("pg_a"), rec("pg_b"), rec("pg_c")],
-    sequence: { id: "seq_1", name: "S", trigger: { type: "signup" as const }, emails: [], exit_on: ["purchase" as const], status: "scheduled" as const },
+    sequence: { id: "seq_1", name: "S", trigger: { type: "signup" as const }, emails: [], exit_on: ["purchase" as const], status: "scheduled" as const, activated_at: null },
   });
 
   it("écrit le tunnel, ses pages et sa séquence en un seul appel réseau", async () => {

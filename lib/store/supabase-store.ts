@@ -92,7 +92,7 @@ function pageFromRow(r: Record<string, unknown>): PageRecord {
   };
 }
 const funnelRow = (f: FunnelRecord) => ({ id: f.id, name: f.name, slug: f.slug, status: f.status, steps: f.steps });
-const sequenceRow = (s: SequenceRecord) => ({ id: s.id, name: s.name, trigger: s.trigger, emails: s.emails, exit_on: s.exit_on, status: s.status });
+const sequenceRow = (s: SequenceRecord) => ({ id: s.id, name: s.name, trigger: s.trigger, emails: s.emails, exit_on: s.exit_on, status: s.status, activated_at: s.activated_at });
 
 export class SupabaseStore implements Store {
   constructor(private rest: Rest) {}

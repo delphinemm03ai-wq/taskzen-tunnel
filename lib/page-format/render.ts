@@ -68,16 +68,17 @@ function renderBlock(b: Block): string {
       return `<section class="tz-section" ${attrs(b)}>${b.title ? `<h2 class="tz-h">${esc(b.title)}</h2>` : ""}${(b.children as Block[]).map(renderBlock).join("")}</section>`;
     case "signup_form": {
       const fields = b.fields as string[];
-      return `<form class="tz-form" ${attrs(b)} data-endpoint="/api/lead" data-next="${esc(b.next_step ?? "")}" data-tag="${esc(b.tag ?? "")}">
+      return `<form class="tz-form" ${attrs(b)} data-endpoint="/api/page-optin" data-funnel="${esc(CTX.funnelSlug ?? "")}" data-step="${esc(CTX.stepSlug ?? "")}" data-block-id="${esc(b.id)}" data-next="${esc(b.next_step ?? "")}">
 ${fields.includes("first_name") ? `<label>Prénom<input name="firstName" autocomplete="given-name" required></label>` : ""}
 <label>Email<input type="email" name="email" autocomplete="email" required></label>
+<input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px">
 <button class="tz-btn" type="submit">${esc(b.label)}</button><p class="tz-form-msg" role="status" aria-live="polite"></p></form>`;
     }
     case "payment_button": {
       const price = ((b.price_cents as number) / 100).toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
       // Vrai bouton : le script public appelle la route Stripe existante (POST /api/stripe/checkout { funnel, step })
       // et redirige vers l'adresse Stripe renvoyée. Prix et produit sont relus côté serveur dans la config, jamais ici.
-      return `<p class="tz-btnwrap" ${attrs(b)}><button class="tz-btn" type="button" data-checkout data-funnel="${esc(CTX.funnelSlug ?? "")}" data-step="${esc(CTX.stepSlug ?? "")}" data-price-cents="${b.price_cents}">${esc(b.label)} (${esc(price)})</button><span class="tz-form-msg" role="status" aria-live="polite"></span></p>`;
+      return `<p class="tz-btnwrap" ${attrs(b)}><button class="tz-btn" type="button" data-checkout data-funnel="${esc(CTX.funnelSlug ?? "")}" data-step="${esc(CTX.stepSlug ?? "")}" data-block-id="${esc(b.id)}" data-price-cents="${b.price_cents}">${esc(b.label)} (${esc(price)})</button><span class="tz-form-msg" role="status" aria-live="polite"></span></p>`;
     }
     case "testimonials":
       return `<div class="tz-testimonials" ${attrs(b)}>${(b.items as { quote: string; author: string }[]).map((t) => `<figure><blockquote>${esc(t.quote)}</blockquote><figcaption>${esc(t.author)}</figcaption></figure>`).join("")}</div>`;
@@ -158,12 +159,12 @@ document.querySelectorAll('dialog.tz-popup').forEach(function(d){
   d.addEventListener('click',function(e){if(e.target===d)d.close()})});
 document.querySelectorAll('[data-checkout]').forEach(function(b){
   b.addEventListener('click',function(){var msg=b.parentNode.querySelector('.tz-form-msg');b.disabled=true;
-    fetch('/api/stripe/checkout',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({funnel:b.dataset.funnel,step:b.dataset.step})})
+    fetch('/api/stripe/checkout',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({funnel:b.dataset.funnel,step:b.dataset.step,block:b.dataset.blockId})})
       .then(function(r){return r.json()}).then(function(j){if(j&&j.ok&&j.data&&j.data.url)location.href=j.data.url;else throw 0})
       .catch(function(){b.disabled=false;msg.textContent='Le paiement n\\u2019a pas pu d\\u00e9marrer, r\\u00e9essaie.'})})});
 document.querySelectorAll('form.tz-form').forEach(function(f){
   f.addEventListener('submit',function(e){e.preventDefault();var msg=f.querySelector('.tz-form-msg');
-    var body={email:f.email.value};if(f.firstName)body.firstName=f.firstName.value;
+    var body={email:f.email.value,funnel:f.dataset.funnel,step:f.dataset.step,block:f.dataset.blockId,website:f.website.value};if(f.firstName)body.firstName=f.firstName.value;
     fetch(f.dataset.endpoint,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)})
       .then(function(r){if(!r.ok)throw 0;if(f.dataset.next)location.href=f.dataset.next;else msg.textContent='Merci, c\\u2019est enregistr\\u00e9.'})
       .catch(function(){msg.textContent='Une erreur est survenue, r\\u00e9essaie.'})})});

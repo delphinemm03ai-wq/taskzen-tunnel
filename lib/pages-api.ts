@@ -8,7 +8,9 @@ import { StoreConflictError, type Store } from "@/lib/store/store";
  */
 export async function readPageForEditor(store: Store, pageId: string) {
   const rec = await store.getPage(pageId);
-  return rec ? { page_id: pageId, version: rec.version, status: rec.status, page: rec.page } : null;
+  if (!rec) return null;
+  const hasUnpublished = JSON.stringify(rec.page) !== JSON.stringify(rec.published);
+  return { page_id: pageId, version: rec.version, status: rec.status, has_unpublished: hasUnpublished, page: rec.page };
 }
 
 export async function patchPageFromEditor(store: Store, pageId: string, body: { changes: unknown; expected_version?: number }) {

@@ -41,7 +41,7 @@ export async function createCheckoutSession(input: {
   prixTtc: number;
   successUrl: string;
   cancelUrl: string;
-  metadata: { funnel: string; step: string; produit: string };
+  metadata: { funnel: string; step: string; produit: string; source?: string; nom?: string };
 }): Promise<{ id: string; url: string }> {
   const form = new URLSearchParams();
   form.set("mode", "payment");
@@ -56,6 +56,8 @@ export async function createCheckoutSession(input: {
   form.set("metadata[funnel]", input.metadata.funnel);
   form.set("metadata[step]", input.metadata.step);
   form.set("metadata[produit]", input.metadata.produit);
+  if (input.metadata.source) form.set("metadata[source]", input.metadata.source);
+  if (input.metadata.nom) form.set("metadata[nom]", input.metadata.nom);
 
   const res = await fetch(`${STRIPE_API}/checkout/sessions`, {
     method: "POST",

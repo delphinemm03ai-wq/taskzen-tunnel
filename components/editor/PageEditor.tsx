@@ -23,7 +23,7 @@ const DEVICES = [
 
 type SaveStatus = { kind: "saved"; at: Date } | { kind: "saving" } | { kind: "error"; message: string };
 
-interface ApiPage { page_id: string; version: number; status: "draft" | "published"; page: Page }
+interface ApiPage { page_id: string; version: number; status: "draft" | "published"; has_unpublished?: boolean; page: Page }
 interface Crumb { tunnel: string; step: string; funnelSlug: string; stepSlug: string }
 
 export function PageEditor({ pageId, secret }: { pageId: string; secret: string }) {
@@ -38,6 +38,9 @@ export function PageEditor({ pageId, secret }: { pageId: string; secret: string 
   const [loadError, setLoadError] = useState<string | null>(null);
   const [crumb, setCrumb] = useState<Crumb | null>(null);
   const [search, setSearch] = useState("");
+  const [needsPublish, setNeedsPublish] = useState(false);
+  const [publishing, setPublishing] = useState(false);
+  const [priceWarning, setPriceWarning] = useState<string | null>(null);
   const holdAutosave = useRef(false);
   const saving = useRef(false);
   const headers = { "x-admin-secret": secret, "content-type": "application/json" };
@@ -58,6 +61,7 @@ export function PageEditor({ pageId, secret }: { pageId: string; secret: string 
         if (!res.ok) return setLoadError(res.status === 404 ? "Cette page n'existe pas (ou plus)." : "Impossible de charger la page.");
         const d = body.data as ApiPage;
         setStatus(d.status);
+        setNeedsPublish(d.has_unpublished ?? false);
         setState(initState(d.page, d.version));
       } catch {
         if (alive) setLoadError("Connexion impossible. Réessaie dans un instant.");
@@ -84,6 +88,7 @@ export function PageEditor({ pageId, secret }: { pageId: string; secret: string 
     const r = rebaseOnServer(cur, d.page, d.version);
     setState(r.state);
     setStatus(d.status);
+    setNeedsPublish(d.has_unpublished ?? true);
     holdAutosave.current = r.hadLocalChanges && r.kept;
     setSave({ kind: "saved", at: new Date() });
     const origin = why === "conflict" ? "Ton IA (ou un autre onglet) a modifié cette page pendant que tu travaillais." : "Ton IA (ou un autre onglet) vient de modifier cette page.";
@@ -94,16 +99,21 @@ export function PageEditor({ pageId, secret }: { pageId: string; secret: string 
     if (selectedId && !findBlock(r.state.page, selectedId)) setSelectedId(null);
   }, [selectedId, setState]);
 
-  const doSave = useCallback(async () => {
+  /** Renvoie true seulement si tout ce qui est à l'écran est bien enregistré. */
+  const doSave = useCallback(async (): Promise<boolean> => {
     const cur = stateRef.current;
-    if (!cur || saving.current) return;
+    if (!cur || saving.current) return false;
     let ops: Change[];
     try {
       ops = pendingOps(cur);
     } catch (e) {
-      return setSave({ kind: "error", message: e instanceof Error ? e.message : "Conversion impossible" });
+      setSave({ kind: "error", message: e instanceof Error ? e.message : "Conversion impossible" });
+      return false;
     }
-    if (ops.length === 0) return setSave({ kind: "saved", at: new Date() });
+    if (ops.length === 0) {
+      setSave({ kind: "saved", at: new Date() });
+      return true;
+    }
     saving.current = true;
     holdAutosave.current = false;
     setSave({ kind: "saving" });
@@ -115,17 +125,50 @@ export function PageEditor({ pageId, secret }: { pageId: string; secret: string 
         const next = markSaved(stateRef.current ?? cur, sent, body.data.version);
         setState(next);
         setSave({ kind: "saved", at: new Date() });
-      } else if (res.status === 409 && body.current) {
+        setNeedsPublish(true);
+        return true;
+      }
+      if (res.status === 409 && body.current) {
         adoptServer(body.current as ApiPage, "conflict");
       } else {
         setSave({ kind: "error", message: body?.error?.message ?? "Enregistrement impossible" });
       }
+      return false;
     } catch {
       setSave({ kind: "error", message: "Connexion impossible" });
+      return false;
     } finally {
       saving.current = false;
     }
   }, [adoptServer, pageId, secret, setState]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // On enregistre d'abord : un échec ou un conflit arrête tout, pour ne jamais publier autre chose que ce qui est à l'écran.
+  const doPublish = useCallback(async (confirm: boolean) => {
+    setPublishing(true);
+    setPriceWarning(null);
+    try {
+      holdAutosave.current = false;
+      if (!(await doSave())) {
+        setNotice("La page n'a pas été publiée : son enregistrement n'a pas abouti. Vérifie-la, puis réessaie.");
+        return;
+      }
+      const res = await fetch(`/api/admin/pages/${pageId}/publish`, { method: "POST", headers, body: JSON.stringify({ confirm }) });
+      const body = await res.json();
+      if (!res.ok) {
+        setNotice(body?.error?.message ?? "Publication impossible. Réessaie dans un instant.");
+      } else if (body.data?.refused) {
+        setPriceWarning(body.data.reason);
+      } else {
+        setStatus("published");
+        setNeedsPublish(false);
+        setNotice("Page publiée : les visiteurs voient maintenant cette version.");
+      }
+    } catch {
+      setNotice("Connexion impossible : la page n'a pas été publiée.");
+    } finally {
+      setPublishing(false);
+    }
+  }, [doSave, pageId, secret]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Enregistrement automatique 1,5 s après la dernière modification (sauf juste après un rechargement forcé).
   const dirty = state ? isDirty(state) : false;
@@ -250,12 +293,16 @@ export function PageEditor({ pageId, secret }: { pageId: string; secret: string 
         </div>
         <button className={`ed-pill sec ${preview ? "on" : ""}`} aria-pressed={preview} onClick={() => setPreview((p) => !p)}>Aperçu</button>
         {status === "published" && crumb && <a className="ed-pill sec" href={`/p/${crumb.funnelSlug}/${crumb.stepSlug}`} target="_blank" rel="noreferrer">Page publiée</a>}
-        <button className="ed-pill main" onClick={() => { holdAutosave.current = false; void doSave(); }} disabled={save.kind === "saving"}>Enregistrer</button>
+        <button className="ed-pill sec" onClick={() => { holdAutosave.current = false; void doSave(); }} disabled={save.kind === "saving"}>Enregistrer</button>
+        <button className="ed-pill main" onClick={() => void doPublish(false)} disabled={publishing || save.kind === "saving" || (status === "published" && !needsPublish && !dirty)}>
+          {publishing ? "Publication..." : status === "published" && !needsPublish && !dirty ? "Publié" : "Publier"}
+        </button>
       </header>
 
       <div>
         <div className="ed-ia" role="note"><b>IA</b> Cette page peut aussi être modifiée par ton IA : vous travaillez sur la même description de page.</div>
         {notice && <div className="ed-notice" role="alert">{notice}<button onClick={() => setNotice(null)}>Compris</button></div>}
+        {priceWarning && <div className="ed-notice" role="alert">{priceWarning}<button onClick={() => void doPublish(true)}>Publier quand même</button><button onClick={() => setPriceWarning(null)}>Annuler</button></div>}
       </div>
 
       <div className="ed-body">

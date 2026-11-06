@@ -5,6 +5,8 @@ import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 import { assertTestMode, createCheckoutSession, isStripeConfigured } from "@/lib/stripe";
 import { getFunnel } from "@/funnels";
 import { getProduit } from "@/funnels/produits";
+import { getStore } from "@/lib/store";
+import { resolvePageSale } from "@/lib/page-checkout";
 import type { AcheterBlock } from "@/types/funnel";
 
 const RATE_LIMIT = { limit: 10, windowSeconds: 60 };
@@ -36,12 +38,32 @@ export async function POST(req: NextRequest) {
       return errors.badRequest(firstError?.message || "Données invalides");
     }
 
+    const siteUrl =
+      process.env.NEXT_PUBLIC_SITE_URL || `${req.nextUrl.protocol}//${req.nextUrl.host}`;
+
     // Tunnel, étape, bloc et produit viennent de la config, jamais du client.
     const funnel = getFunnel(parsed.data.funnel);
     const step = funnel?.etapes.find((e) => e.slug === parsed.data.step);
     const block = step?.blocs.find((b): b is AcheterBlock => b.type === "acheter");
     if (!funnel || !step || !block) {
-      return errors.badRequest("Produit inconnu");
+      // Pas dans la config : page créée par l'éditeur ou l'IA, relue dans sa version publiée.
+      const vente = await resolvePageSale(getStore(), parsed.data.funnel, parsed.data.step, parsed.data.block);
+      if (!vente) {
+        return errors.badRequest("Produit inconnu");
+      }
+      if (!isStripeConfigured()) {
+        console.error("[checkout] Stripe non configuré");
+        return errors.internal("Paiement indisponible pour le moment. Réessaie plus tard.");
+      }
+      assertTestMode();
+      const session = await createCheckoutSession({
+        nom: vente.nom,
+        prixTtc: vente.prixTtc,
+        successUrl: `${siteUrl}${vente.successPath}?session_id={CHECKOUT_SESSION_ID}`,
+        cancelUrl: `${siteUrl}${vente.cancelPath}`,
+        metadata: { funnel: parsed.data.funnel, step: parsed.data.step, produit: vente.produit, source: "page", nom: vente.nom },
+      });
+      return success({ url: session.url });
     }
     const produit = getProduit(block.produit);
     const succes = funnel.etapes.find((e) => e.slug === block.etapeSucces);
@@ -56,8 +78,6 @@ export async function POST(req: NextRequest) {
     }
     assertTestMode();
 
-    const siteUrl =
-      process.env.NEXT_PUBLIC_SITE_URL || `${req.nextUrl.protocol}//${req.nextUrl.host}`;
     const session = await createCheckoutSession({
       nom: produit.nom,
       prixTtc: produit.prixTtc,

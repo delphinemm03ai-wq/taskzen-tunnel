@@ -12,6 +12,7 @@ import {
 } from "@/lib/supabase";
 import { isResendConfigured, sendFunnelConfirmationEmail } from "@/lib/resend";
 import { getProduit, prixHt } from "@/funnels/produits";
+import { produitDePage } from "@/lib/page-checkout";
 
 /** Les seuls événements qui enregistrent une vente (ADR 004). */
 const PAID_EVENTS = new Set(["checkout.session.completed", "checkout.session.async_payment_succeeded"]);
@@ -57,7 +58,7 @@ export async function POST(req: NextRequest) {
   // Un produit inconnu ou un email absent ne se corrigent pas en réessayant :
   // 200 loggé, pour que Stripe ne boucle pas.
   const produitSlug = session.metadata?.produit ?? "";
-  const produit = getProduit(produitSlug);
+  const produit = produitDePage(session.metadata, session.amount_total) ?? getProduit(produitSlug);
   if (!produit) {
     console.error(`[stripe-webhook] produit inconnu "${produitSlug}" (événement ${event.id})`);
     return success({ ignored: true });
@@ -123,7 +124,7 @@ export async function POST(req: NextRequest) {
           title: livraison.titre,
           text: livraison.texte,
           buttonLabel: livraison.boutonTexte,
-          buttonUrl: `${siteUrl}/api/telecharger?session_id=${encodeURIComponent(session.id)}`,
+          buttonUrl: livraison.fichier ? `${siteUrl}/api/telecharger?session_id=${encodeURIComponent(session.id)}` : undefined,
         });
         if (!result.ok) {
           throw new Error(`envoi de la livraison échoué : ${result.reason ?? "raison inconnue"}`);
