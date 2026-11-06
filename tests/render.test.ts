@@ -33,6 +33,12 @@ describe("format de page et rendu serveur", () => {
     for (const id of JSON.stringify(page).match(/"id":"b[0-9a-f]{8}"/g) ?? []) expect(html).toContain(id.slice(6, -1));
   });
 
+  it("la page publique porte le lien des mentions légales, pas l'éditeur", () => {
+    const page = newPage("pg_l", { title: "L", blocks: [] });
+    expect(renderPageHtml(page)).toContain('href="https://taskzen.fr/mentions-legales"');
+    expect(renderPageHtml(page, { editor: true })).not.toContain("mentions-legales");
+  });
+
   it("le bouton de paiement appelle la route Stripe existante avec tunnel et étape", () => {
     const page = newPage("pg_p", { title: "Vente", blocks: [{ type: "payment_button", label: "Acheter", product: "offre", price_cents: 9700 }] });
     const html = renderPageHtml(page, { funnelSlug: "mon-tunnel", stepSlug: "offre" });

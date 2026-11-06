@@ -35,7 +35,7 @@ export function fillFirstName(text: string, firstName?: string | null): string {
 export function renderSequenceEmail(input: { body: string; firstName?: string | null; unsubscribeUrl?: string }): string {
   const html = fillFirstName(input.body, input.firstName).split(/\n{2,}/).map(block).join("\n");
   const footer = input.unsubscribeUrl
-    ? `<p style="color:#4a4963;font-size:12px;margin-top:32px;">Tu reçois cet e-mail parce que tu t'es inscrit(e) sur un tunnel Taskzen. <a href="${esc(input.unsubscribeUrl)}" style="color:#4a4963;">Me désinscrire</a></p>`
+    ? `<p style="color:#4a4963;font-size:12px;margin-top:32px;">Tu reçois cet e-mail parce que tu t'es inscrit(e) auprès de Taskzen. <a href="${esc(input.unsubscribeUrl)}" style="color:#4a4963;">Me désinscrire</a></p>`
     : "";
   return `<div style="font-family:system-ui,-apple-system,sans-serif;max-width:520px;margin:0 auto;color:#131428;line-height:1.5;">${html}${footer}</div>`;
 }

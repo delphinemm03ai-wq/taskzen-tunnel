@@ -216,7 +216,8 @@ describe("rendu en mode édition", () => {
     expect(ed).not.toContain("<script>");
     expect(ed).toContain("ed-sel");
     expect(ed).toContain('data-block="t"');
-    expect(ed.replace(/<style>[\s\S]*?<\/style>/, "")).toBe(pub.replace(/<style>[\s\S]*?<\/style>/, "").replace(/<script>[\s\S]*?<\/script>/, ""));
+    // Seules différences voulues du public : le script et le pied de page légal (lien non cliquable dans l'éditeur).
+    expect(ed.replace(/<style>[\s\S]*?<\/style>/, "")).toBe(pub.replace(/<style>[\s\S]*?<\/style>/, "").replace(/<script>[\s\S]*?<\/script>/, "").replace(/<footer class="tz-foot">[\s\S]*?<\/footer>/, ""));
   });
 });
 

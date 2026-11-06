@@ -105,7 +105,9 @@ const config = {
   legal: {
     companyName: "Taskzen",
     contactEmail: "contact@taskzen.fr",
-    privacyUrl: "/confidentialite",
+    mentionsUrl: "https://taskzen.fr/mentions-legales",
+    // Aucune page de confidentialité publiée pour l'instant : à ajouter ici et dans le pied des pages.
+    privacyUrl: null,
   },
 } as const;
 

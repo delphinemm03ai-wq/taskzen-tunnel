@@ -1,3 +1,4 @@
+import config from "@/config";
 import { Block, Page } from "./schema";
 
 /**
@@ -124,6 +125,8 @@ h1.tz-h{font-size:clamp(1.9rem,6vw,2.8rem)}h2.tz-h{font-size:clamp(1.5rem,4.5vw,
 .tz-popup{max-width:min(92vw,520px);padding:28px;border-radius:1.5rem;border:1px solid var(--line);background:var(--ink2);color:var(--fg)}
 .tz-popup::backdrop{background:rgba(9,11,30,.7)}
 .tz-popup-x{position:absolute;top:8px;right:8px;min-width:44px;min-height:44px;border:0;background:transparent;color:var(--fg);font-size:1.6rem;cursor:pointer}
+.tz-foot{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);color:var(--mute);font-size:.85rem;text-align:center}
+.tz-foot a{color:inherit}
 `;
 
 /**
@@ -193,7 +196,7 @@ ${ogImage ? `<meta property="og:image" content="${esc(ogImage)}">` : ""}
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>${PAGE_CSS}${opts.editor ? EDITOR_CSS : ""}</style></head>
 <body><div class="tz-wrap"><div class="tz-brand"><img src="${esc(logo)}" alt="" width="32" height="32">Taskzen</div>
-<main>${renderBlocksHtml(page, opts)}</main></div>${opts.editor ? "" : `<script>${PAGE_JS}</script>`}</body></html>`;
+<main>${renderBlocksHtml(page, opts)}</main>${opts.editor ? "" : `<footer class="tz-foot"><a href="${esc(config.legal.mentionsUrl)}">Mentions légales</a></footer>`}</div>${opts.editor ? "" : `<script>${PAGE_JS}</script>`}</body></html>`;
 }
 
 function findFirstImage(blocks: Block[]): string | undefined {

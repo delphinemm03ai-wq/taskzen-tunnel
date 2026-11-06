@@ -1,0 +1,101 @@
+{
+  "_statut": "Brouillon non envoyé. Rien n'est créé tant que Delphine n'a pas relu et que les marqueurs ne sont pas remplacés.",
+  "_a_remplacer": [
+    "{lien_salle_paylive} : lien public de la salle PayLive, jamais /guest",
+    "{lien_audit} : adresse de la page audit une fois le domaine connu, https://<domaine>/p/webinaire-17-novembre/audit",
+    "{lien_reservation_audit} : lien pour réserver le créneau de l'audit (page merci-audit)"
+  ],
+  "create_funnel": {
+    "name": "Webinaire du 17 novembre : Ta boîte qui tourne sans toi",
+    "slug": "webinaire-17-novembre",
+    "steps": [
+      {
+        "title": "Ta boîte qui tourne sans toi",
+        "slug": "inscription",
+        "kind": "capture",
+        "blocks": [
+          { "type": "heading", "level": 1, "text": "Ta boîte qui tourne sans toi" },
+          { "type": "text", "text": "Webinaire en direct, le mardi 17 novembre à 18h.\n\nPour les entrepreneurs à 10 000 € par mois ou plus qui répondent encore à la main à leurs clients." },
+          { "type": "heading", "level": 2, "text": "Les 3 secrets que tu vas voir" },
+          { "type": "list", "items": [
+            "Tes clients ne veulent pas ta réponse, ils veulent une réponse rapide",
+            "La plupart de tes messages ne demandent pas ton cerveau, juste ta mémoire",
+            "Ta boîte ne peut pas grandir tant qu'elle passe par ton téléphone"
+          ] },
+          { "type": "timer", "mode": "fixed_date", "ends_at": "2026-11-17T17:00:00Z" },
+          { "type": "signup_form", "label": "Je réserve ma place", "fields": ["first_name", "email"], "tag": "webinaire-17-11", "next_step": "@next" },
+          { "type": "text", "text": "En t'inscrivant, tu reçois les e-mails de ce webinaire : confirmation, rappels et relance. Tu peux te désinscrire à tout moment depuis chaque e-mail." }
+        ]
+      },
+      {
+        "title": "Ta place est réservée",
+        "slug": "confirmation",
+        "kind": "thanks",
+        "blocks": [
+          { "type": "heading", "level": 1, "text": "Ta place est réservée" },
+          { "type": "text", "text": "Rendez-vous le mardi 17 novembre à 18h. Tu reçois un e-mail de confirmation, puis un rappel la veille et un autre juste avant le début." },
+          { "type": "list", "items": [
+            "Téléphone en mode avion pendant l'heure",
+            "Papier et crayon à côté de toi, il y a un calcul et des petits tests à faire en direct",
+            "Connecte-toi quelques minutes avant 18h"
+          ] }
+        ]
+      },
+      {
+        "title": "Audit de 30 minutes",
+        "slug": "audit",
+        "kind": "sales",
+        "blocks": [
+          { "type": "heading", "level": 1, "text": "Ce que ta messagerie te coûte, chiffré en 30 minutes" },
+          { "type": "text", "text": "Un audit de 30 minutes, réservé aux activités à 10 000 € par mois ou plus.\n\nTu repars avec un chiffrage, que tu travailles avec moi ou non." },
+          { "type": "payment_button", "label": "Je réserve mon audit", "product": "audit", "price_cents": 99700 },
+          { "type": "faq", "items": [
+            { "question": "Et si je décide ensuite de travailler avec toi ?", "answer": "Les 997 € de l'audit sont déduits des 5 000 € de mise en place du Système Boîte Autonome." },
+            { "question": "Que comprend Le Système Boîte Autonome ?", "answer": "Les réponses automatiques aux messages clients avec tes mots (WhatsApp, e-mail, Instagram), les relances et la prise de rendez-vous, le passage de main vers toi dès qu'un échange demande vraiment toi, puis la maintenance et les ajustements chaque mois. 5 000 € de mise en place et 500 € par mois." }
+          ] }
+        ]
+      },
+      {
+        "title": "Merci pour ton audit",
+        "slug": "merci-audit",
+        "kind": "thanks",
+        "blocks": [
+          { "type": "heading", "level": 1, "text": "Ton paiement est bien reçu" },
+          { "type": "text", "text": "Dernière étape : choisis ton créneau de 30 minutes.\n\n{lien_reservation_audit}" }
+        ]
+      }
+    ],
+    "email_sequence": {
+      "name": "Webinaire 17/11 : confirmation à l'inscription",
+      "trigger": { "type": "tag_added", "tag": "webinaire-17-11" },
+      "emails": [
+        {
+          "delay_hours": 0,
+          "subject": "C'est noté : rendez-vous le 17 novembre à 18h",
+          "body": "Salut {first_name},\n\nTa place est réservée pour le webinaire **Ta boîte qui tourne sans toi**, le mardi 17 novembre à 18h.\n\nPour en profiter à fond :\n\n- Téléphone en mode avion pendant l'heure\n- Papier et crayon à côté de toi, il y a un calcul et des petits tests à faire en direct\n- Connecte-toi quelques minutes avant 18h\n\n[Accéder au webinaire le 17 novembre]({lien_salle_paylive})\n\nJe t'envoie un rappel la veille et un autre juste avant le début.\n\nÀ mardi,\nDelphine"
+        }
+      ]
+    }
+  },
+  "schedule_email_sequence": {
+    "name": "Webinaire 17/11 : rappels et relance",
+    "trigger": { "type": "date", "tag": "webinaire-17-11", "date": "2026-11-16T17:00:00Z" },
+    "emails": [
+      {
+        "delay_hours": 0,
+        "subject": "C'est demain à 18h",
+        "body": "Salut {first_name},\n\nPetit rappel : on se retrouve **demain, mardi 17 novembre à 18h**, pour le webinaire Ta boîte qui tourne sans toi.\n\nPrévois une heure tranquille : téléphone en mode avion, papier et crayon prêts.\n\n[Accéder au webinaire demain à 18h]({lien_salle_paylive})\n\nÀ demain,\nDelphine"
+      },
+      {
+        "delay_hours": 23.75,
+        "subject": "On commence dans 15 minutes",
+        "body": "Salut {first_name},\n\nOn commence dans 15 minutes.\n\n[Je rejoins le webinaire]({lien_salle_paylive})\n\nFerme tes onglets, mets ton téléphone en mode avion, et garde ton papier et ton crayon à côté de toi.\n\nÀ tout de suite,\nDelphine"
+      },
+      {
+        "delay_hours": 16.25,
+        "subject": "Ce que ta messagerie te coûte, chiffré en 30 minutes",
+        "body": "Salut {first_name},\n\nMerci d'avoir suivi Ta boîte qui tourne sans toi.\n\nVoici les 3 secrets qu'on a vus :\n\n1. Tes clients ne veulent pas ta réponse, ils veulent une réponse rapide\n2. La plupart de tes messages ne demandent pas ton cerveau, juste ta mémoire\n3. Ta boîte ne peut pas grandir tant qu'elle passe par ton téléphone\n\nSi tu veux chiffrer ce que ta messagerie te coûte, je te propose ton audit de 30 minutes.\n\n**997 €. Réservé aux activités à 10 000 € par mois ou plus.**\n\n[Je réserve mon audit]({lien_audit})\n\nTu repars avec un chiffrage, que tu travailles avec moi ou non.\n\nÀ très vite,\nDelphine"
+      }
+    ]
+  }
+}
