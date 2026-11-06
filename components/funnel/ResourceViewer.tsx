@@ -81,7 +81,7 @@ export function ResourceViewer() {
               Ta vidéo arrive très bientôt
             </strong>
             <span style={{ fontSize: "0.9rem" }}>
-              En attendant, réserve ton diagnostic gratuit juste en dessous.
+              En attendant, réserve ton diagnostic juste en dessous.
             </span>
           </div>
         </div>

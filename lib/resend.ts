@@ -96,7 +96,7 @@ function bookingButton(siteUrl: string): string {
       <a href="${siteUrl}/reserver"
          style="background:${config.brand.colorPrimary};color:#fff;text-decoration:none;
                 padding:14px 26px;border-radius:999px;font-weight:600;display:inline-block;">
-        Réserver mon diagnostic gratuit
+        Réserver mon diagnostic
       </a>
     </p>`;
 }
@@ -134,7 +134,7 @@ const FOLLOWUP_CONTENT: Record<
     body: (firstName) => `
       <p>Hello ${firstName || "toi"},</p>
       <p>Je ne vais pas te relancer indéfiniment sur ce sujet, donc je fais simple.</p>
-      <p>Si l'idée de récupérer 10h par semaine sans embaucher te parle, pas besoin d'attendre la vidéo : le prochain pas, c'est 30 minutes avec moi, gratuites, sans engagement.</p>
+      <p>Si l'idée de récupérer 10h par semaine sans embaucher te parle, pas besoin d'attendre la vidéo : le prochain pas, c'est 30 minutes avec moi, sans engagement.</p>
       <p>On regarde tes messages clients, je te dis exactement ce que tu peux automatiser et ce que ça change pour toi en temps et en argent. Que tu bosses avec moi après ou pas.</p>
       <p>Si ce n'est pas le bon moment, pas de souci. Tu recevras la vidéo dès sa sortie, et tu me recontactes quand tu veux.</p>`,
   },

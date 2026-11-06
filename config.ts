@@ -53,19 +53,19 @@ const config = {
     eyebrow: "Merci pour ton inscription",
     title: "La Méthode IA : comment récupérer du temps sans embaucher",
     description:
-      "En 5 minutes, tu vas voir exactement comment automatiser tes réponses clients sans perdre ton ton, et combien ce temps perdu te coûte réellement chaque mois. Envie de savoir combien TOI tu peux récupérer avec tes messages à toi ? Réserve ton diagnostic gratuit juste en dessous.",
+      "En 5 minutes, tu vas voir exactement comment automatiser tes réponses clients sans perdre ton ton, et combien ce temps perdu te coûte réellement chaque mois. Envie de savoir combien TOI tu peux récupérer avec tes messages à toi ? Réserve ton diagnostic juste en dessous.",
     // Pour type=video/vsl : URL d'embed (YouTube, Vimeo, Tella, Loom...).
     // Vide tant que la vidéo n'est pas tournée : la page affiche un message d'attente (12/10/2026).
     embedUrl: "",
     // Pour type=pdf : lien de téléchargement direct.
     downloadUrl: "",
-    ctaToBooking: "Réserver mon diagnostic gratuit",
+    ctaToBooking: "Réserver mon diagnostic",
   },
 
   // ── Étape 3 : Réserver (Cal.com) ───────────────────────
   booking: {
     eyebrow: "Dernière étape",
-    headline: "Réserve ton audit gratuit de 30 minutes",
+    headline: "Réserve ton audit de 30 minutes",
     description:
       "On regarde ensemble tes messages clients et on chiffre précisément le temps (et l'argent) que tu peux récupérer chaque semaine. Sans engagement, sans vente forcée : tu repars avec le chiffrage, que tu bosses avec moi ou pas.",
     // Ton identifiant Cal.com : cal.com/<username>/<eventSlug>
