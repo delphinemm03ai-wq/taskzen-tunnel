@@ -47,7 +47,7 @@ Le site utilise les cookies nécessaires à son fonctionnement.
 
 Les pages du webinaire n'utilisent aucun outil de statistiques.
 
-[À VÉRIFIER : PostHog reste chargé sur les autres pages (accueil, réservation), sans bandeau de consentement. Les mentions légales actuelles promettent : « aucun cookie publicitaire ou de traçage tiers n'est déposé sans votre consentement ». Proposition : le configurer sans cookie, puis adapter ce paragraphe.]
+Sur les autres pages (accueil, réservation), PostHog mesure les visites sans déposer de cookie ni garder d'identifiant d'une visite à l'autre.
 
 ## Modification de cette page
 
