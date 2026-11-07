@@ -19,6 +19,8 @@ export function initPostHog(): void {
     api_host: POSTHOG_HOST,
     capture_pageview: false,
     person_profiles: "always",
+    // Aucun cookie ni stockage durable : pas de consentement a recueillir (mentions legales).
+    persistence: "memory",
   });
   initialized = true;
 }

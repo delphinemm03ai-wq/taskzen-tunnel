@@ -24,12 +24,12 @@ Je ne vends jamais tes données.
 ## Qui les traite pour moi
 
 - **Vercel :** hébergement du site (États-Unis).
-- **Supabase :** base de données des contacts et des commandes. [À VÉRIFIER : région du projet]
+- **Supabase :** base de données des contacts et des commandes (serveur à Paris).
 - **Resend :** envoi des emails. [À VÉRIFIER : région]
 - **Stripe :** paiement. Je n'ai jamais accès à tes données bancaires.
 - **Cal.com :** prise de rendez-vous.
 - **[À VÉRIFIER : outil de diffusion du webinaire] :** salle du webinaire.
-- **PostHog :** statistiques de visite. [À VÉRIFIER : hébergement UE ou États-Unis]
+- **PostHog :** statistiques de visite sur certaines pages du site, pas sur les pages du webinaire. [À VÉRIFIER : hébergement UE ou États-Unis, selon le réglage de production]
 
 Certains de ces prestataires peuvent traiter des données hors de l'Union européenne. Dans ce cas, le transfert s'appuie sur les garanties prévues par le RGPD, comme les clauses contractuelles types ou une décision d'adéquation. [À VÉRIFIER pour chaque prestataire]
 
@@ -45,7 +45,9 @@ Si tu estimes que tes droits ne sont pas respectés, tu peux saisir la CNIL (cni
 
 Le site utilise les cookies nécessaires à son fonctionnement.
 
-[À VÉRIFIER : PostHog se charge sur toutes les pages. S'il dépose un cookie ou un identifiant de suivi, il faut soit recueillir ton accord avant, soit le configurer sans cookie. Les mentions légales actuelles promettent : « aucun cookie publicitaire ou de traçage tiers n'est déposé sans votre consentement ». Le tunnel doit tenir cette promesse.]
+Les pages du webinaire n'utilisent aucun outil de statistiques.
+
+[À VÉRIFIER : PostHog reste chargé sur les autres pages (accueil, réservation), sans bandeau de consentement. Les mentions légales actuelles promettent : « aucun cookie publicitaire ou de traçage tiers n'est déposé sans votre consentement ». Proposition : le configurer sans cookie, puis adapter ce paragraphe.]
 
 ## Modification de cette page
 
