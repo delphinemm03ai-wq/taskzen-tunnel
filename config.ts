@@ -108,6 +108,8 @@ const config = {
     mentionsUrl: "https://taskzen.fr/mentions-legales",
     // Aucune page de confidentialité publiée pour l'instant : à ajouter ici et dans le pied des pages.
     privacyUrl: null,
+    // CGV de l'audit : à renseigner une fois validées et publiées.
+    cgvUrl: null,
   },
 } as const;
 

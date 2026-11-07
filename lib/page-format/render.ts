@@ -174,6 +174,13 @@ document.querySelectorAll('form.tz-form').forEach(function(f){
 })();
 `;
 
+/** Liens légaux du pied de page : confidentialité et CGV seulement quand elles sont publiées. */
+function legalLinks(): string {
+  const { mentionsUrl, privacyUrl, cgvUrl } = config.legal as { mentionsUrl: string; privacyUrl: string | null; cgvUrl: string | null };
+  const links: [string | null, string][] = [[mentionsUrl, "Mentions légales"], [privacyUrl, "Politique de confidentialité"], [cgvUrl, "Conditions générales de vente"]];
+  return links.filter(([u]) => u).map(([u, l]) => `<a href="${esc(u)}">${l}</a>`).join(" · ");
+}
+
 /** Fragment HTML du corps de page (utilisé aussi par l'aperçu). */
 export function renderBlocksHtml(page: Page, ctx: RenderContext = {}): string {
   CTX = ctx;
@@ -196,7 +203,7 @@ ${ogImage ? `<meta property="og:image" content="${esc(ogImage)}">` : ""}
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>${PAGE_CSS}${opts.editor ? EDITOR_CSS : ""}</style></head>
 <body><div class="tz-wrap"><div class="tz-brand"><img src="${esc(logo)}" alt="" width="32" height="32">Taskzen</div>
-<main>${renderBlocksHtml(page, opts)}</main>${opts.editor ? "" : `<footer class="tz-foot"><a href="${esc(config.legal.mentionsUrl)}">Mentions légales</a></footer>`}</div>${opts.editor ? "" : `<script>${PAGE_JS}</script>`}</body></html>`;
+<main>${renderBlocksHtml(page, opts)}</main>${opts.editor ? "" : `<footer class="tz-foot">${legalLinks()}</footer>`}</div>${opts.editor ? "" : `<script>${PAGE_JS}</script>`}</body></html>`;
 }
 
 function findFirstImage(blocks: Block[]): string | undefined {
