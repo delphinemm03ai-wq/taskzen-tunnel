@@ -34,7 +34,7 @@ function style(b: Block): string {
   return parts.length ? ` style="${parts.join(";")}"` : "";
 }
 
-const attrs = (b: Block) => `data-block="${esc(b.id)}"${style(b)}`;
+const attrs = (b: Block) => `id="${esc(b.id)}" data-block="${esc(b.id)}"${style(b)}`;
 
 function paragraphs(t: string): string {
   return t
@@ -100,7 +100,7 @@ export const PAGE_CSS = `
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:Inter,system-ui,sans-serif;background:var(--ink);color:var(--fg);line-height:1.6;font-size:17px;overflow-x:hidden}
-.tz-wrap{max-width:760px;margin:0 auto;padding:24px 20px 64px}
+.tz-wrap{max-width:1080px;margin:0 auto;padding:24px 20px 64px}
 .tz-brand{display:flex;align-items:center;gap:10px;font:700 1.25rem Fraunces,Georgia,serif;margin-bottom:24px}
 .tz-h{font-family:Fraunces,Georgia,serif;letter-spacing:-.02em;line-height:1.15;font-weight:600;margin-block:20px 12px}
 h1.tz-h{font-size:clamp(1.9rem,6vw,2.8rem)}h2.tz-h{font-size:clamp(1.5rem,4.5vw,2rem)}h3.tz-h{font-size:1.3rem}
@@ -110,6 +110,9 @@ h1.tz-h{font-size:clamp(1.9rem,6vw,2.8rem)}h2.tz-h{font-size:clamp(1.5rem,4.5vw,
 .tz-btnwrap{margin-block:20px}
 .tz-btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:.85rem 1.8rem;border-radius:999px;border:0;font:600 1.05rem Inter,sans-serif;color:#fff;background:var(--grad);box-shadow:0 10px 28px -8px rgba(125,81,210,.7);cursor:pointer;text-decoration:none}
 .tz-btn:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--lav2);outline-offset:3px}
+.tz-text p{max-width:68ch}[style*="text-align:center"] p{margin-inline:auto}
+.tz-cols .tz-section{margin:0;height:100%}.tz-cols .tz-form{margin:0}.tz-cols+.tz-text,.tz-btnwrap+.tz-text,.tz-section+.tz-text,.tz-faq+.tz-h{margin-top:56px}.tz-cols .tz-section .tz-h{margin-top:0}
+.tz-section .tz-img{width:120px;height:120px;object-fit:cover;border-radius:50%;margin-block:0 12px}
 .tz-hr{border:0;border-top:1px solid var(--line);margin-block:32px}
 .tz-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:20px;margin-block:20px}
 .tz-section{margin-block:32px;padding:24px;border-radius:1.5rem;background:var(--ink2);border:1px solid var(--line)}

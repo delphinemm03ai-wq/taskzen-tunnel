@@ -17,58 +17,465 @@
         "kind": "capture",
         "blocks": [
           {
+            "type": "columns",
+            "columns": [
+              [
+                {
+                  "type": "text",
+                  "text": "WEBINAIRE GRATUIT EN DIRECT · MARDI 17 NOVEMBRE À 18H",
+                  "settings": {
+                    "color": "#c4a4fe"
+                  }
+                },
+                {
+                  "type": "heading",
+                  "level": 1,
+                  "text": "Ta boîte qui tourne sans toi"
+                },
+                {
+                  "type": "text",
+                  "text": "La méthode Taskzen pour que tes messages clients, tes relances et tes rendez-vous se gèrent sans toi."
+                },
+                {
+                  "type": "text",
+                  "text": "Pour les entrepreneurs à 10 000 € par mois ou plus qui répondent encore à la main à leurs clients."
+                },
+                {
+                  "type": "timer",
+                  "mode": "fixed_date",
+                  "ends_at": "2026-11-17T17:00:00Z"
+                }
+              ],
+              [
+                {
+                  "id": "inscription",
+                  "type": "signup_form",
+                  "label": "Je réserve ma place",
+                  "fields": [
+                    "first_name",
+                    "email"
+                  ],
+                  "tag": "webinaire-17-11",
+                  "next_step": "@next"
+                },
+                {
+                  "type": "text",
+                  "text": "Tu reçois les e-mails de ce webinaire : confirmation, rappels et relance. Tu peux te désinscrire à tout moment depuis chaque e-mail. Détails dans la politique de confidentialité, en bas de page."
+                }
+              ]
+            ]
+          },
+          {
+            "type": "columns",
+            "columns": [
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 2,
+                      "text": "1 h",
+                      "settings": {
+                        "color": "#c4a4fe"
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "text": "en direct, avec tes questions"
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 2,
+                      "text": "3",
+                      "settings": {
+                        "color": "#c4a4fe"
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "text": "secrets pour sortir ta boîte de ton téléphone"
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 2,
+                      "text": "1",
+                      "settings": {
+                        "color": "#c4a4fe"
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "text": "test en direct avec de vrais messages"
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 2,
+                      "text": "0 €",
+                      "settings": {
+                        "color": "#c4a4fe"
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "text": "le webinaire est gratuit"
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
             "type": "text",
-            "text": "Webinaire gratuit en direct : mardi 17 novembre à 18h, pendant 1 heure"
-          },
-          {
-            "type": "heading",
-            "level": 1,
-            "text": "Ta boîte qui tourne sans toi"
-          },
-          {
-            "type": "text",
-            "text": "La méthode Taskzen pour que tes messages clients, tes relances et tes rendez-vous se gèrent sans toi.\n\nPour les entrepreneurs à 10 000 € par mois ou plus qui répondent encore à la main à leurs clients."
-          },
-          {
-            "type": "timer",
-            "mode": "fixed_date",
-            "ends_at": "2026-11-17T17:00:00Z"
-          },
-          {
-            "type": "signup_form",
-            "label": "Je réserve ma place",
-            "fields": [
-              "first_name",
-              "email"
-            ],
-            "tag": "webinaire-17-11",
-            "next_step": "@next"
-          },
-          {
-            "type": "text",
-            "text": "En t'inscrivant, tu reçois les e-mails de ce webinaire : confirmation, rappels et relance. Tu peux te désinscrire à tout moment depuis chaque e-mail. Détails dans la politique de confidentialité, en bas de page."
+            "text": "LE PROGRAMME",
+            "settings": {
+              "color": "#c4a4fe"
+            }
           },
           {
             "type": "heading",
             "level": 2,
-            "text": "Les 3 secrets que tu vas voir"
+            "text": "Une heure, trois secrets, un test en direct"
           },
           {
-            "type": "list",
+            "type": "text",
+            "text": "Pas de théorie : on part de ce qui se passe vraiment dans ta messagerie."
+          },
+          {
+            "type": "columns",
+            "columns": [
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "Secret 1"
+                    },
+                    {
+                      "type": "text",
+                      "text": "Tes clients ne veulent pas ta réponse, ils veulent une réponse rapide. La vitesse compte plus que la plume."
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "Secret 2"
+                    },
+                    {
+                      "type": "text",
+                      "text": "La plupart de tes messages ne demandent pas ton cerveau, juste ta mémoire : tarifs, dispos, relances, rendez-vous."
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "Secret 3"
+                    },
+                    {
+                      "type": "text",
+                      "text": "Ta boîte ne peut pas grandir tant qu'elle passe par ton téléphone. Chaque message traité à la main est du temps en moins pour vendre ou livrer."
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "type": "columns",
+            "columns": [
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "Le test en direct"
+                    },
+                    {
+                      "type": "text",
+                      "text": "De vrais messages, côte à côte. À toi de deviner lesquels viennent de moi, et lesquels viennent du système."
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "Le calcul"
+                    },
+                    {
+                      "type": "text",
+                      "text": "Papier et crayon : on chiffre ensemble ce que ta messagerie te coûte vraiment."
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "type": "button",
+            "label": "Je réserve ma place",
+            "href": "#inscription"
+          },
+          {
+            "type": "text",
+            "text": "POUR QUI",
+            "settings": {
+              "color": "#c4a4fe"
+            }
+          },
+          {
+            "type": "heading",
+            "level": 2,
+            "text": "Est-ce que c'est pour toi ?"
+          },
+          {
+            "type": "columns",
+            "columns": [
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "C'est pour toi si"
+                    },
+                    {
+                      "type": "list",
+                      "items": [
+                        "Ton activité fait 10 000 € par mois ou plus",
+                        "Tu réponds encore toi-même aux mêmes questions",
+                        "Tu relances quand tu y penses, donc rarement",
+                        "Tout s'arrête quand tu n'es pas derrière ton écran"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "Ce n'est pas pour toi si"
+                    },
+                    {
+                      "type": "list",
+                      "items": [
+                        "Tu démarres et tu n'as pas encore de clients réguliers",
+                        "Tu cherches un tutoriel pour tout construire toi-même",
+                        "Tu veux qu'une machine parle à tes clients sans jamais te passer la main"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "type": "text",
+            "text": "CE QUE TU EMPORTES",
+            "settings": {
+              "color": "#c4a4fe"
+            }
+          },
+          {
+            "type": "heading",
+            "level": 2,
+            "text": "Tu repars avec du concret"
+          },
+          {
+            "type": "columns",
+            "columns": [
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "Ton chiffre"
+                    },
+                    {
+                      "type": "text",
+                      "text": "Le temps et l'argent que tes messages répétitifs te coûtent."
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "Ta liste"
+                    },
+                    {
+                      "type": "text",
+                      "text": "Les messages qui n'ont pas besoin de toi, et ceux qui doivent rester entre tes mains."
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "La suite"
+                    },
+                    {
+                      "type": "text",
+                      "text": "À la fin, je présente un audit payant pour ceux qui veulent aller plus loin. Rien d'obligatoire."
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "type": "text",
+            "text": "AVEC QUI",
+            "settings": {
+              "color": "#c4a4fe"
+            }
+          },
+          {
+            "type": "section",
+            "children": [
+              {
+                "type": "image",
+                "src": "https://taskzen.fr/sommet/intervenants/delphine.jpg",
+                "alt": "Delphine Moura-Miranda"
+              },
+              {
+                "type": "heading",
+                "level": 2,
+                "text": "Delphine Moura-Miranda"
+              },
+              {
+                "type": "text",
+                "text": "Fondatrice de Taskzen, organisatrice du sommet IA en 5 Jours.",
+                "settings": {
+                  "color": "#c4a4fe"
+                }
+              },
+              {
+                "type": "text",
+                "text": "Vingt-cinq ans dans l'informatique avant de se lancer en solo. Delphine aide aujourd'hui les entrepreneurs et les indépendants à automatiser leurs messages clients et leurs tâches répétitives, pour récupérer du temps sans embaucher."
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "QUESTIONS FRÉQUENTES",
+            "settings": {
+              "color": "#c4a4fe"
+            }
+          },
+          {
+            "type": "heading",
+            "level": 2,
+            "text": "Les questions qu'on me pose"
+          },
+          {
+            "type": "faq",
             "items": [
-              "Tes clients ne veulent pas ta réponse, ils veulent une réponse rapide",
-              "La plupart de tes messages ne demandent pas ton cerveau, juste ta mémoire",
-              "Ta boîte ne peut pas grandir tant qu'elle passe par ton téléphone"
+              {
+                "question": "C'est vraiment gratuit ?",
+                "answer": "Oui, le webinaire est gratuit. À la fin, je présente un audit payant de 30 minutes. Tu es libre de ne pas le prendre."
+              },
+              {
+                "question": "Je ne suis pas technique, c'est pour moi ?",
+                "answer": "Oui. Je parle de tes messages et de ton temps, pas d'outils. Aucun jargon, rien à installer."
+              },
+              {
+                "question": "Je ne peux pas être là mardi, je fais comment ?",
+                "answer": "Inscris-toi quand même. Le replay reste en ligne jusqu'au vendredi 20 novembre à minuit, et je t'envoie le lien par e-mail."
+              },
+              {
+                "question": "Je ne suis pas coach sportif, ça me concerne ?",
+                "answer": "Oui, si tes clients te posent souvent les mêmes questions et que ton activité fait 10 000 € par mois ou plus."
+              },
+              {
+                "question": "Comment je rejoins le webinaire ?",
+                "answer": "Tu reçois le lien par e-mail juste après ton inscription, puis un rappel la veille et un autre juste avant le début."
+              },
+              {
+                "question": "Combien de temps ça dure ?",
+                "answer": "Une heure. Prévois du papier, un crayon et ton téléphone en mode avion."
+              }
             ]
           },
           {
             "type": "heading",
             "level": 2,
-            "text": "Avec qui"
+            "text": "Ta place t'attend, mardi à 18h",
+            "settings": {
+              "align": "center"
+            }
           },
           {
             "type": "text",
-            "text": "Delphine Moura-Miranda, consultante IA, 25 ans dans l'informatique. J'aide les entrepreneurs à récupérer du temps en automatisant leurs messages clients et leurs tâches répétitives."
+            "text": "La méthode Taskzen pour que tes messages clients, tes relances et tes rendez-vous se gèrent sans toi.",
+            "settings": {
+              "align": "center"
+            }
+          },
+          {
+            "type": "button",
+            "label": "Je réserve ma place",
+            "href": "#inscription",
+            "settings": {
+              "align": "center"
+            }
           }
         ]
       },
@@ -78,13 +485,95 @@
         "kind": "thanks",
         "blocks": [
           {
+            "type": "text",
+            "text": "TON INSCRIPTION EST CONFIRMÉE",
+            "settings": {
+              "color": "#c4a4fe"
+            }
+          },
+          {
             "type": "heading",
             "level": 1,
             "text": "Ta place est réservée"
           },
           {
             "type": "text",
-            "text": "Rendez-vous le mardi 17 novembre à 18h. Tu reçois un e-mail de confirmation, puis un rappel la veille et un autre juste avant le début."
+            "text": "Rendez-vous le mardi 17 novembre à 18h, en direct. Il te reste 3 petites choses à faire pour en profiter à fond."
+          },
+          {
+            "type": "timer",
+            "mode": "fixed_date",
+            "ends_at": "2026-11-17T17:00:00Z"
+          },
+          {
+            "type": "columns",
+            "columns": [
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "1. Regarde tes e-mails"
+                    },
+                    {
+                      "type": "text",
+                      "text": "Ta confirmation arrive dans quelques minutes. Rien reçu ? Regarde dans tes courriers indésirables, et ajoute mon adresse à tes contacts."
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "2. Bloque ton agenda"
+                    },
+                    {
+                      "type": "text",
+                      "text": "Une heure, le mardi 17 novembre à 18h. Le bouton ci-dessous l'ajoute à ton Google Agenda."
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "3. Fais le petit test"
+                    },
+                    {
+                      "type": "text",
+                      "text": "Regarde tes 20 derniers messages clients. Combien posent une question à laquelle tu as déjà répondu ? Garde ce chiffre pour mardi."
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "type": "button",
+            "label": "Ajouter à mon agenda",
+            "href": "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Webinaire+%3A+Ta+bo%C3%AEte+qui+tourne+sans+toi&dates=20261117T170000Z%2F20261117T180000Z&details=Le+lien+%3A+https%3A%2F%2Fpages.taskzen.fr%2Fp%2Fwebinaire-17-novembre%2Fsalle"
+          },
+          {
+            "type": "text",
+            "text": "LE JOUR J",
+            "settings": {
+              "color": "#c4a4fe"
+            }
+          },
+          {
+            "type": "heading",
+            "level": 2,
+            "text": "Pour en tirer le maximum"
           },
           {
             "type": "list",
@@ -92,6 +581,99 @@
               "Téléphone en mode avion pendant l'heure",
               "Papier et crayon à côté de toi, il y a un calcul et des petits tests à faire en direct",
               "Connecte-toi quelques minutes avant 18h"
+            ]
+          },
+          {
+            "type": "text",
+            "text": "CE QU'ON VA VOIR",
+            "settings": {
+              "color": "#c4a4fe"
+            }
+          },
+          {
+            "type": "columns",
+            "columns": [
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "Secret 1"
+                    },
+                    {
+                      "type": "text",
+                      "text": "Tes clients ne veulent pas ta réponse, ils veulent une réponse rapide."
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "Secret 2"
+                    },
+                    {
+                      "type": "text",
+                      "text": "La plupart de tes messages ne demandent pas ton cerveau, juste ta mémoire."
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "Secret 3"
+                    },
+                    {
+                      "type": "text",
+                      "text": "Ta boîte ne peut pas grandir tant qu'elle passe par ton téléphone."
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "type": "text",
+            "text": "AVEC QUI",
+            "settings": {
+              "color": "#c4a4fe"
+            }
+          },
+          {
+            "type": "section",
+            "children": [
+              {
+                "type": "image",
+                "src": "https://taskzen.fr/sommet/intervenants/delphine.jpg",
+                "alt": "Delphine Moura-Miranda"
+              },
+              {
+                "type": "heading",
+                "level": 2,
+                "text": "Delphine Moura-Miranda"
+              },
+              {
+                "type": "text",
+                "text": "Fondatrice de Taskzen, organisatrice du sommet IA en 5 Jours.",
+                "settings": {
+                  "color": "#c4a4fe"
+                }
+              },
+              {
+                "type": "text",
+                "text": "Vingt-cinq ans dans l'informatique avant de se lancer en solo. Delphine aide aujourd'hui les entrepreneurs et les indépendants à automatiser leurs messages clients et leurs tâches répétitives, pour récupérer du temps sans embaucher."
+              }
             ]
           }
         ]
@@ -102,23 +684,283 @@
         "kind": "sales",
         "blocks": [
           {
+            "type": "columns",
+            "columns": [
+              [
+                {
+                  "type": "text",
+                  "text": "AUDIT DE 30 MINUTES · RÉSERVÉ AUX ACTIVITÉS À 10 000 € PAR MOIS OU PLUS",
+                  "settings": {
+                    "color": "#c4a4fe"
+                  }
+                },
+                {
+                  "type": "heading",
+                  "level": 1,
+                  "text": "Ce que ta messagerie te coûte, chiffré en 30 minutes"
+                },
+                {
+                  "type": "text",
+                  "text": "On regarde ensemble tes messages clients et tes tâches répétitives, puis on chiffre le temps et l'argent qu'ils te prennent. Tu repars avec ce chiffrage, que tu travailles avec moi ou non."
+                }
+              ],
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 2,
+                      "text": "997 €",
+                      "settings": {
+                        "color": "#c4a4fe"
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "text": "En une fois. Déduits des 5 000 € de mise en place si tu signes ensuite."
+                    },
+                    {
+                      "type": "payment_button",
+                      "label": "Je réserve mon audit",
+                      "product": "audit",
+                      "price_cents": 99700
+                    },
+                    {
+                      "type": "text",
+                      "text": "En réservant, tu acceptes les conditions générales de vente, en bas de page."
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "type": "text",
+            "text": "COMMENT ÇA SE PASSE",
+            "settings": {
+              "color": "#c4a4fe"
+            }
+          },
+          {
             "type": "heading",
-            "level": 1,
-            "text": "Ce que ta messagerie te coûte, chiffré en 30 minutes"
+            "level": 2,
+            "text": "3 étapes, sans engagement pour la suite"
+          },
+          {
+            "type": "columns",
+            "columns": [
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "1. Tu réserves"
+                    },
+                    {
+                      "type": "text",
+                      "text": "Tu règles l'audit en ligne, de façon sécurisée."
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "2. Tu choisis ton créneau"
+                    },
+                    {
+                      "type": "text",
+                      "text": "Juste après le paiement, tu prends 30 minutes dans mon agenda."
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "3. On chiffre ensemble"
+                    },
+                    {
+                      "type": "text",
+                      "text": "En visio, sur tes vrais messages. Tu repars avec le chiffrage."
+                    }
+                  ]
+                }
+              ]
+            ]
           },
           {
             "type": "text",
-            "text": "Un audit de 30 minutes, réservé aux activités à 10 000 € par mois ou plus.\n\nTu repars avec un chiffrage, que tu travailles avec moi ou non."
+            "text": "CE QUE TU OBTIENS",
+            "settings": {
+              "color": "#c4a4fe"
+            }
           },
           {
-            "type": "payment_button",
-            "label": "Je réserve mon audit",
-            "product": "audit",
-            "price_cents": 99700
+            "type": "heading",
+            "level": 2,
+            "text": "Ce que tu as à la fin des 30 minutes"
+          },
+          {
+            "type": "columns",
+            "columns": [
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "Le coût réel"
+                    },
+                    {
+                      "type": "text",
+                      "text": "Le temps et l'argent que tes messages et tes relances te prennent."
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "Ce qui peut partir tout seul"
+                    },
+                    {
+                      "type": "text",
+                      "text": "Les messages que le système peut gérer, et ceux qui doivent rester à toi."
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "La suite possible"
+                    },
+                    {
+                      "type": "text",
+                      "text": "Ce que Le Système Boîte Autonome ferait pour toi, si tu veux aller plus loin."
+                    }
+                  ]
+                }
+              ]
+            ]
           },
           {
             "type": "text",
-            "text": "En réservant, tu acceptes les conditions générales de vente, en bas de page."
+            "text": "POUR QUI",
+            "settings": {
+              "color": "#c4a4fe"
+            }
+          },
+          {
+            "type": "columns",
+            "columns": [
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "C'est pour toi si"
+                    },
+                    {
+                      "type": "list",
+                      "items": [
+                        "Ton activité fait 10 000 € par mois ou plus",
+                        "Tes messages clients te prennent trop de temps",
+                        "Tu veux un chiffre avant de décider quoi que ce soit"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "Ce n'est pas pour toi si"
+                    },
+                    {
+                      "type": "list",
+                      "items": [
+                        "Ton activité est sous ce seuil",
+                        "Tu cherches à tout construire toi-même",
+                        "Tu n'es pas prêt à me montrer de vrais messages"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "type": "text",
+            "text": "AVEC QUI",
+            "settings": {
+              "color": "#c4a4fe"
+            }
+          },
+          {
+            "type": "section",
+            "children": [
+              {
+                "type": "image",
+                "src": "https://taskzen.fr/sommet/intervenants/delphine.jpg",
+                "alt": "Delphine Moura-Miranda"
+              },
+              {
+                "type": "heading",
+                "level": 2,
+                "text": "Delphine Moura-Miranda"
+              },
+              {
+                "type": "text",
+                "text": "Fondatrice de Taskzen, organisatrice du sommet IA en 5 Jours.",
+                "settings": {
+                  "color": "#c4a4fe"
+                }
+              },
+              {
+                "type": "text",
+                "text": "Vingt-cinq ans dans l'informatique avant de se lancer en solo. Delphine aide aujourd'hui les entrepreneurs et les indépendants à automatiser leurs messages clients et leurs tâches répétitives, pour récupérer du temps sans embaucher."
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "QUESTIONS FRÉQUENTES",
+            "settings": {
+              "color": "#c4a4fe"
+            }
+          },
+          {
+            "type": "heading",
+            "level": 2,
+            "text": "Avant de réserver"
           },
           {
             "type": "faq",
@@ -130,8 +972,48 @@
               {
                 "question": "Que comprend Le Système Boîte Autonome ?",
                 "answer": "Les réponses automatiques aux messages clients avec tes mots (WhatsApp, e-mail, Instagram), les relances et la prise de rendez-vous, le passage de main vers toi dès qu'un échange demande vraiment toi, puis la maintenance et les ajustements chaque mois. 5 000 € de mise en place et 500 € par mois."
+              },
+              {
+                "question": "Mes clients vont sentir le robot ?",
+                "answer": "C'est justement ce qu'on regarde. On part de tes messages à toi, et dès qu'un échange demande vraiment toi, le système te passe la main."
+              },
+              {
+                "question": "Qui me dit que tu sais le faire ?",
+                "answer": "Je préfère te montrer plutôt que te promettre. L'audit te donne un chiffrage concret sur ta propre activité, et tu le gardes même si on s'arrête là."
+              },
+              {
+                "question": "Ce que je te montre reste confidentiel ?",
+                "answer": "Oui. Ce que tu me montres ne sert qu'à réaliser le chiffrage. Rien n'est publié ni cité sans ton accord écrit."
+              },
+              {
+                "question": "Je suis obligé de signer ensuite ?",
+                "answer": "Non. Tu repars avec ton chiffrage, que tu travailles avec moi ou non."
               }
             ]
+          },
+          {
+            "type": "heading",
+            "level": 2,
+            "text": "Chiffre ce que ta messagerie te coûte",
+            "settings": {
+              "align": "center"
+            }
+          },
+          {
+            "type": "text",
+            "text": "997 €, déduits des 5 000 € de mise en place si tu signes ensuite.",
+            "settings": {
+              "align": "center"
+            }
+          },
+          {
+            "type": "payment_button",
+            "label": "Je réserve mon audit",
+            "product": "audit",
+            "price_cents": 99700,
+            "settings": {
+              "align": "center"
+            }
           }
         ]
       },
@@ -141,9 +1023,16 @@
         "kind": "thanks",
         "blocks": [
           {
+            "type": "text",
+            "text": "PAIEMENT REÇU",
+            "settings": {
+              "color": "#c4a4fe"
+            }
+          },
+          {
             "type": "heading",
             "level": 1,
-            "text": "Ton paiement est bien reçu"
+            "text": "Ton audit est réservé"
           },
           {
             "type": "text",
@@ -153,6 +1042,66 @@
             "type": "button",
             "label": "Je choisis mon créneau",
             "href": "{lien_reservation_audit}"
+          },
+          {
+            "type": "text",
+            "text": "POUR PRÉPARER CES 30 MINUTES",
+            "settings": {
+              "color": "#c4a4fe"
+            }
+          },
+          {
+            "type": "columns",
+            "columns": [
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "Tes messages"
+                    },
+                    {
+                      "type": "text",
+                      "text": "Garde sous la main quelques exemples de messages clients que tu reçois souvent."
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "Ton temps"
+                    },
+                    {
+                      "type": "text",
+                      "text": "Estime les heures que tu y passes par semaine. On affinera ensemble."
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "Ta question"
+                    },
+                    {
+                      "type": "text",
+                      "text": "Note la question à laquelle tu veux absolument une réponse."
+                    }
+                  ]
+                }
+              ]
+            ]
           }
         ]
       },
@@ -162,18 +1111,83 @@
         "kind": "thanks",
         "blocks": [
           {
+            "type": "text",
+            "text": "MARDI 17 NOVEMBRE À 18H",
+            "settings": {
+              "color": "#c4a4fe"
+            }
+          },
+          {
             "type": "heading",
             "level": 1,
             "text": "Ta boîte qui tourne sans toi"
           },
           {
             "type": "text",
-            "text": "Mardi 17 novembre à 18h. Téléphone en mode avion, papier et crayon à côté de toi."
+            "text": "La méthode Taskzen pour que tes messages clients, tes relances et tes rendez-vous se gèrent sans toi."
+          },
+          {
+            "type": "timer",
+            "mode": "fixed_date",
+            "ends_at": "2026-11-17T17:00:00Z"
           },
           {
             "type": "button",
             "label": "Je rejoins le webinaire",
             "href": "{lien_salle_webinaire}"
+          },
+          {
+            "type": "columns",
+            "columns": [
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "Téléphone"
+                    },
+                    {
+                      "type": "text",
+                      "text": "En mode avion pendant l'heure."
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "Papier et crayon"
+                    },
+                    {
+                      "type": "text",
+                      "text": "Il y a un calcul et des petits tests à faire en direct."
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "type": "section",
+                  "children": [
+                    {
+                      "type": "heading",
+                      "level": 3,
+                      "text": "Ton chiffre"
+                    },
+                    {
+                      "type": "text",
+                      "text": "Garde le résultat du petit test sur tes 20 derniers messages."
+                    }
+                  ]
+                }
+              ]
+            ]
           }
         ]
       }
