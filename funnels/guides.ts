@@ -11,6 +11,7 @@ const GUIDES: readonly Guide[] = [
   { slug: "quick-capture-obsidian", titre: "Quick Capture d'Obsidian : noter une idée en 3 gestes", fichier: "10-delphine-quick-capture-obsidian-memo.pdf" },
   { slug: "shorts-avec-claude", titre: "Transformer une vidéo en shorts avec Claude : les outils et la méthode", fichier: "11-delphine-shorts-avec-claude-guide.pdf" },
   { slug: "tunnel-avec-ia", titre: "Construire son tunnel de vente avec l'IA : la méthode et les vrais bugs", fichier: "12-delphine-tunnel-avec-ia-guide.pdf" },
+  { slug: "lexique-ia", titre: "Le lexique de l'IA : 10 mots expliqués avec une cuisine", fichier: "13-delphine-lexique-ia.pdf" },
 ];
 
 const guides = {
